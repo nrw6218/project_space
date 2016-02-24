@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GroupProject
 {
-    public class Character
+    public class Entity
     {
         protected Rectangle rectangle;
         protected Texture2D texture;
@@ -20,10 +20,10 @@ namespace GroupProject
         public int Y { get { return rectangle.Y; } }
 
         /// <summary>
-        /// Creates a character from a rectangle
+        /// Creates a Entity from a rectangle
         /// </summary>
-        /// <param name="rectangle">character's rectangle</param>
-        public Character(Rectangle rectangle)
+        /// <param name="rectangle">Entity's rectangle</param>
+        public Entity(Rectangle rectangle)
         {
             this.rectangle = rectangle;
             texture = null;
@@ -32,11 +32,11 @@ namespace GroupProject
         /// <summary>
         /// creates a character from rectangle components
         /// </summary>
-        /// <param name="x">X coord of the character</param>
-        /// <param name="y">Y coord of the character</param>
-        /// <param name="width">the width of the character</param>
-        /// <param name="height">the height of the character</param>
-        public Character(int x, int y, int width, int height)
+        /// <param name="x">X coord of the Entity</param>
+        /// <param name="y">Y coord of the Entity</param>
+        /// <param name="width">the width of the Entity</param>
+        /// <param name="height">the height of the Entity</param>
+        public Entity(int x, int y, int width, int height)
         {
             this.rectangle = new Rectangle(x, y, width, height);
             texture = null;
@@ -45,7 +45,7 @@ namespace GroupProject
         /// <summary>
         /// Sets the texture if it hasent been set before
         /// </summary>
-        /// <param name="texture">the character's sprite texture</param>
+        /// <param name="texture">the Entity's sprite texture</param>
         public void SetTexture(Texture2D texture)
         {
             if (this.texture == null)
@@ -53,7 +53,7 @@ namespace GroupProject
         }
 
         /// <summary>
-        /// Draws the character if it has a texture
+        /// Draws the Entity if it has a texture
         /// </summary>
         /// <param name="spriteBatch">the game's spritebatch</param>
         public virtual void Draw(SpriteBatch spriteBatch)

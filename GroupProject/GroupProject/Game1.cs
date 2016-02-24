@@ -13,9 +13,14 @@ namespace GroupProject
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        
+        const double ANGLE_MULTIPLIER = 0.70710678118;
 
         enum GameState { Game };
         GameState gameState;
+
+        double fps;
+        double timePerFrame;
 
         public Game1()
         {
@@ -31,7 +36,8 @@ namespace GroupProject
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            fps = 60.0;
+            timePerFrame = 1.0 / fps;
 
             base.Initialize();
         }
@@ -87,6 +93,33 @@ namespace GroupProject
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
+        }
+
+        /// <summary>
+        /// Returns distance that comething should travel this frame based on how much 
+        /// it should move per frame and if it is moving diagonally or not
+        /// 
+        /// if an object is moveing on an anfle then it must 
+        /// move int both the x and y directions by the returned value
+        /// </summary>
+        /// <param name="speed">how many pixes th eobject should move in a frame</param>
+        /// <param name="onAngle">true if the object is moving diagonally</param>
+        /// <returns></returns>
+        public int MovementDistance(double speed, bool onAngle)
+        {
+            //speed * timePerFrame = how many pixels it should move this game frame
+            //speed * timePerFrame * ANGLE_MULTIPLIER -> so the object doesn't move faster when moving on an angle
+
+            if (onAngle)
+            {
+                //the object must be moved in both the x and y axies by the returned value
+                return (int)(Math.Round(speed * timePerFrame * ANGLE_MULTIPLIER));
+            }
+            else
+            {
+                //object is moving on one axis
+                return (int)(Math.Round(speed * timePerFrame));
+            }
         }
     }
 }
