@@ -12,9 +12,8 @@ namespace GroupProject
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        //Matt Lewis
-        //fuck bitches get money
-        //all day erry day
+        enum GameState { Game };
+        GameState gameState;
 
         public Game1()
         {
@@ -66,7 +65,11 @@ namespace GroupProject
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            switch (gameState)
+            {
+                case GameState.Game:
+                    break;
+            }
 
             base.Update(gameTime);
         }
