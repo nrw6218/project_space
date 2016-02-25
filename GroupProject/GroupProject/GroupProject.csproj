@@ -38,11 +38,8 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-<<<<<<< HEAD
     <Compile Include="Character.cs" />
     <Compile Include="Enemy.cs" />
-=======
->>>>>>> e73876213f0a6802f59239700f497d5a8c40af2c
     <Compile Include="Entity.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Player.cs" />
