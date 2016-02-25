@@ -10,27 +10,33 @@ namespace GroupProject
     class Character : Entity
     {
         //Fields
-        int speed;
+        protected double speed;
+        protected int hp;
 
         //Properties
-        public int Speed
+        /// <summary>
+        /// How many pixels per frame the character can move
+        /// </summary>
+        public double Speed
         {
             get { return speed; }
             set { speed = value; }
         }
 
         //Constructor
-        public Character(Rectangle rectangle, int speed)
+        public Character(Rectangle rectangle, int hp, double speed)
             :base(rectangle)
         {
             this.texture = null;
+            this.hp = hp;
             this.speed = speed;
         }
 
-        public Character(int x, int y, int width, int height, int speed)
+        public Character(int x, int y, int width, int height, int hp, double speed)
             :base(x,y,width, height)
         {
             this.texture = null;
+            this.hp = hp;
             this.speed = speed;
         }
 

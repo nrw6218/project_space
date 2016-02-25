@@ -20,25 +20,22 @@ namespace GroupProject
         }
 
         //Constructor
-        public Enemy(Rectangle rectangle, int speed)
-            :base(rectangle, speed)
+        public Enemy(Rectangle rectangle, int hp, double speed)
+            :base(rectangle, hp, speed)
         {
             hostile = false;
         }
 
-        public Enemy(int x, int y, int width, int height, int speed)
-            :base(x,y,width,height, speed)
+        public Enemy(int x, int y, int width, int height, int hp, double speed)
+            :base(x, y, width, height, hp, speed)
         {
             hostile = false;
         }
 
         //Methods
-        public Boolean isHostile(Player p)
+        public bool isHostile(Player p)
         {
-            if (p.Karma < 0)
-                hostile = true;
-            else
-                hostile = false;
+            hostile = p.Karma < 0;
             return hostile;
         }
     }

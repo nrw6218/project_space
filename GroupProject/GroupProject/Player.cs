@@ -11,7 +11,7 @@ namespace GroupProject
     {
         //Fields
         private int karma;
-        private List<Entity> inventory;
+        private List<Item> inventory;
 
         //Properties
         public int Karma
@@ -21,18 +21,20 @@ namespace GroupProject
         }
 
         //Constructor
-        public Player(Rectangle rectangle, int speed)
-            :base(rectangle, speed)
+        public Player(Rectangle rectangle, int hp, double speed)
+            :base(rectangle, hp, speed)
         {
             karma = 0;
-            inventory = new List<Entity>();
+            inventory = new List<Item>();
         }
 
-        public Player(int x, int y, int width, int height, int speed)
-            :base(x,y,width,height, speed)
+        public Player(int x, int y, int width, int height, int hp, double speed)
+            :base(x, y, width, height, hp, speed)
         {
             karma = 0;
-            inventory = new List<Entity>();
+            inventory = new List<Item>();
         }
+
+        //Methods
     }
 }

@@ -9,13 +9,18 @@ namespace GroupProject
 {
     public class SubMap
     {
+        //Fields
         private Block[,] subMap;
 
+        //Properties
         public SubMap(int[,] intMap)
         {
             //make blocks and add them to map
         }
 
+        //Constructors
+
+        //Methods
         public void Draw(SpriteBatch spriteBatch)
         {
             for (int i = 0; i < subMap.GetLength(0); i++)

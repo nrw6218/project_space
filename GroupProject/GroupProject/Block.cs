@@ -9,9 +9,12 @@ namespace GroupProject
 {
     public class Block
     {
+        //Fields
         protected Rectangle rectangle;
         protected Texture2D texture;
+        protected int textureId;
 
+        //Properties
         public Rectangle Rectangle { get { return rectangle; } }
         public Texture2D Texture { get { return texture; } }
 
@@ -19,15 +22,23 @@ namespace GroupProject
 
         protected bool Collidable;
 
-        public Block(int textureId)
+        //Constructors
+        public Block(int x, int y, int textureId)
         {
-            //texture = texture int spritesheet
-            //rectangle = new Rectangle(x, y, BLOCK_SIZE, BLOCK_SIZE);
+            this.textureId = textureId;
+            rectangle = new Rectangle(x, y, BLOCK_SIZE, BLOCK_SIZE);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             //do the draw
         }
+
+        public void SetTexture()
+        {
+            //set texture from textureId int a spritesheet
+        }
+                
+        //Methods
     }
 }

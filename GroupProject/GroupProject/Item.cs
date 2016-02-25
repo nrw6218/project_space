@@ -7,21 +7,22 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GroupProject
 {
-    public class Map
+    public class Item
     {
         //Fields
-        private SubMap[,] map;
+        private Rectangle rectangle;
+        private Texture2D texture;
+
+        private Entity entity;
 
         //Properties
 
         //Constructors
-        public Map(string filename)
+        public Item()
         {
-            /*
-            loads submaps from file
-            */
+
         }
 
-        //Methods
+        //Methods        
     }
 }

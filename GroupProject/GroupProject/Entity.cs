@@ -9,9 +9,11 @@ namespace GroupProject
 {
     public class Entity
     {
+        //Fields
         protected Rectangle rectangle;
         protected Texture2D texture;
 
+        //Properties
         public Rectangle Rectangle { get { return rectangle; } }
         public Texture2D Texture { get { return texture; } }
         public int Width { get { return rectangle.Width; } }
@@ -27,6 +29,8 @@ namespace GroupProject
             set { rectangle.Y = value; }
         }
 
+
+        //Constructors
         /// <summary>
         /// Creates a Entity from a rectangle
         /// </summary>
@@ -50,6 +54,7 @@ namespace GroupProject
             texture = null;
         }
 
+        //Methods
         /// <summary>
         /// Sets the texture if it hasent been set before
         /// </summary>
