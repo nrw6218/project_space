@@ -34,7 +34,7 @@ namespace GroupProject
             //do the draw
         }
 
-        public void SetTexture()
+        public void SetTexture(Texture2D spriteSheet)
         {
             //set texture from textureId int a spritesheet
         }
