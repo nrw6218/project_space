@@ -16,8 +16,16 @@ namespace GroupProject
         public Texture2D Texture { get { return texture; } }
         public int Width { get { return rectangle.Width; } }
         public int Height { get { return rectangle.Height; } }
-        public int X { get { return rectangle.X; } }
-        public int Y { get { return rectangle.Y; } }
+        public int X
+        {
+            get { return rectangle.X; }
+            set { rectangle.X = value; }
+        }
+        public int Y
+        {
+            get { return rectangle.Y; }
+            set { rectangle.Y = value; }
+        }
 
         /// <summary>
         /// Creates a Entity from a rectangle
