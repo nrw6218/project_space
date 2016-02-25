@@ -19,6 +19,7 @@ namespace GroupProject
         public Texture2D Texture { get { return texture; } }
 
         public int BLOCK_SIZE { get { return 32; } }
+        public int SPRITESHEET_DIMENTIONS { get { return 16; } }
 
         protected bool Collidable;
 
@@ -29,9 +30,18 @@ namespace GroupProject
             rectangle = new Rectangle(x, y, BLOCK_SIZE, BLOCK_SIZE);
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, Texture2D spriteSheet)
         {
-            //do the draw
+            spriteBatch.Draw(
+                spriteSheet,
+                rectangle,
+                new Rectangle(
+                    textureId*BLOCK_SIZE,
+                    0,
+                    BLOCK_SIZE,
+                    BLOCK_SIZE
+                    ),
+                Color.White);
         }
 
         public void SetTexture(Texture2D spriteSheet)

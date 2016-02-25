@@ -21,13 +21,13 @@ namespace GroupProject
         //Constructors
 
         //Methods
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, Texture2D spriteSheet)
         {
             for (int i = 0; i < subMap.GetLength(0); i++)
             {
                 for (int j = 0; j < subMap.GetLength(1); j++)
                 {
-                    subMap[i, j].Draw(spriteBatch);
+                    subMap[i, j].Draw(spriteBatch, spriteSheet);
                 }
             }
         }
