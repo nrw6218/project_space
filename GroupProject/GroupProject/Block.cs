@@ -12,6 +12,7 @@ namespace GroupProject
         //Fields
         protected Rectangle rectangle;
         protected Texture2D texture;
+        //two digit number in yx form, 25 is the 6th texture in the 3rd row
         protected int textureId;
 
         //Properties
@@ -36,8 +37,8 @@ namespace GroupProject
                 spriteSheet,
                 rectangle,
                 new Rectangle(
-                    textureId*BLOCK_SIZE,
-                    0,
+                    (textureId % 10) * BLOCK_SIZE,
+                    (textureId / 10) * BLOCK_SIZE,
                     BLOCK_SIZE,
                     BLOCK_SIZE
                     ),
