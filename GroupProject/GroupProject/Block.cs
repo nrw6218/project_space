@@ -44,11 +44,6 @@ namespace GroupProject
                     ),
                 Color.White);
         }
-
-        public void SetTexture(Texture2D spriteSheet)
-        {
-            //set texture from textureId int a spritesheet
-        }
                 
         //Methods
     }

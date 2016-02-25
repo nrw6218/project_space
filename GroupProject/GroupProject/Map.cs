@@ -15,12 +15,27 @@ namespace GroupProject
         //Properties
 
         //Constructors
-        public Map(string filename)
+        public Map(int[,,,] mapIntArry, Texture2D spriteSheet)
         {
-            /*
-            loads submaps from file
-            */
-        }
+            map = new SubMap[mapIntArry.GetLength(0), mapIntArry.GetLength(1)];
+
+            for (int i = 0; i < mapIntArry.GetLength(0); i++)
+            {
+                for (int j = 0; j < mapIntArry.GetLength(1); j++)
+                {
+                    int[,] subMapIntArry = new int [mapIntArry.GetLength(2), mapIntArry.GetLength(3)];
+                    for (int k = 0; k < mapIntArry.GetLength(2); k++)
+                    {
+                        for (int l = 0; l < mapIntArry.GetLength(3); l++)
+                        {
+                            subMapIntArry[k, l] = mapIntArry[i, j, k, l];
+                        }
+                    }
+                    map[i, j] = new SubMap(subMapIntArry);
+
+                }
+            }            
+        }    
 
         //Methods
     }
