@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GroupProject
 {
+    public enum Direction { Left, Right, Up, Down };
+
     public class MapManeger
     {
         private static MapManeger instance;
@@ -14,6 +16,11 @@ namespace GroupProject
         private MapManeger() { }
 
         private Texture2D spriteSheet;
+
+        private Map currentMap;
+
+        public Map CurrentMap { get { return currentMap; } }
+        public SubMap CurrentSubMap { get { return currentMap.CurrentSubMap; } }
 
         public static MapManeger Instance
         {
@@ -31,6 +38,32 @@ namespace GroupProject
         {
             this.spriteSheet = spriteSheet;
         }
-        //take file and map;
+
+        //edit to make work
+        public void NewMap(string fileName)
+        {
+            int[,,,] mapIntArry = default(int[,,,]);
+            //mapIntArry = from binaryfile;
+            currentMap = new Map(mapIntArry, spriteSheet);
+
+        }
+        
+        public void MoveSubmap(Direction dir)
+        {
+            switch (dir)
+            {
+                case Direction.Left:
+                    break;
+
+                case Direction.Right:
+                    break;
+
+                case Direction.Up:
+                    break;
+
+                case Direction.Down:
+                    break;
+            }
+        }
     }
 }
