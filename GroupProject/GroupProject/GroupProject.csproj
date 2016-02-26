@@ -38,16 +38,17 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-	<Compile Include="Block.cs" />
+    <Compile Include="Block.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Item.cs" />
-	<Compile Include="Map.cs" />
+    <Compile Include="Map.cs" />
+    <Compile Include="MapManeger.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
-	<Compile Include="SubMap.cs" />
+    <Compile Include="SubMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
