@@ -13,7 +13,7 @@ namespace GroupProject
         private Block[,] subMap;
 
         //Properties
-        public SubMap(int[,] intMap)
+        public SubMap(int[,] intMap, List<Entity> subMapEntities)
         {
             //make blocks and add them to map
         }

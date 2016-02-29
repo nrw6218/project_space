@@ -18,7 +18,7 @@ namespace GroupProject
         public SubMap CurrentSubMap { get { return currentSubMap; } }
 
         //Constructors
-        public Map(int[,,,] mapIntArry, Texture2D spriteSheet)
+        public Map(int[,,,] mapIntArry, List<Entity>[,] mapEntities, Texture2D spriteSheet)
         {
             /*EXPLINATION
                 the 4d array is treated as a 2d array of 2d arrays
@@ -41,7 +41,7 @@ namespace GroupProject
                         {
                             subMapIntArry[k, l] = mapIntArry[i, j, k, l];
                     }}
-                    map[i, j] = new SubMap(subMapIntArry);
+                    map[i, j] = new SubMap(subMapIntArry, mapEntities[i,j]);
                 }}            
         }    
 

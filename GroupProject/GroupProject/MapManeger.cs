@@ -43,8 +43,9 @@ namespace GroupProject
         public void NewMap(string fileName)
         {
             int[,,,] mapIntArry = default(int[,,,]);
-            //mapIntArry = from binaryfile;
-            currentMap = new Map(mapIntArry, spriteSheet);
+            List<Entity>[,] mapEntities = default(List<Entity>[,]);
+            //load int[,,,] and list<entity>[,] from binary file;
+            currentMap = new Map(mapIntArry, mapEntities, spriteSheet);
 
         }
         
