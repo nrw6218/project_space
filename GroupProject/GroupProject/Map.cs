@@ -18,7 +18,7 @@ namespace GroupProject
         public SubMap CurrentSubMap { get { return currentSubMap; } }
 
         //Constructors
-        public Map(int[,,,] mapIntArry, List<Entity>[,] mapEntities, Texture2D spriteSheet)
+        public Map(int[,][,] mapIntArry, List<Entity>[,] mapEntities)
         {
             /*EXPLINATION
                 the 4d array is treated as a 2d array of 2d arrays
@@ -34,12 +34,12 @@ namespace GroupProject
                 {
                     /*This section makes the submaps and adds them to the map 2d array
                     /*****************************************************************/
-                    int[,] subMapIntArry = new int [mapIntArry.GetLength(2), mapIntArry.GetLength(3)];
+                    int[,] subMapIntArry = new int [mapIntArry[i,j].GetLength(0), mapIntArry.GetLength(3)];
                     for (int k = 0; k < mapIntArry.GetLength(2); k++)
                     {
-                        for (int l = 0; l < mapIntArry.GetLength(3); l++)
+                        for (int l = 0; l < mapIntArry[i, j].GetLength(1); l++)
                         {
-                            subMapIntArry[k, l] = mapIntArry[i, j, k, l];
+                            subMapIntArry[k, l] = mapIntArry[i, j][k, l];
                     }}
                     map[i, j] = new SubMap(subMapIntArry, mapEntities[i,j]);
                 }}            

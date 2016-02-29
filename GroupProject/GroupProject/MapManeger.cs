@@ -15,8 +15,6 @@ namespace GroupProject
 
         private MapManeger() { }
 
-        private Texture2D spriteSheet;
-
         private Map currentMap;
 
         public Map CurrentMap { get { return currentMap; } }
@@ -34,19 +32,13 @@ namespace GroupProject
             }
         }
 
-        public void LoadSpritesheet(Texture2D spriteSheet)
-        {
-            this.spriteSheet = spriteSheet;
-        }
-
         //edit to make work
         public void NewMap(string fileName)
         {
-            int[,,,] mapIntArry = default(int[,,,]);
+            int[,][,] mapIntArry = default(int[,][,]);
             List<Entity>[,] mapEntities = default(List<Entity>[,]);
             //load int[,,,] and list<entity>[,] from binary file;
-            currentMap = new Map(mapIntArry, mapEntities, spriteSheet);
-
+            currentMap = new Map(mapIntArry, mapEntities);
         }
         
         public void MoveSubmap(Direction dir)

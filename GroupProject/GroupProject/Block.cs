@@ -20,7 +20,6 @@ namespace GroupProject
         public Texture2D Texture { get { return texture; } }
 
         public int BLOCK_SIZE { get { return 32; } }
-        public int SPRITESHEET_DIMENTIONS { get { return 16; } }
 
         protected bool Collidable;
 
@@ -28,7 +27,7 @@ namespace GroupProject
         public Block(int x, int y, int textureId)
         {
             this.textureId = textureId;
-            rectangle = new Rectangle(x, y, BLOCK_SIZE, BLOCK_SIZE);
+            rectangle = new Rectangle(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
         }
 
         public void Draw(SpriteBatch spriteBatch, Texture2D spriteSheet)
