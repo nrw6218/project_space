@@ -27,7 +27,7 @@ namespace GroupProject
         public Block(int x, int y, int textureId)
         {
             this.textureId = textureId;
-            rectangle = new Rectangle(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+            rectangle = new Rectangle(y * BLOCK_SIZE, x * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
         }
 
         public void Draw(SpriteBatch spriteBatch, Texture2D spriteSheet)

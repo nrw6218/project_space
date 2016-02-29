@@ -34,8 +34,8 @@ namespace GroupProject
                 {
                     /*This section makes the submaps and adds them to the map 2d array
                     /*****************************************************************/
-                    int[,] subMapIntArry = new int [mapIntArry[i,j].GetLength(0), mapIntArry.GetLength(3)];
-                    for (int k = 0; k < mapIntArry.GetLength(2); k++)
+                    int[,] subMapIntArry = new int [mapIntArry[i,j].GetLength(0), mapIntArry[i, j].GetLength(1)];
+                    for (int k = 0; k < mapIntArry[i, j].GetLength(0); k++)
                     {
                         for (int l = 0; l < mapIntArry[i, j].GetLength(1); l++)
                         {
