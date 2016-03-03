@@ -13,6 +13,8 @@ namespace GroupProject
         private Block[,] subMap;
 
         //Properties
+
+        //Constructors
         public SubMap(int[,] intMap, List<Entity> subMapEntities)
         {
             //make blocks and add them to map
@@ -24,9 +26,7 @@ namespace GroupProject
                 }
             }
         }
-
-        //Constructors
-
+        
         //Methods
         public void Draw(SpriteBatch spriteBatch, Texture2D spriteSheet)
         {

@@ -9,24 +9,24 @@ namespace GroupProject
 {
     public enum Direction { Left, Right, Up, Down };
 
-    public class MapManeger
+    public class MapManager
     {
-        private static MapManeger instance;
+        private static MapManager instance;
 
-        private MapManeger() { }
+        private MapManager() { }
 
         private Map currentMap;
 
         public Map CurrentMap { get { return currentMap; } }
         public SubMap CurrentSubMap { get { return currentMap.CurrentSubMap; } }
 
-        public static MapManeger Instance
+        public static MapManager Instance
         {
             get
             {
                 if (instance == null)
                 {
-                    instance = new MapManeger();
+                    instance = new MapManager();
                 }
                 return instance;
             }

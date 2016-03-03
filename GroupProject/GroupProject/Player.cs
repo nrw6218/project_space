@@ -27,7 +27,7 @@ namespace GroupProject
             karma = 0;
             inventory = new List<Item>();
         }
-
+        
         public Player(int x, int y, int width, int height, int hp, double speed)
             :base(x, y, width, height, hp, speed)
         {

@@ -11,17 +11,16 @@ namespace GroupProject
     {
         //Fields
         protected Rectangle rectangle;
-        protected Texture2D texture;
         //two digit number in yx form, 25 is the 6th texture in the 3rd row
         protected int textureId;
+        protected bool collidable;
 
         //Properties
         public Rectangle Rectangle { get { return rectangle; } }
-        public Texture2D Texture { get { return texture; } }
 
-        public int BLOCK_SIZE { get { return 32; } }
+        public static int BLOCK_SIZE { get { return 32; } }
 
-        protected bool Collidable;
+        
 
         //Constructors
         public Block(int x, int y, int textureId)
