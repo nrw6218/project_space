@@ -11,12 +11,15 @@ namespace GroupProject
     {
         //Fields
         private Block[,] subMap;
+        int mapIndex;
 
         //Properties
+        public int MapIndex { get { return mapIndex; } }
 
         //Constructors
-        public SubMap(int[,] intMap, List<Entity> subMapEntities)
+        public SubMap(int[,] intMap, List<Entity> subMapEntities, int mapIndex)
         {
+            this.mapIndex = mapIndex;
             //make blocks and add them to map
             for (int i = 0; i < subMap.GetLength(0); i++)
             {

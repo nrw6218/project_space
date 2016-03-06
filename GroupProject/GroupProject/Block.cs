@@ -19,14 +19,13 @@ namespace GroupProject
         public Rectangle Rectangle { get { return rectangle; } }
 
         public static int BLOCK_SIZE { get { return 32; } }
-
-        
+        public static int TEXURE_SIZE { get { return 16; } }
 
         //Constructors
         public Block(int x, int y, int textureId)
         {
             this.textureId = textureId;
-            rectangle = new Rectangle(y * BLOCK_SIZE, x * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+            rectangle = new Rectangle(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
         }
 
         public void Draw(SpriteBatch spriteBatch, Texture2D spriteSheet)
@@ -35,10 +34,10 @@ namespace GroupProject
                 spriteSheet,
                 rectangle,
                 new Rectangle(
-                    (textureId % 10) * BLOCK_SIZE,
-                    (textureId / 10) * BLOCK_SIZE,
-                    BLOCK_SIZE,
-                    BLOCK_SIZE
+                    (textureId % 10) * TEXURE_SIZE,
+                    (textureId / 10) * TEXURE_SIZE,
+                    TEXURE_SIZE,
+                    TEXURE_SIZE
                     ),
                 Color.White);
         }

@@ -16,12 +16,13 @@ namespace GroupProject
 
         //Properties
         public SubMap CurrentSubMap { get { return currentSubMap; } }
+        public int MapColumns { get { return map.GetLength(0); } }
+        public int MapRows { get { return map.GetLength(1); } }
 
         //Constructors
         public Map(int[,][,] mapIntArry, List<Entity>[,] mapEntities)
         {
-            /*EXPLINATION
-                the 4d array is treated as a 2d array of 2d arrays
+            /*
                 the outer 2d array is an array of submaps
                 the inner 2d arrays are arrays of blocks, which are the individual submaps
             */
@@ -41,14 +42,17 @@ namespace GroupProject
                         {
                             subMapIntArry[k, l] = mapIntArry[i, j][k, l];
                     }}
-                    map[i, j] = new SubMap(subMapIntArry, mapEntities[i,j]);
+                    map[i, j] = new SubMap(subMapIntArry, mapEntities[i,j], i*10 + j);
                 }}            
         }    
 
         //Methods
-        public void SetCurrentSubmap(int index)
+        public void SetCurrentSubmap(int mapIndex)
         {
-            //do
+            if ((mapIndex / 10 >= 0 || mapIndex / 10 < MapRows) && (mapIndex % 10 >= 0 || mapIndex % 10 < MapColumns))
+                currentSubMap = map[mapIndex / 10, mapIndex % 10];
+            else
+                throw new IndexOutOfRangeException();
         }
 
     }
