@@ -23,6 +23,9 @@ namespace GroupProject
         double fps;
         double timePerFrame;
 
+        KeyboardState currentKb;
+        KeyboardState previousKb;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -39,6 +42,8 @@ namespace GroupProject
         {
             fps = 60.0;
             timePerFrame = 1.0 / fps;
+            currentKb = Keyboard.GetState();
+            previousKb = currentKb;
 
             base.Initialize();
         }
@@ -73,9 +78,58 @@ namespace GroupProject
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            previousKb = currentKb;
+            currentKb = Keyboard.GetState();
+
             switch (gameState)
             {
                 case GameState.Game:
+                    PlayerManager.Instance.Player.PreviousX = PlayerManager.Instance.Player.X;
+                    PlayerManager.Instance.Player.PreviousY = PlayerManager.Instance.Player.Y;
+                    bool movingVertically = false;
+                    bool movingHorizontally = false;
+                    int moveBy = 0;
+
+                    if (currentKb.IsKeyDown(Keys.W) != currentKb.IsKeyDown(Keys.S))
+                        movingVertically = true;
+                    if (currentKb.IsKeyDown(Keys.A) != currentKb.IsKeyDown(Keys.D))
+                        movingHorizontally = true;
+
+                    //if the player is moving change the moveby
+                    if (movingVertically || movingHorizontally)
+                        moveBy = MovementDistance(PlayerManager.Instance.Player.Speed, movingVertically && movingHorizontally);
+
+                    //move the player vertically in the correct direction
+                    if (movingVertically && currentKb.IsKeyDown(Keys.W))
+                        PlayerManager.Instance.Player.Y -= moveBy;
+                    else if (movingVertically && currentKb.IsKeyDown(Keys.S))
+                        PlayerManager.Instance.Player.Y += moveBy;
+
+                    //move the player horizontally in the correct direction
+                    if (movingHorizontally && currentKb.IsKeyDown(Keys.A))
+                        PlayerManager.Instance.Player.X -= moveBy;
+                    else if (movingHorizontally && currentKb.IsKeyDown(Keys.D))
+                        PlayerManager.Instance.Player.X += moveBy;
+
+                    //handles wall collision
+                    List<Wall> collidingWalls = MapManager.CurrentSubMap.CollidingWalls();
+                    foreach (Wall w in collidingWalls)
+                    {
+                        //if the player is moving to the left, hitting a block on its right side
+                        if (PlayerManager.Instance.Player.X < PlayerManager.Instance.Player.PreviousX)
+                            PlayerManager.Instance.Player.X = w.Rectangle.X + w.Rectangle.Width;
+                        //if the player is moving to the right, hitting a block on its left side
+                        else if (PlayerManager.Instance.Player.X > PlayerManager.Instance.Player.PreviousX)
+                            PlayerManager.Instance.Player.X = w.Rectangle.X - PlayerManager.Instance.Player.Rectangle.Width;
+
+                        //if the player is moving up, hitting a block on its bottom
+                        if (PlayerManager.Instance.Player.Y < PlayerManager.Instance.Player.PreviousY)
+                            PlayerManager.Instance.Player.Y = w.Rectangle.Y + w.Rectangle.Height;
+                        //if the player is moving down, hitting a block on its top
+                        else if (PlayerManager.Instance.Player.Y > PlayerManager.Instance.Player.PreviousY)
+                            PlayerManager.Instance.Player.Y = w.Rectangle.Y - PlayerManager.Instance.Player.Rectangle.Height;
+                    }
+
                     break;
             }
 

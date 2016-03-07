@@ -12,6 +12,19 @@ namespace GroupProject
         //Fields
         private int karma;
         private List<Item> inventory;
+        private int previousX;
+        private int previousY;
+
+        public int PreviousX
+        {
+            get { return previousX; }
+            set { previousX = value; }
+        }
+        public int PreviousY
+        {
+            get { return previousY; }
+            set { previousY = value; }
+        }
 
         //Properties
         public int Karma
@@ -26,6 +39,8 @@ namespace GroupProject
         {
             karma = 0;
             inventory = new List<Item>();
+            previousX = X;
+            previousY = Y;
         }
         
         public Player(int x, int y, int width, int height, int hp, double speed)
@@ -33,6 +48,8 @@ namespace GroupProject
         {
             karma = 0;
             inventory = new List<Item>();
+            previousX = X;
+            previousY = Y;
         }
 
         //Methods
