@@ -23,6 +23,7 @@ namespace GroupProject
             this.mapIndex = mapIndex;
             walls = new List<Wall>();
             //make blocks and add them to map
+            subMap = new Block[intMap.GetLength(0), intMap.GetLength(1)];
             for (int i = 0; i < subMap.GetLength(0); i++)
             {
                 for (int j = 0; j < subMap.GetLength(1); j++)
