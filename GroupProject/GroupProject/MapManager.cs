@@ -38,10 +38,14 @@ namespace GroupProject
         {
             Stream inStream = File.OpenRead(fileName);
             BinaryReader input = new BinaryReader(inStream);
-            int mapWidth = input.ReadInt32();
+            /*int mapWidth = input.ReadInt32();
             int mapHeight = input.ReadInt32();
             int subMapWidth = input.ReadInt32();
-            int subMapHeight = input.ReadInt32();
+            int subMapHeight = input.ReadInt32();*/
+            int mapWidth = 1;
+            int mapHeight = 1;
+            int subMapWidth = 12;
+            int subMapHeight = 6;
 
             //loads ints from file 
             int[,][,] mapIntArry = new int[mapHeight, mapWidth][,];
@@ -49,18 +53,15 @@ namespace GroupProject
             {
                 for (int j = 0; j < mapHeight; j++)
                 {
-                    mapIntArry[i, j] = new int[subMapWidth, subMapHeight];
-                    for (int k = 0; k < subMapWidth; k++)
+                    mapIntArry[i, j] = new int[subMapHeight, subMapWidth];
+                    for (int k = 0; k < subMapHeight; k++)
                     {
-                        for (int l = 0; l < subMapHeight; l++)
+                        for (int l = 0; l < subMapWidth; l++)
                         {
                             mapIntArry[i, j][k, l] = input.ReadInt32();
             }}}}
-
-
-            List<Entity>[,] mapEntities = default(List<Entity>[,]);
-            //load int[,,,] and list<entity>[,] from binary file;
-            currentMap = new Map(mapIntArry, mapEntities);
+            input.Close();
+            currentMap = new Map(mapIntArry);
         }
         
         public void MoveSubmap(Direction dir)

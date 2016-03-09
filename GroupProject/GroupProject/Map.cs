@@ -20,7 +20,7 @@ namespace GroupProject
         public int MapRows { get { return map.GetLength(1); } }
 
         //Constructors
-        public Map(int[,][,] mapIntArry, List<Entity>[,] mapEntities)
+        public Map(int[,][,] mapIntArry)
         {
             /*
                 the outer 2d array is an array of submaps
@@ -42,8 +42,10 @@ namespace GroupProject
                         {
                             subMapIntArry[k, l] = mapIntArry[i, j][k, l];
                     }}
-                    map[i, j] = new SubMap(subMapIntArry, mapEntities[i,j], i*10 + j);
-                }}            
+                    map[i, j] = new SubMap(subMapIntArry, i*10 + j);
+            }}
+
+            currentSubMap = map[0, 0];
         }    
 
         //Methods

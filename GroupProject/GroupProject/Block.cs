@@ -18,8 +18,8 @@ namespace GroupProject
         //Properties
         public Rectangle Rectangle { get { return rectangle; } }
 
-        public static int BLOCK_SIZE { get { return 32; } }
-        public static int TEXURE_SIZE { get { return 16; } }
+        public static int BLOCK_SIZE { get { return 64; } }
+        public static int TEXURE_SIZE { get { return 96; } }
 
         //Constructors
         public Block(int x, int y, int textureId)

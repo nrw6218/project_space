@@ -31,7 +31,13 @@ namespace GroupProject
         //Methods
         public void CreatePlayer()
         {
-            player = new Player(0, 0, 0, 0, 0, 0);
+            int x = 100;
+            int y = 100;
+            int width = 64;
+            int height = 64;
+            int hp = 10;
+            double speed = 2;
+            player = new Player(x, y, width, height, hp , speed);
         }
     }
 }

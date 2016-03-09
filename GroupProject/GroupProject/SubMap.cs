@@ -18,7 +18,7 @@ namespace GroupProject
         public int MapIndex { get { return mapIndex; } }
 
         //Constructors
-        public SubMap(int[,] intMap, List<Entity> subMapEntities, int mapIndex)
+        public SubMap(int[,] intMap, int mapIndex)
         {
             this.mapIndex = mapIndex;
             walls = new List<Wall>();
