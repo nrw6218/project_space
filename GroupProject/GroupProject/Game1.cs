@@ -20,8 +20,9 @@ namespace GroupProject
         enum GameState { Game };
         GameState gameState;
 
-        double fps;
-        double timePerFrame;
+        static double FPS = 60.0;
+        static double SECONDS_PER_FRAME = 1/FPS;
+        double framesThisGameFrame;
 
         KeyboardState currentKb;
         KeyboardState previousKb;
@@ -41,10 +42,9 @@ namespace GroupProject
         /// and initialize them as well.
         /// </summary>
         protected override void Initialize()
-        {
+        {   
+            framesThisGameFrame = 0;
             gameState = GameState.Game;
-            fps = 60.0;
-            timePerFrame = 1.0 / fps;
             currentKb = Keyboard.GetState();
             previousKb = currentKb;
             MapManager.Instance.NewMap("map.data");
@@ -83,6 +83,8 @@ namespace GroupProject
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            framesThisGameFrame = gameTime.ElapsedGameTime.TotalSeconds / SECONDS_PER_FRAME;
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -94,39 +96,19 @@ namespace GroupProject
                 case GameState.Game:
                     PlayerManager.Instance.Player.PreviousX = PlayerManager.Instance.Player.X;
                     PlayerManager.Instance.Player.PreviousY = PlayerManager.Instance.Player.Y;
-                    bool movingVertically = false;
-                    bool movingHorizontally = false;
                     int moveBy = 0;
-
-                    /*
-                    if (currentKb.IsKeyDown(Keys.W) != currentKb.IsKeyDown(Keys.S))
-                        movingVertically = true;
-                    if (currentKb.IsKeyDown(Keys.A) != currentKb.IsKeyDown(Keys.D))
-                        movingHorizontally = true;
+                    bool movingVertically = currentKb.IsKeyDown(Keys.W) != currentKb.IsKeyDown(Keys.S);
+                    bool movingHorizontally = currentKb.IsKeyDown(Keys.A) != currentKb.IsKeyDown(Keys.D);
 
                     //if the player is moving change the moveby
-                    if (movingVertically || movingHorizontally)
-                        moveBy = MovementDistance(PlayerManager.Instance.Player.Speed, movingVertically && movingHorizontally);
-
-                    //move the player vertically in the correct direction
-                    if (movingVertically && currentKb.IsKeyDown(Keys.W))
-                        PlayerManager.Instance.Player.Y -= moveBy;
-                    else if (movingVertically && currentKb.IsKeyDown(Keys.S))
-                        PlayerManager.Instance.Player.Y += moveBy;
+                    moveBy = MovementDistance(PlayerManager.Instance.Player.Speed, movingVertically && movingHorizontally);                 
 
                     //move the player horizontally in the correct direction
-                    if (movingHorizontally && currentKb.IsKeyDown(Keys.A))
-                        PlayerManager.Instance.Player.X -= moveBy;
-                    else if (movingHorizontally && currentKb.IsKeyDown(Keys.D))
-                        PlayerManager.Instance.Player.X += moveBy;
-                    */
-
-                    
                     if (currentKb.IsKeyDown(Keys.A))
-                        PlayerManager.Instance.Player.X--;
-                    if (currentKb.IsKeyDown(Keys.D))
-                        PlayerManager.Instance.Player.X++;
-
+                        PlayerManager.Instance.Player.X -= moveBy;
+                    else if (currentKb.IsKeyDown(Keys.D))
+                        PlayerManager.Instance.Player.X += moveBy;
+                    
                     //handles wall collision
                     List<Wall> collidingWalls = MapManager.Instance.CurrentSubMap.CollidingWalls();
                     
@@ -140,10 +122,11 @@ namespace GroupProject
                             PlayerManager.Instance.Player.X = w.Rectangle.X - PlayerManager.Instance.Player.Rectangle.Width;
                     }
 
+                    //move the player vertically in the correct direction
                     if (currentKb.IsKeyDown(Keys.W))
-                        PlayerManager.Instance.Player.Y--;
-                    if (currentKb.IsKeyDown(Keys.S))
-                        PlayerManager.Instance.Player.Y++;
+                        PlayerManager.Instance.Player.Y -= moveBy;
+                    else if (currentKb.IsKeyDown(Keys.S))
+                        PlayerManager.Instance.Player.Y += moveBy;
 
                     collidingWalls = MapManager.Instance.CurrentSubMap.CollidingWalls();
 
@@ -200,12 +183,12 @@ namespace GroupProject
             if (onAngle)
             {
                 //the object must be moved in both the x and y axies by the returned value
-                return (int)(Math.Round(speed * timePerFrame * ANGLE_MULTIPLIER));
+                return (int)(Math.Round(speed * framesThisGameFrame * ANGLE_MULTIPLIER));
             }
             else
             {
                 //object is moving on one axis
-                return (int)(Math.Round(speed * timePerFrame));
+                return (int)(Math.Round(speed * framesThisGameFrame));
             }
         }
     }
