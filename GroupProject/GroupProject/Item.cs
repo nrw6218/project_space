@@ -67,9 +67,9 @@ namespace GroupProject
                 spriteBatch.Draw(texture, mapposition, Color.White);
         }
     
-        public void addToPlayerInventory()
+        public void AddToPlayerInventory()
         {
-            InventoryManager.Instance.PlayerInventory.addToInventory(this);
+            PlayerManager.Instance.PlayerInventory.AddToInventory(this);
             isInInventory = true;
         }
     }

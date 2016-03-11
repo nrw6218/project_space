@@ -12,31 +12,30 @@ namespace GroupProject
         //Fields
         private Block[,] subMap;
         private int mapIndex;
-        private List<Wall> walls;
-        private mapInventory mapInventory = new mapInventory();
+        private List<Block> walls;
+        private MapInventory mapInventory;
 
         //Properties
         public int MapIndex { get { return mapIndex; } }
-        public mapInventory MapInventory { get { return mapInventory; } }
+        public MapInventory MapInventory { get { return mapInventory; } }
 
         //Constructors
         public SubMap(int[,] intMap, int mapIndex)
         {
             this.mapIndex = mapIndex;
-            walls = new List<Wall>();
+            walls = new List<Block>();
+            mapInventory = new MapInventory();
+
             //make blocks and add them to map
             subMap = new Block[intMap.GetLength(0), intMap.GetLength(1)];
             for (int i = 0; i < subMap.GetLength(0); i++)
             {
                 for (int j = 0; j < subMap.GetLength(1); j++)
                 {
-                    if(intMap[i, j] == 0)
-                    {
-                        Wall w = new Wall(j, i, intMap[i, j]);
-                        subMap[i, j] = w;
-                        walls.Add(w);
-                    }
-                    subMap[i, j] = new Floor(j, i, intMap[i, j]);
+                    subMap[i, j] = new Block(j, i, intMap[i, j]);
+                    if (intMap[i, j] == 00 || intMap[i, j] == 01 || intMap[i, j] == 10 || intMap[i, j] == 30 || intMap[i, j] == 31 || intMap[i, j] == 33)
+                        walls.Add(subMap[i, j]);
+                    
                 }
             }
 
@@ -54,10 +53,10 @@ namespace GroupProject
             }
         }
 
-        public List<Wall> CollidingWalls()
+        public List<Block> CollidingWalls()
         {
-            List<Wall> collindingWalls = new List<Wall>();
-            foreach(Wall w in walls)
+            List<Block> collindingWalls = new List<Block>();
+            foreach(Block w in walls)
             {
                 if (PlayerManager.Instance.Player.Rectangle.Intersects(w.Rectangle))
                     collindingWalls.Add(w);

@@ -15,7 +15,6 @@ namespace GroupProject
 
         //Properties
         public Rectangle Rectangle { get { return rectangle; } }
-        public Texture2D Texture { get { return texture; } }
         public int Width { get { return rectangle.Width; } }
         public int Height { get { return rectangle.Height; } }
         public int X

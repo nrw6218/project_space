@@ -8,13 +8,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GroupProject
 {
-    public class playerInventory
+    public class PlayerInventory
     {
         List<Item> currinventory;
 
         public List<Item> Currinventory { get { return currinventory; } }
 
-        public playerInventory()
+        public PlayerInventory()
         {
             currinventory = new List<Item>(0);
         }
@@ -39,7 +39,7 @@ namespace GroupProject
             }
         }
 
-        public void addToInventory(Item a)
+        public void AddToInventory(Item a)
         {
             currinventory.Add(a);
         }

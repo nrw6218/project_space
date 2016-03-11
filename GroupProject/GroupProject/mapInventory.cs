@@ -7,33 +7,33 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GroupProject
 {
-     public class mapInventory
+     public class MapInventory
     {
-        List<Item> currinventory;
+        List<Item> currentInventory;
 
-        public List<Item> Currinventory { get { return currinventory; } }
+        public List<Item> CurrentInventory { get { return currentInventory; } }
 
-        public mapInventory()
+        public MapInventory()
         {
-            currinventory = new List<Item>(0);
+            currentInventory = new List<Item>(0);
         }
         public void Draw(SpriteBatch spriteBatch)
         {
 
-            foreach (Item a in currinventory)
+            foreach (Item a in currentInventory)
             {
                 a.Draw(spriteBatch, a.MapPosition);
             }
         }
 
-        public void addToInventory(Item a)
+        public void AddToInventory(Item a)
         {
-            currinventory.Add(a);
+            currentInventory.Add(a);
         }
 
-        public void removeFromInventory(Item a)
+        public void RemoveFromInventory(Item a)
         {
-            currinventory.Remove(a);
+            currentInventory.Remove(a);
         }
 
     }

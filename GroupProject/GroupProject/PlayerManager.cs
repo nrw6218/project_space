@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Input;
 
 namespace GroupProject
 {
@@ -10,6 +11,7 @@ namespace GroupProject
         //Fields
         private static PlayerManager instance;
         private Player player;
+        private PlayerInventory playerInventory;
 
         //Properties
         public static PlayerManager Instance
@@ -25,6 +27,7 @@ namespace GroupProject
         }
 
         public Player Player { get { return player; } }
+        public PlayerInventory PlayerInventory { get { return playerInventory; } }
 
         //Constructors
 
@@ -37,7 +40,16 @@ namespace GroupProject
             int height = 64;
             int hp = 10;
             double speed = 2;
-            player = new Player(x, y, width, height, hp , speed);
+            if (player == null)
+                player = new Player(x, y, width, height, hp , speed);
         }
+
+        public void CreatePlayerInventory()
+        {
+            if(playerInventory == null)
+                playerInventory = new PlayerInventory();
+        }
+
+        
     }
 }

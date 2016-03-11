@@ -44,13 +44,19 @@ namespace GroupProject
         /// </summary>
         protected override void Initialize()
         {
+            graphics.PreferredBackBufferWidth = 12 * Block.BLOCK_SIZE;
+            graphics.PreferredBackBufferHeight = 6 * Block.BLOCK_SIZE;
+            graphics.ApplyChanges();
+
             gameState = GameState.Game;
             framesThisGameFrame = 0;
             currentKb = Keyboard.GetState();
             previousKb = currentKb;
+
             MapManager.Instance.NewMap("map.data");
             PlayerManager.Instance.CreatePlayer();
-            InventoryManager.Instance.CreateInventory();
+            PlayerManager.Instance.CreatePlayerInventory();
+
             base.Initialize();
         }
 
@@ -67,9 +73,9 @@ namespace GroupProject
             Texture2D bot = Content.Load<Texture2D>("botcombat");
             testItem = Content.Load<Texture2D>("imgres");
             PlayerManager.Instance.Player.SetTexture(bot);
-            InventoryManager.Instance.PlayerInventory.addToInventory(new Item(testItem, "test"));
-            InventoryManager.Instance.PlayerInventory.addToInventory(new Item(testItem, "test"));
-            MapManager.Instance.CurrentSubMap.MapInventory.addToInventory(new Item(testItem, "test", new Rectangle(100, 100, 50, 50)));
+            PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(testItem, "test"));
+            PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(testItem, "test"));
+            MapManager.Instance.CurrentSubMap.MapInventory.AddToInventory(new Item(testItem, "test", new Rectangle(100, 100, 50, 50)));
         }
 
         /// <summary>
@@ -101,23 +107,20 @@ namespace GroupProject
                 case GameState.Game:
                     PlayerManager.Instance.Player.PreviousX = PlayerManager.Instance.Player.X;
                     PlayerManager.Instance.Player.PreviousY = PlayerManager.Instance.Player.Y;
-                    bool movingVertically = currentKb.IsKeyDown(Keys.W) != currentKb.IsKeyDown(Keys.S);
-                    bool movingHorizontally = currentKb.IsKeyDown(Keys.A) != currentKb.IsKeyDown(Keys.D);
-                    int moveBy = 0;
 
                     //if the player is moving change the moveby
-                    moveBy = MovementDistance(PlayerManager.Instance.Player.Speed, movingVertically && movingHorizontally);
+                    int moveBy = MovementDistance(PlayerManager.Instance.Player.Speed, (currentKb.IsKeyDown(Keys.W) != currentKb.IsKeyDown(Keys.S)) && (currentKb.IsKeyDown(Keys.A) != currentKb.IsKeyDown(Keys.D)));
 
                     //move the player horizontally in the correct direction
                     if (currentKb.IsKeyDown(Keys.A))
                         PlayerManager.Instance.Player.X -= moveBy;
-                    else if (currentKb.IsKeyDown(Keys.D))
+                    if (currentKb.IsKeyDown(Keys.D))
                         PlayerManager.Instance.Player.X += moveBy;
 
                     //handles wall collision
-                    List<Wall> collidingWalls = MapManager.Instance.CurrentSubMap.CollidingWalls();
+                    List<Block> collidingWalls = MapManager.Instance.CurrentSubMap.CollidingWalls();
 
-                    foreach (Wall w in collidingWalls)
+                    foreach (Block w in collidingWalls)
                     {
                         //if the player is moving to the left, hitting a block on its right side
                         if (PlayerManager.Instance.Player.X < PlayerManager.Instance.Player.PreviousX)
@@ -130,12 +133,12 @@ namespace GroupProject
                     //move the player vertically in the correct direction
                     if (currentKb.IsKeyDown(Keys.W))
                         PlayerManager.Instance.Player.Y -= moveBy;
-                    else if (currentKb.IsKeyDown(Keys.S))
+                    if (currentKb.IsKeyDown(Keys.S))
                         PlayerManager.Instance.Player.Y += moveBy;
 
                     collidingWalls = MapManager.Instance.CurrentSubMap.CollidingWalls();
 
-                    foreach (Wall w in collidingWalls)
+                    foreach (Block w in collidingWalls)
                     {
                         //if the player is moving up, hitting a block on its bottom
                         if (PlayerManager.Instance.Player.Y < PlayerManager.Instance.Player.PreviousY)
@@ -153,15 +156,15 @@ namespace GroupProject
                     }
                     if (currentKb.IsKeyDown(Keys.Space))
                     {
-                        if (MapManager.Instance.CurrentSubMap.MapInventory.Currinventory.Count != 0)
+                        if (MapManager.Instance.CurrentSubMap.MapInventory.CurrentInventory.Count != 0)
                         {
 
-                            for (int i = 0; i < MapManager.Instance.CurrentSubMap.MapInventory.Currinventory.Count; i++)
+                            for (int i = 0; i < MapManager.Instance.CurrentSubMap.MapInventory.CurrentInventory.Count; i++)
                             {
-                                if (PlayerManager.Instance.Player.Rectangle.Intersects(MapManager.Instance.CurrentSubMap.MapInventory.Currinventory[i].MapPosition))
+                                if (PlayerManager.Instance.Player.Rectangle.Intersects(MapManager.Instance.CurrentSubMap.MapInventory.CurrentInventory[i].MapPosition))
                                 {
-                                    MapManager.Instance.CurrentSubMap.MapInventory.Currinventory[i].addToPlayerInventory();
-                                    MapManager.Instance.CurrentSubMap.MapInventory.removeFromInventory(MapManager.Instance.CurrentSubMap.MapInventory.Currinventory[i]);
+                                    MapManager.Instance.CurrentSubMap.MapInventory.CurrentInventory[i].AddToPlayerInventory();
+                                    MapManager.Instance.CurrentSubMap.MapInventory.RemoveFromInventory(MapManager.Instance.CurrentSubMap.MapInventory.CurrentInventory[i]);
                                 }
                             }
 
@@ -181,12 +184,12 @@ namespace GroupProject
 
                     if (currentKb.IsKeyDown(Keys.U))
                     {
-                        InventoryManager.Instance.PlayerInventory.addToInventory(new Item(testItem, "test"));
+                        PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(testItem, "test"));
                     }
 
                     if (currentKb.IsKeyDown(Keys.Y))
                     {
-                        MapManager.Instance.CurrentSubMap.MapInventory.addToInventory(new Item(testItem, "test", new Rectangle(100, 100, 50, 50)));
+                        MapManager.Instance.CurrentSubMap.MapInventory.AddToInventory(new Item(testItem, "test", new Rectangle(100, 100, 50, 50)));
                     }
 
                     break;
@@ -215,7 +218,7 @@ namespace GroupProject
                     break;
 
                 case GameState.Inventory:
-                    InventoryManager.Instance.PlayerInventory.Draw(spriteBatch);
+                    PlayerManager.Instance.PlayerInventory.Draw(spriteBatch);
                     break;
 
             }
@@ -234,21 +237,15 @@ namespace GroupProject
         /// <param name="speed">how many pixes th eobject should move in a frame</param>
         /// <param name="onAngle">true if the object is moving diagonally</param>
         /// <returns></returns>
-        public int MovementDistance(double speed, bool onAngle)
+        public int MovementDistance(double speed, bool onAngle = false)
         {
             //speed * timePerFrame = how many pixels it should move this game frame
             //speed * timePerFrame * ANGLE_MULTIPLIER -> so the object doesn't move faster when moving on an angle
 
             if (onAngle)
-            {
-                //the object must be moved in both the x and y axies by the returned value
                 return (int)(Math.Round(speed * framesThisGameFrame * ANGLE_MULTIPLIER));
-            }
             else
-            {
-                //object is moving on one axis
                 return (int)(Math.Round(speed * framesThisGameFrame));
-            }
         }
     }
 }
