@@ -13,9 +13,11 @@ namespace GroupProject
         private Block[,] subMap;
         private int mapIndex;
         private List<Wall> walls;
+        private mapInventory mapInventory = new mapInventory();
 
         //Properties
         public int MapIndex { get { return mapIndex; } }
+        public mapInventory MapInventory { get { return mapInventory; } }
 
         //Constructors
         public SubMap(int[,] intMap, int mapIndex)
@@ -37,6 +39,7 @@ namespace GroupProject
                     subMap[i, j] = new Floor(j, i, intMap[i, j]);
                 }
             }
+
         }
         
         //Methods
