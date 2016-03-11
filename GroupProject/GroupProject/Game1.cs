@@ -13,15 +13,16 @@ namespace GroupProject
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        
+        Texture2D testItem;
+
         //for deconstructing a magnatude when using a 45degree angle int componets
         const double ANGLE_MULTIPLIER = 0.70710678118;
 
-        enum GameState { Game };
+        enum GameState { Game, Inventory };
         GameState gameState;
 
         static double FPS = 60.0;
-        static double SECONDS_PER_FRAME = 1/FPS;
+        static double SECONDS_PER_FRAME = 1 / FPS;
         double framesThisGameFrame;
 
         KeyboardState currentKb;
@@ -42,14 +43,14 @@ namespace GroupProject
         /// and initialize them as well.
         /// </summary>
         protected override void Initialize()
-        {   
-            framesThisGameFrame = 0;
+        {
             gameState = GameState.Game;
+            framesThisGameFrame = 0;
             currentKb = Keyboard.GetState();
             previousKb = currentKb;
             MapManager.Instance.NewMap("map.data");
             PlayerManager.Instance.CreatePlayer();
-
+            InventoryManager.Instance.CreateInventory();
             base.Initialize();
         }
 
@@ -64,7 +65,11 @@ namespace GroupProject
 
             tilesheet = Content.Load<Texture2D>("tilesheet");
             Texture2D bot = Content.Load<Texture2D>("botcombat");
+            testItem = Content.Load<Texture2D>("imgres");
             PlayerManager.Instance.Player.SetTexture(bot);
+            InventoryManager.Instance.PlayerInventory.addToInventory(new Item(testItem, "test"));
+            InventoryManager.Instance.PlayerInventory.addToInventory(new Item(testItem, "test"));
+            MapManager.Instance.CurrentSubMap.MapInventory.addToInventory(new Item(testItem, "test", new Rectangle(100, 100, 50, 50)));
         }
 
         /// <summary>
@@ -83,7 +88,7 @@ namespace GroupProject
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            framesThisGameFrame = gameTime.ElapsedGameTime.TotalSeconds / SECONDS_PER_FRAME;
+            framesThisGameFrame = gameTime.ElapsedGameTime.TotalSeconds / SECONDS_PER_FRAME; 
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
@@ -96,23 +101,23 @@ namespace GroupProject
                 case GameState.Game:
                     PlayerManager.Instance.Player.PreviousX = PlayerManager.Instance.Player.X;
                     PlayerManager.Instance.Player.PreviousY = PlayerManager.Instance.Player.Y;
-                    int moveBy = 0;
                     bool movingVertically = currentKb.IsKeyDown(Keys.W) != currentKb.IsKeyDown(Keys.S);
                     bool movingHorizontally = currentKb.IsKeyDown(Keys.A) != currentKb.IsKeyDown(Keys.D);
+                    int moveBy = 0;
 
                     //if the player is moving change the moveby
-                    moveBy = MovementDistance(PlayerManager.Instance.Player.Speed, movingVertically && movingHorizontally);                 
+                    moveBy = MovementDistance(PlayerManager.Instance.Player.Speed, movingVertically && movingHorizontally);
 
                     //move the player horizontally in the correct direction
                     if (currentKb.IsKeyDown(Keys.A))
                         PlayerManager.Instance.Player.X -= moveBy;
                     else if (currentKb.IsKeyDown(Keys.D))
                         PlayerManager.Instance.Player.X += moveBy;
-                    
+
                     //handles wall collision
                     List<Wall> collidingWalls = MapManager.Instance.CurrentSubMap.CollidingWalls();
-                    
-                    foreach(Wall w in collidingWalls)
+
+                    foreach (Wall w in collidingWalls)
                     {
                         //if the player is moving to the left, hitting a block on its right side
                         if (PlayerManager.Instance.Player.X < PlayerManager.Instance.Player.PreviousX)
@@ -139,6 +144,51 @@ namespace GroupProject
                         else if (PlayerManager.Instance.Player.Y > PlayerManager.Instance.Player.PreviousY)
                             PlayerManager.Instance.Player.Y = w.Rectangle.Y - PlayerManager.Instance.Player.Rectangle.Height;
                     }
+
+
+                    if (currentKb.IsKeyDown(Keys.I))
+                    {
+                        gameState = GameState.Inventory;
+                        this.IsMouseVisible = true;
+                    }
+                    if (currentKb.IsKeyDown(Keys.Space))
+                    {
+                        if (MapManager.Instance.CurrentSubMap.MapInventory.Currinventory.Count != 0)
+                        {
+
+                            for (int i = 0; i < MapManager.Instance.CurrentSubMap.MapInventory.Currinventory.Count; i++)
+                            {
+                                if (PlayerManager.Instance.Player.Rectangle.Intersects(MapManager.Instance.CurrentSubMap.MapInventory.Currinventory[i].MapPosition))
+                                {
+                                    MapManager.Instance.CurrentSubMap.MapInventory.Currinventory[i].addToPlayerInventory();
+                                    MapManager.Instance.CurrentSubMap.MapInventory.removeFromInventory(MapManager.Instance.CurrentSubMap.MapInventory.Currinventory[i]);
+                                }
+                            }
+
+                        }
+                    }
+
+
+
+
+                    break;
+                case GameState.Inventory:
+                    if (currentKb.IsKeyDown(Keys.O))
+                    {
+                        gameState = GameState.Game;
+                        this.IsMouseVisible = false;
+                    }
+
+                    if (currentKb.IsKeyDown(Keys.U))
+                    {
+                        InventoryManager.Instance.PlayerInventory.addToInventory(new Item(testItem, "test"));
+                    }
+
+                    if (currentKb.IsKeyDown(Keys.Y))
+                    {
+                        MapManager.Instance.CurrentSubMap.MapInventory.addToInventory(new Item(testItem, "test", new Rectangle(100, 100, 50, 50)));
+                    }
+
                     break;
             }
 
@@ -154,12 +204,21 @@ namespace GroupProject
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
             spriteBatch.Begin();
+            switch (gameState)
+            {
+                case GameState.Game:
 
-            MapManager.Instance.CurrentSubMap.Draw(spriteBatch, tilesheet);
-            PlayerManager.Instance.Player.Draw(spriteBatch);
+                    MapManager.Instance.CurrentSubMap.Draw(spriteBatch, tilesheet);
+                    PlayerManager.Instance.Player.Draw(spriteBatch);
+                    MapManager.Instance.CurrentSubMap.MapInventory.Draw(spriteBatch);
+                    break;
 
+                case GameState.Inventory:
+                    InventoryManager.Instance.PlayerInventory.Draw(spriteBatch);
+                    break;
+
+            }
             spriteBatch.End();
 
             base.Draw(gameTime);

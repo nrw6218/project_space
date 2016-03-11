@@ -10,19 +10,67 @@ namespace GroupProject
     public class Item
     {
         //Fields
-        private Rectangle rectangle;
+        private Rectangle invenposition;
+        private Rectangle mapposition;
         private Texture2D texture;
+        private String description;
+        private bool isInInventory;
 
         private Entity entity;
 
         //Properties
 
-        //Constructors
-        public Item()
+        public Rectangle InvenPosition
         {
-
+            get { return invenposition; }
+            set { invenposition = value; }
+        }
+        public Rectangle MapPosition
+        {
+            get { return mapposition; }
+            set { mapposition = value; }
         }
 
-        //Methods        
+        public String Description
+        {
+            get { return description; }
+        }
+
+        
+        //Constructors
+        public Item(Texture2D _texture, String _description)
+        {
+            texture = _texture;
+            description = _description;
+            entity = new Entity(mapposition);
+            entity.SetTexture(texture);
+            isInInventory = true;
+        }
+        public Item(Texture2D _texture, String _description, Rectangle _mapposition)
+        {
+            texture = _texture;
+            description = _description;
+            entity = new Entity(mapposition);
+            entity.SetTexture(texture);
+            mapposition = _mapposition;
+            isInInventory = false;
+        }
+
+
+
+        //methods
+        public void Draw(SpriteBatch spriteBatch, Rectangle position)
+        {
+            if (isInInventory)
+                spriteBatch.Draw(texture, position, Color.White);
+            if (!isInInventory)
+                spriteBatch.Draw(texture, mapposition, Color.White);
+        }
+    
+        public void addToPlayerInventory()
+        {
+            InventoryManager.Instance.PlayerInventory.addToInventory(this);
+            isInInventory = true;
+        }
     }
 }

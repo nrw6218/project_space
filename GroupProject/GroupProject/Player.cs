@@ -11,7 +11,6 @@ namespace GroupProject
     {
         //Fields
         private int karma;
-        private List<Item> inventory;
         private int previousX;
         private int previousY;
 
@@ -38,7 +37,6 @@ namespace GroupProject
             :base(rectangle, hp, speed)
         {
             karma = 0;
-            inventory = new List<Item>();
             previousX = X;
             previousY = Y;
         }
@@ -47,11 +45,11 @@ namespace GroupProject
             :base(x, y, width, height, hp, speed)
         {
             karma = 0;
-            inventory = new List<Item>();
             previousX = X;
             previousY = Y;
         }
 
         //Methods
+
     }
 }
