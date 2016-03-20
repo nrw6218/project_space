@@ -53,7 +53,7 @@ namespace GroupProject
             currentKb = Keyboard.GetState();
             previousKb = currentKb;
 
-            MapManager.Instance.NewMap("map.data");
+            MapManager.Instance.NewMap("../../../Content/testWorld.map");
             PlayerManager.Instance.CreatePlayer();
             PlayerManager.Instance.CreatePlayerInventory();
 
@@ -158,7 +158,6 @@ namespace GroupProject
                     {
                         if (MapManager.Instance.CurrentSubMap.MapInventory.CurrentInventory.Count != 0)
                         {
-
                             for (int i = 0; i < MapManager.Instance.CurrentSubMap.MapInventory.CurrentInventory.Count; i++)
                             {
                                 if (PlayerManager.Instance.Player.Rectangle.Intersects(MapManager.Instance.CurrentSubMap.MapInventory.CurrentInventory[i].MapPosition))
@@ -171,6 +170,26 @@ namespace GroupProject
                         }
                     }
 
+                    if(PlayerManager.Instance.Player.X + PlayerManager.Instance.Player.Width/2 < 0)
+                    {
+                        MapManager.Instance.MoveSubmap(Direction.Left);
+                        PlayerManager.Instance.Player.X = graphics.PreferredBackBufferWidth - PlayerManager.Instance.Player.Width / 2;
+                    }
+                    else if (PlayerManager.Instance.Player.X + PlayerManager.Instance.Player.Width / 2 > graphics.PreferredBackBufferWidth)
+                    {
+                        MapManager.Instance.MoveSubmap(Direction.Right);
+                        PlayerManager.Instance.Player.X = PlayerManager.Instance.Player.Width / 2;
+                    }
+                    else if (PlayerManager.Instance.Player.Y + PlayerManager.Instance.Player.Height / 2 < 0)
+                    {
+                        MapManager.Instance.MoveSubmap(Direction.Up);
+                        PlayerManager.Instance.Player.Y = graphics.PreferredBackBufferHeight - PlayerManager.Instance.Player.Height / 2;
+                    }
+                    else if (PlayerManager.Instance.Player.Y + PlayerManager.Instance.Player.Height / 2 > graphics.PreferredBackBufferHeight)
+                    {
+                        MapManager.Instance.MoveSubmap(Direction.Down);
+                        PlayerManager.Instance.Player.Y = PlayerManager.Instance.Player.Height / 2;
+                    }
 
 
 
