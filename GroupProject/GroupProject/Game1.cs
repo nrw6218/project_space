@@ -149,7 +149,7 @@ namespace GroupProject
                     }
 
 
-                    if (currentKb.IsKeyDown(Keys.I))
+                    if (currentKb.IsKeyDown(Keys.I) && previousKb.IsKeyUp(Keys.I))
                     {
                         gameState = GameState.Inventory;
                         this.IsMouseVisible = true;
@@ -195,18 +195,18 @@ namespace GroupProject
 
                     break;
                 case GameState.Inventory:
-                    if (currentKb.IsKeyDown(Keys.O))
+                    if (currentKb.IsKeyDown(Keys.I) && previousKb.IsKeyUp(Keys.I))
                     {
                         gameState = GameState.Game;
                         this.IsMouseVisible = false;
                     }
 
-                    if (currentKb.IsKeyDown(Keys.U))
+                    if (currentKb.IsKeyDown(Keys.U) && previousKb.IsKeyUp(Keys.U))
                     {
                         PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(testItem, "test"));
                     }
 
-                    if (currentKb.IsKeyDown(Keys.Y))
+                    if (currentKb.IsKeyDown(Keys.Y) && previousKb.IsKeyUp(Keys.Y))
                     {
                         MapManager.Instance.CurrentSubMap.MapInventory.AddToInventory(new Item(testItem, "test", new Rectangle(100, 100, 50, 50)));
                     }
