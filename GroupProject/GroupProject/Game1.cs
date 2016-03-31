@@ -18,7 +18,7 @@ namespace GroupProject
         //for deconstructing a magnatude when using a 45degree angle int componets
         const double ANGLE_MULTIPLIER = 0.70710678118;
 
-        enum GameState { Game, Inventory };
+        enum GameState { Game, Inventory, Equipment, Puzzle };
         GameState gameState;
 
         static double FPS = 60.0;
@@ -96,7 +96,7 @@ namespace GroupProject
         {
             framesThisGameFrame = gameTime.ElapsedGameTime.TotalSeconds / SECONDS_PER_FRAME; 
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             previousKb = currentKb;
@@ -154,6 +154,11 @@ namespace GroupProject
                         gameState = GameState.Inventory;
                         this.IsMouseVisible = true;
                     }
+                    if (currentKb.IsKeyDown(Keys.E) && previousKb.IsKeyUp(Keys.E))
+                    {
+                        gameState = GameState.Equipment;
+                        this.IsMouseVisible = true;
+                    }
                     if (currentKb.IsKeyDown(Keys.Space))
                     {
                         if (MapManager.Instance.CurrentSubMap.MapInventory.CurrentInventory.Count != 0)
@@ -200,6 +205,11 @@ namespace GroupProject
                         gameState = GameState.Game;
                         this.IsMouseVisible = false;
                     }
+                    if (currentKb.IsKeyDown(Keys.E) && previousKb.IsKeyUp(Keys.E))
+                    {
+                        gameState = GameState.Equipment;
+                        this.IsMouseVisible = false;
+                    }
 
                     if (currentKb.IsKeyDown(Keys.U) && previousKb.IsKeyUp(Keys.U))
                     {
@@ -211,6 +221,20 @@ namespace GroupProject
                         MapManager.Instance.CurrentSubMap.MapInventory.AddToInventory(new Item(testItem, "test", new Rectangle(100, 100, 50, 50)));
                     }
 
+                    break;
+                case GameState.Equipment:
+                    if (currentKb.IsKeyDown(Keys.I) && previousKb.IsKeyUp(Keys.I))
+                    {
+                        gameState = GameState.Inventory;
+                        this.IsMouseVisible = false;
+                    }
+                    if (currentKb.IsKeyDown(Keys.E) && previousKb.IsKeyUp(Keys.E))
+                    {
+                        gameState = GameState.Game;
+                        this.IsMouseVisible = false;
+                    }
+                    break;
+                case GameState.Puzzle:
                     break;
             }
 
