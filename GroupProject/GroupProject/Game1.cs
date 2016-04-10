@@ -26,6 +26,7 @@ namespace GroupProject
         Texture2D menuWall;
         Texture2D mainLogo;
         Texture2D hud;
+        Texture2D astro;
 
         //Font for in-game text
         SpriteFont basicFont;
@@ -33,7 +34,7 @@ namespace GroupProject
         //for deconstructing a magnatude when using a 45degree angle int componets
         const double ANGLE_MULTIPLIER = 0.70710678118;
 
-        enum GameState { MainMenu, Game, Inventory, Equipment, Puzzle };
+        enum GameState { MainMenu, Help, Game, Inventory, Equipment, Puzzle };
         GameState gameState;
 
         static double FPS = 60.0;
@@ -91,6 +92,7 @@ namespace GroupProject
             mainLogo = Content.Load<Texture2D>("mainBack");
             basicFont = Content.Load<SpriteFont>("Audiowide");
             hud = Content.Load<Texture2D>("hudBack");
+            astro = Content.Load<Texture2D>("astroFront");
             PlayerManager.Instance.Player.SetTexture(bot);
             PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(testItem, "test"));
             PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(testItem, "test"));
@@ -125,7 +127,29 @@ namespace GroupProject
             {
                 case GameState.MainMenu:
                     if (currentKb.IsKeyDown(Keys.Enter))
+                        gameState = GameState.Help;
+                    break;
+                case GameState.Help:
+                    if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
+                    {
                         gameState = GameState.Game;
+                        this.IsMouseVisible = false;
+                    }
+                    if (currentKb.IsKeyDown(Keys.H) && previousKb.IsKeyUp(Keys.H))
+                    {
+                        gameState = GameState.Game;
+                        this.IsMouseVisible = false;
+                    }
+                    if (currentKb.IsKeyDown(Keys.E) && previousKb.IsKeyUp(Keys.E))
+                    {
+                        gameState = GameState.Equipment;
+                        this.IsMouseVisible = true;
+                    }
+                    if (currentKb.IsKeyDown(Keys.I) && previousKb.IsKeyUp(Keys.I))
+                    {
+                        gameState = GameState.Inventory;
+                        this.IsMouseVisible = true;
+                    }
                     break;
                 case GameState.Game:
                     PlayerManager.Instance.Player.PreviousX = PlayerManager.Instance.Player.X;
@@ -171,7 +195,12 @@ namespace GroupProject
                             PlayerManager.Instance.Player.Y = w.Rectangle.Y - PlayerManager.Instance.Player.Rectangle.Height;
                     }
 
-                    //Keys to open inventory and equipment screens
+                    //Keys to open help, inventory and equipment screens
+                    if (currentKb.IsKeyDown(Keys.H) && previousKb.IsKeyUp(Keys.H))
+                    {
+                        gameState = GameState.Help;
+                        this.IsMouseVisible = true;
+                    }
                     if (currentKb.IsKeyDown(Keys.I) && previousKb.IsKeyUp(Keys.I))
                     {
                         gameState = GameState.Inventory;
@@ -231,7 +260,12 @@ namespace GroupProject
                     if (currentKb.IsKeyDown(Keys.E) && previousKb.IsKeyUp(Keys.E))
                     {
                         gameState = GameState.Equipment;
-                        this.IsMouseVisible = false;
+                        this.IsMouseVisible = true;
+                    }
+                    if (currentKb.IsKeyDown(Keys.H) && previousKb.IsKeyUp(Keys.H))
+                    {
+                        gameState = GameState.Help;
+                        this.IsMouseVisible = true;
                     }
 
                     if (currentKb.IsKeyDown(Keys.U) && previousKb.IsKeyUp(Keys.U))
@@ -249,12 +283,17 @@ namespace GroupProject
                     if (currentKb.IsKeyDown(Keys.I) && previousKb.IsKeyUp(Keys.I))
                     {
                         gameState = GameState.Inventory;
-                        this.IsMouseVisible = false;
+                        this.IsMouseVisible = true;
                     }
                     if (currentKb.IsKeyDown(Keys.E) && previousKb.IsKeyUp(Keys.E))
                     {
                         gameState = GameState.Game;
                         this.IsMouseVisible = false;
+                    }
+                    if (currentKb.IsKeyDown(Keys.H) && previousKb.IsKeyUp(Keys.H))
+                    {
+                        gameState = GameState.Help;
+                        this.IsMouseVisible = true;
                     }
                     break;
                 case GameState.Puzzle:
@@ -280,22 +319,36 @@ namespace GroupProject
                     spriteBatch.Draw(mainLogo, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
                     spriteBatch.DrawString(basicFont, "press enter", new Vector2(223, GraphicsDevice.Viewport.Height / 2 + 60), Color.White);
                     break;
+                case GameState.Help:
+                    spriteBatch.Draw(menuWall, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.MediumPurple);
+                    spriteBatch.DrawString(basicFont, "how to play", new Vector2(GraphicsDevice.Viewport.Width / 2 - 55, 10), Color.Black);
+                    spriteBatch.DrawString(basicFont, "controls", new Vector2(GraphicsDevice.Viewport.Width / 2 - 250, 100), Color.Black);
+                    spriteBatch.DrawString(basicFont, "Move: ASDW", new Vector2(GraphicsDevice.Viewport.Width / 2 - 250, 140), Color.Black);
+                    spriteBatch.DrawString(basicFont, "Grab Item: Space Bar", new Vector2(GraphicsDevice.Viewport.Width / 2 - 250, 155), Color.Black);
+                    spriteBatch.DrawString(basicFont, "Open Inventory: I", new Vector2(GraphicsDevice.Viewport.Width / 2 - 250, 170), Color.Black);
+                    spriteBatch.DrawString(basicFont, "Open Equipment: E", new Vector2(GraphicsDevice.Viewport.Width / 2 - 250, 185), Color.Black);
+                    spriteBatch.DrawString(basicFont, "Open Help: H", new Vector2(GraphicsDevice.Viewport.Width / 2 - 250, 200), Color.Black);
+                    spriteBatch.DrawString(basicFont, "Exit Game: Escape", new Vector2(GraphicsDevice.Viewport.Width / 2 - 250, 215), Color.Black);
+                    spriteBatch.DrawString(basicFont, "press enter to continue to game", new Vector2(GraphicsDevice.Viewport.Width / 2 - 140, 300), Color.Black);
+                    spriteBatch.Draw(astro, new Rectangle(500, 100, 130, 150), Color.White);
+                    break;
                 case GameState.Game:
-
                     MapManager.Instance.CurrentSubMap.Draw(spriteBatch, tilesheet);
                     PlayerManager.Instance.Player.Draw(spriteBatch);
                     MapManager.Instance.CurrentSubMap.MapInventory.Draw(spriteBatch);
-                    spriteBatch.Draw(hud, new Rectangle(15, 15, 125, 55), Color.White);
+                    spriteBatch.Draw(hud, new Rectangle(15, 15, 125, 55), Color.NavajoWhite);
                     spriteBatch.DrawString(basicFont, "Artifacts: " + PlayerManager.Instance.PlayerInventory.Count, new Vector2(25, 20), Color.Black);
                     break;
 
                 case GameState.Inventory:
                     spriteBatch.Draw(menuWall, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
                     PlayerManager.Instance.PlayerInventory.Draw(spriteBatch);
+                    spriteBatch.DrawString(basicFont, "inventory", new Vector2(GraphicsDevice.Viewport.Width / 2 - 55, 10), Color.Black);
                     break;
 
                 case GameState.Equipment:
                     spriteBatch.Draw(menuWall, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.Coral);
+                    spriteBatch.DrawString(basicFont, "equipment", new Vector2(GraphicsDevice.Viewport.Width / 2 - 55, 10), Color.Black);
                     break;
 
             }
