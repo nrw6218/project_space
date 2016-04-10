@@ -14,6 +14,11 @@ namespace GroupProject
 
         public List<Item> Currinventory { get { return currinventory; } }
 
+        public int Count
+        {
+            get { return currinventory.Count; }
+        }
+
         public PlayerInventory()
         {
             currinventory = new List<Item>(0);

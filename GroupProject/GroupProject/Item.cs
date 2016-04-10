@@ -68,6 +68,8 @@ namespace GroupProject
             if (!isInInventory)
                 spriteBatch.Draw(texture, mapposition, color);
         }
+
+
         public void Draw(SpriteBatch spriteBatch, Rectangle position)
         {
             if (isInInventory)

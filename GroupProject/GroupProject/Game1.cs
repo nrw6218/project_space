@@ -22,13 +22,18 @@ namespace GroupProject
         SpriteBatch spriteBatch;
         Texture2D testItem;
 
-        //For use in inventory and equipment screens
+        //For use in main menu and inventory screens
         Texture2D menuWall;
+        Texture2D mainLogo;
+        Texture2D hud;
+
+        //Font for in-game text
+        SpriteFont basicFont;
 
         //for deconstructing a magnatude when using a 45degree angle int componets
         const double ANGLE_MULTIPLIER = 0.70710678118;
 
-        enum GameState { Game, Inventory, Equipment, Puzzle };
+        enum GameState { MainMenu, Game, Inventory, Equipment, Puzzle };
         GameState gameState;
 
         static double FPS = 60.0;
@@ -58,7 +63,7 @@ namespace GroupProject
             graphics.PreferredBackBufferHeight = 6 * Block.BLOCK_SIZE;
             graphics.ApplyChanges();
 
-            gameState = GameState.Game;
+            gameState = GameState.MainMenu;
             framesThisGameFrame = 0;
             currentKb = Keyboard.GetState();
             previousKb = currentKb;
@@ -83,6 +88,9 @@ namespace GroupProject
             Texture2D bot = Content.Load<Texture2D>("botcombat");
             testItem = Content.Load<Texture2D>("imgres");
             menuWall = Content.Load<Texture2D>("InventoryBack");
+            mainLogo = Content.Load<Texture2D>("mainBack");
+            basicFont = Content.Load<SpriteFont>("Audiowide");
+            hud = Content.Load<Texture2D>("hudBack");
             PlayerManager.Instance.Player.SetTexture(bot);
             PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(testItem, "test"));
             PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(testItem, "test"));
@@ -115,6 +123,10 @@ namespace GroupProject
 
             switch (gameState)
             {
+                case GameState.MainMenu:
+                    if (currentKb.IsKeyDown(Keys.Enter))
+                        gameState = GameState.Game;
+                    break;
                 case GameState.Game:
                     PlayerManager.Instance.Player.PreviousX = PlayerManager.Instance.Player.X;
                     PlayerManager.Instance.Player.PreviousY = PlayerManager.Instance.Player.Y;
@@ -159,7 +171,7 @@ namespace GroupProject
                             PlayerManager.Instance.Player.Y = w.Rectangle.Y - PlayerManager.Instance.Player.Rectangle.Height;
                     }
 
-
+                    //Keys to open inventory and equipment screens
                     if (currentKb.IsKeyDown(Keys.I) && previousKb.IsKeyUp(Keys.I))
                     {
                         gameState = GameState.Inventory;
@@ -264,11 +276,17 @@ namespace GroupProject
             spriteBatch.Begin();
             switch (gameState)
             {
+                case GameState.MainMenu:
+                    spriteBatch.Draw(mainLogo, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+                    spriteBatch.DrawString(basicFont, "press enter", new Vector2(223, GraphicsDevice.Viewport.Height / 2 + 60), Color.White);
+                    break;
                 case GameState.Game:
 
                     MapManager.Instance.CurrentSubMap.Draw(spriteBatch, tilesheet);
                     PlayerManager.Instance.Player.Draw(spriteBatch);
                     MapManager.Instance.CurrentSubMap.MapInventory.Draw(spriteBatch);
+                    spriteBatch.Draw(hud, new Rectangle(15, 15, 125, 55), Color.White);
+                    spriteBatch.DrawString(basicFont, "Artifacts: " + PlayerManager.Instance.PlayerInventory.Count, new Vector2(25, 20), Color.Black);
                     break;
 
                 case GameState.Inventory:
