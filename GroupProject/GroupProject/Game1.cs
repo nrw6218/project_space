@@ -4,6 +4,13 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 
+//Assets borrowed from the following sources:
+//http://s267.photobucket.com/user/RandomDave15/media/PSP%20wallpapers/Games/Untitled.png.html
+//
+
+
+
+
 namespace GroupProject
 {
     /// <summary>
@@ -14,6 +21,9 @@ namespace GroupProject
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Texture2D testItem;
+
+        //For use in inventory and equipment screens
+        Texture2D menuWall;
 
         //for deconstructing a magnatude when using a 45degree angle int componets
         const double ANGLE_MULTIPLIER = 0.70710678118;
@@ -72,6 +82,7 @@ namespace GroupProject
             tilesheet = Content.Load<Texture2D>("tilesheet");
             Texture2D bot = Content.Load<Texture2D>("botcombat");
             testItem = Content.Load<Texture2D>("imgres");
+            menuWall = Content.Load<Texture2D>("InventoryBack");
             PlayerManager.Instance.Player.SetTexture(bot);
             PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(testItem, "test"));
             PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(testItem, "test"));
@@ -261,7 +272,12 @@ namespace GroupProject
                     break;
 
                 case GameState.Inventory:
+                    spriteBatch.Draw(menuWall, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
                     PlayerManager.Instance.PlayerInventory.Draw(spriteBatch);
+                    break;
+
+                case GameState.Equipment:
+                    spriteBatch.Draw(menuWall, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.Coral);
                     break;
 
             }

@@ -59,6 +59,15 @@ namespace GroupProject
 
 
         //methods
+
+        //Overloads other version of method by allowing the user to choose a color
+        public void Draw(SpriteBatch spriteBatch, Rectangle position, Color color)
+        {
+            if (isInInventory)
+                spriteBatch.Draw(texture, position, color);
+            if (!isInInventory)
+                spriteBatch.Draw(texture, mapposition, color);
+        }
         public void Draw(SpriteBatch spriteBatch, Rectangle position)
         {
             if (isInInventory)
