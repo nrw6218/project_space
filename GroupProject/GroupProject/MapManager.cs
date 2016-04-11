@@ -39,15 +39,15 @@ namespace GroupProject
             Stream inStream = File.OpenRead(fileName);
             BinaryReader input = new BinaryReader(inStream);
             int mapHeight = input.ReadInt32();
-            int mapWidth = input.ReadInt32();            
+            int mapWidth = input.ReadInt32();    
             int subMapHeight = 6;
             int subMapWidth = 12;
 
             //loads ints from file 
             int[,][,] mapIntArry = new int[mapHeight, mapWidth][,];
-            for (int i = 0; i < mapWidth; i++)
+            for (int i = 0; i < mapHeight; i++)
             {
-                for (int j = 0; j < mapHeight; j++)
+                for (int j = 0; j < mapWidth; j++)
                 {
                     mapIntArry[i, j] = new int[subMapHeight, subMapWidth];
                     for (int k = 0; k < subMapHeight; k++)

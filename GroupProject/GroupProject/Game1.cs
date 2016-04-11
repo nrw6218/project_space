@@ -69,7 +69,7 @@ namespace GroupProject
             currentKb = Keyboard.GetState();
             previousKb = currentKb;
 
-            MapManager.Instance.NewMap("../../../Content/testWorld.map");
+            MapManager.Instance.NewMap("../../../Content/Level 1.map");
             PlayerManager.Instance.CreatePlayer();
             PlayerManager.Instance.CreatePlayerInventory();
 
