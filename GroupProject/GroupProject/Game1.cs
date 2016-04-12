@@ -20,13 +20,18 @@ namespace GroupProject
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Texture2D testItem;
+        //For use with inventory items
+        Texture2D crate;
+        Texture2D box;
+        Texture2D artifact;
+        Texture2D key;
 
         //For use in main menu and inventory screens
         Texture2D menuWall;
         Texture2D mainLogo;
         Texture2D hud;
         Texture2D astro;
+        Texture2D logo;
 
         //Font for in-game text
         SpriteFont basicFont;
@@ -87,16 +92,23 @@ namespace GroupProject
 
             tilesheet = Content.Load<Texture2D>("tilesheet");
             Texture2D bot = Content.Load<Texture2D>("botcombat");
-            testItem = Content.Load<Texture2D>("imgres");
+            crate = Content.Load<Texture2D>("Crate");
             menuWall = Content.Load<Texture2D>("InventoryBack");
             mainLogo = Content.Load<Texture2D>("mainBack");
             basicFont = Content.Load<SpriteFont>("Audiowide");
             hud = Content.Load<Texture2D>("hudBack");
             astro = Content.Load<Texture2D>("astroFront");
-            PlayerManager.Instance.Player.SetTexture(bot);
-            PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(testItem, "test"));
-            PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(testItem, "test"));
-            MapManager.Instance.CurrentSubMap.MapInventory.AddToInventory(new Item(testItem, "test", new Rectangle(100, 100, 50, 50)));
+            key = Content.Load<Texture2D>("Card");
+            box = Content.Load<Texture2D>("Crate2");
+            artifact = Content.Load<Texture2D>("Artifact2");
+            logo = Content.Load<Texture2D>("CompanyLogo");
+
+            PlayerManager.Instance.Player.SetTexture(astro);
+            PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(crate, "Crate"));
+            PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(box, "Mysterious Box"));
+            PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(artifact, "Camera"));
+            MapManager.Instance.CurrentSubMap.MapInventory.AddToInventory(new Item(crate, "Artifact", new Rectangle(300, 200, 50, 50)));
+            MapManager.Instance.CurrentSubMap.MapInventory.AddToInventory(new Item(key, "Card Key", new Rectangle(400, 80, 25, 30)));
         }
 
         /// <summary>
@@ -270,12 +282,12 @@ namespace GroupProject
 
                     if (currentKb.IsKeyDown(Keys.U) && previousKb.IsKeyUp(Keys.U))
                     {
-                        PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(testItem, "test"));
+                        PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(crate, "test"));
                     }
 
                     if (currentKb.IsKeyDown(Keys.Y) && previousKb.IsKeyUp(Keys.Y))
                     {
-                        MapManager.Instance.CurrentSubMap.MapInventory.AddToInventory(new Item(testItem, "test", new Rectangle(100, 100, 50, 50)));
+                        MapManager.Instance.CurrentSubMap.MapInventory.AddToInventory(new Item(crate, "test", new Rectangle(100, 100, 50, 50)));
                     }
 
                     break;
@@ -334,9 +346,9 @@ namespace GroupProject
                     break;
                 case GameState.Game:
                     MapManager.Instance.CurrentSubMap.Draw(spriteBatch, tilesheet);
-                    PlayerManager.Instance.Player.Draw(spriteBatch);
                     MapManager.Instance.CurrentSubMap.MapInventory.Draw(spriteBatch);
-                    spriteBatch.Draw(hud, new Rectangle(15, 15, 125, 55), Color.NavajoWhite);
+                    PlayerManager.Instance.Player.Draw(spriteBatch);
+                    spriteBatch.Draw(hud, new Rectangle(15, 15, 130, 55), Color.NavajoWhite);
                     spriteBatch.DrawString(basicFont, "Artifacts: " + PlayerManager.Instance.PlayerInventory.Count, new Vector2(25, 20), Color.Black);
                     break;
 
@@ -344,11 +356,15 @@ namespace GroupProject
                     spriteBatch.Draw(menuWall, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
                     PlayerManager.Instance.PlayerInventory.Draw(spriteBatch);
                     spriteBatch.DrawString(basicFont, "inventory", new Vector2(GraphicsDevice.Viewport.Width / 2 - 55, 10), Color.Black);
+                    spriteBatch.DrawString(basicFont, "to_help: H", new Vector2(600, 10), Color.White);
+                    spriteBatch.DrawString(basicFont, "to_equipment: E", new Vector2(60, 10), Color.White);
                     break;
 
                 case GameState.Equipment:
                     spriteBatch.Draw(menuWall, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.Coral);
                     spriteBatch.DrawString(basicFont, "equipment", new Vector2(GraphicsDevice.Viewport.Width / 2 - 55, 10), Color.Black);
+                    spriteBatch.DrawString(basicFont, "to_help: H", new Vector2(600, 10), Color.White);
+                    spriteBatch.DrawString(basicFont, "to_inventory: I", new Vector2(60, 10), Color.White);
                     break;
 
             }
