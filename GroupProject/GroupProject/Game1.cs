@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 //Assets borrowed from the following sources:
 //http://s267.photobucket.com/user/RandomDave15/media/PSP%20wallpapers/Games/Untitled.png.html
+//http://www.puppygames.net/chaz/
 //
 
 
@@ -109,6 +110,8 @@ namespace GroupProject
             PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(artifact, "Camera"));
             MapManager.Instance.CurrentSubMap.MapInventory.AddToInventory(new Item(crate, "Artifact", new Rectangle(300, 200, 50, 50)));
             MapManager.Instance.CurrentSubMap.MapInventory.AddToInventory(new Item(key, "Card Key", new Rectangle(400, 80, 25, 30)));
+            MapManager.Instance.CurrentMap.GetSubmap(0, 2).MapInventory.AddToInventory(new Item(box, "Mysterious Box", new Rectangle(200, 200, 50, 50)));
+
         }
 
         /// <summary>

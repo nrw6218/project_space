@@ -57,5 +57,10 @@ namespace GroupProject
                 throw new IndexOutOfRangeException();
         }
 
+        public SubMap GetSubmap(int row, int col)
+        {
+            return map[row, col];
+        }
+
     }
 }
