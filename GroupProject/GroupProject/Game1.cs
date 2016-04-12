@@ -3,15 +3,15 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 //Assets borrowed from the following sources:
 //http://s267.photobucket.com/user/RandomDave15/media/PSP%20wallpapers/Games/Untitled.png.html
 //http://www.puppygames.net/chaz/
 //
 
-
-
-
+    
 namespace GroupProject
 {
     /// <summary>
@@ -37,6 +37,8 @@ namespace GroupProject
         //Font for in-game text
         SpriteFont basicFont;
 
+        //For use in tracking the mouse state
+        MouseState ms;
         //for deconstructing a magnatude when using a 45degree angle int componets
         const double ANGLE_MULTIPLIER = 0.70710678118;
 
@@ -107,11 +109,24 @@ namespace GroupProject
             PlayerManager.Instance.Player.SetTexture(astro);
             PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(crate, "Crate"));
             PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(box, "Mysterious Box"));
-            PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(artifact, "Camera"));
-            MapManager.Instance.CurrentSubMap.MapInventory.AddToInventory(new Item(crate, "Artifact", new Rectangle(300, 200, 50, 50)));
-            MapManager.Instance.CurrentSubMap.MapInventory.AddToInventory(new Item(key, "Card Key", new Rectangle(400, 80, 25, 30)));
-            MapManager.Instance.CurrentMap.GetSubmap(0, 2).MapInventory.AddToInventory(new Item(box, "Mysterious Box", new Rectangle(200, 200, 50, 50)));
+            PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(artifact, "Advanced Camera"));
+            MapManager.Instance.CurrentSubMap.MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(300, 200, 50, 50)));
+            MapManager.Instance.CurrentSubMap.MapInventory.AddToInventory(new Item(box, "Mysterious Box", new Rectangle(400, 80, 50, 50)));
 
+            MapManager.Instance.CurrentMap.GetSubmap(0, 2).MapInventory.AddToInventory(new Item(box, "Mysterious Box", new Rectangle(200, 200, 50, 50)));
+            MapManager.Instance.CurrentMap.GetSubmap(0, 2).MapInventory.AddToInventory(new Item(artifact, "Advanced Camera", new Rectangle(200, 250, 50, 50)));
+            MapManager.Instance.CurrentMap.GetSubmap(0, 2).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(320, 200, 50, 50)));
+            MapManager.Instance.CurrentMap.GetSubmap(0, 2).MapInventory.AddToInventory(new Item(key, "Card Key", new Rectangle(100, 100, 25, 30)));
+
+            MapManager.Instance.CurrentMap.GetSubmap(2, 0).MapInventory.AddToInventory(new Item(artifact, "Advanced Camera", new Rectangle(200, 250, 50, 50)));
+            MapManager.Instance.CurrentMap.GetSubmap(2, 1).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(320, 200, 50, 50)));
+            MapManager.Instance.CurrentMap.GetSubmap(3, 1).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(320, 200, 50, 50)));
+
+            MapManager.Instance.CurrentMap.GetSubmap(4, 0).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(80, 80, 50, 50)));
+            MapManager.Instance.CurrentMap.GetSubmap(4, 0).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(70, 200, 50, 50)));
+
+            MapManager.Instance.CurrentMap.GetSubmap(4, 1).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(200, 200, 50, 50)));
+            MapManager.Instance.CurrentMap.GetSubmap(4, 1).MapInventory.AddToInventory(new Item(key, "Card Key", new Rectangle(300, 150, 25, 30)));
         }
 
         /// <summary>
@@ -280,6 +295,7 @@ namespace GroupProject
 
                     break;
                 case GameState.Inventory:
+                    ms = Mouse.GetState();
                     if (currentKb.IsKeyDown(Keys.I) && previousKb.IsKeyUp(Keys.I))
                     {
                         gameState = GameState.Game;
@@ -305,7 +321,6 @@ namespace GroupProject
                     {
                         MapManager.Instance.CurrentSubMap.MapInventory.AddToInventory(new Item(crate, "test", new Rectangle(100, 100, 50, 50)));
                     }
-
                     break;
                 case GameState.Equipment:
                     if (currentKb.IsKeyDown(Keys.I) && previousKb.IsKeyUp(Keys.I))
@@ -382,6 +397,13 @@ namespace GroupProject
                     spriteBatch.DrawString(basicFont, "inventory", new Vector2(GraphicsDevice.Viewport.Width / 2 - 55, 10), Color.Black);
                     spriteBatch.DrawString(basicFont, "to_help: H", new Vector2(600, 10), Color.White);
                     spriteBatch.DrawString(basicFont, "to_equipment: E", new Vector2(60, 10), Color.White);
+                    foreach(Item i in PlayerManager.Instance.PlayerInventory.Currinventory)
+                    {
+                        if (i.MapPosition.Contains(ms.Position))
+                        {
+                            i.Draw(spriteBatch, new Rectangle(200, 100, 300, 300),Color.Green);
+                        }
+                    }
                     break;
 
                 case GameState.Equipment:
