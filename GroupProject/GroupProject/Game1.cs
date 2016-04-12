@@ -39,7 +39,7 @@ namespace GroupProject
         //for deconstructing a magnatude when using a 45degree angle int componets
         const double ANGLE_MULTIPLIER = 0.70710678118;
 
-        enum GameState { MainMenu, Help, Game, Inventory, Equipment, Puzzle };
+        enum GameState { MainMenu, Help, Game, Inventory, Equipment, Puzzle, End };
         GameState gameState;
 
         static double FPS = 60.0;
@@ -168,7 +168,9 @@ namespace GroupProject
                     PlayerManager.Instance.Player.PreviousY = PlayerManager.Instance.Player.Y;
 
                     //if the player is moving change the moveby
-                    int moveBy = MovementDistance(PlayerManager.Instance.Player.Speed, (currentKb.IsKeyDown(Keys.W) != currentKb.IsKeyDown(Keys.S)) && (currentKb.IsKeyDown(Keys.A) != currentKb.IsKeyDown(Keys.D)));
+                    int moveBy = 0;
+                    if (PlayerManager.Instance.PlayerInventory.Count < 15)
+                        moveBy = MovementDistance(PlayerManager.Instance.Player.Speed, (currentKb.IsKeyDown(Keys.W) != currentKb.IsKeyDown(Keys.S)) && (currentKb.IsKeyDown(Keys.A) != currentKb.IsKeyDown(Keys.D)));
 
                     //move the player horizontally in the correct direction
                     if (currentKb.IsKeyDown(Keys.A))
@@ -205,6 +207,17 @@ namespace GroupProject
                         //if the player is moving down, hitting a block on its top
                         else if (PlayerManager.Instance.Player.Y > PlayerManager.Instance.Player.PreviousY)
                             PlayerManager.Instance.Player.Y = w.Rectangle.Y - PlayerManager.Instance.Player.Rectangle.Height;
+                    }
+
+                    //Stop the player from moving if they have collected 15 artifacts
+                    if (PlayerManager.Instance.PlayerInventory.Count >= 15)
+                    {
+                        moveBy = 0;
+                        if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
+                        {
+                            gameState = GameState.End;
+                            this.IsMouseVisible = true;
+                        }
                     }
 
                     //Keys to open help, inventory and equipment screens
@@ -331,6 +344,7 @@ namespace GroupProject
                     spriteBatch.Draw(mainLogo, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
                     spriteBatch.DrawString(basicFont, "press enter", new Vector2(223, GraphicsDevice.Viewport.Height / 2 + 60), Color.White);
                     break;
+
                 case GameState.Help:
                     spriteBatch.Draw(menuWall, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.MediumPurple);
                     spriteBatch.DrawString(basicFont, "how to play", new Vector2(GraphicsDevice.Viewport.Width / 2 - 55, 10), Color.Black);
@@ -342,14 +356,21 @@ namespace GroupProject
                     spriteBatch.DrawString(basicFont, "Open Help: H", new Vector2(GraphicsDevice.Viewport.Width / 2 - 250, 200), Color.Black);
                     spriteBatch.DrawString(basicFont, "Exit Game: Escape", new Vector2(GraphicsDevice.Viewport.Width / 2 - 250, 215), Color.Black);
                     spriteBatch.DrawString(basicFont, "press enter to continue to game", new Vector2(GraphicsDevice.Viewport.Width / 2 - 140, 300), Color.Black);
+                    spriteBatch.DrawString(basicFont, "mission: uncover fifteen artifacts", new Vector2(GraphicsDevice.Viewport.Width / 2 - 145, 40), Color.White);
                     spriteBatch.Draw(astro, new Rectangle(500, 100, 130, 150), Color.White);
                     break;
+
                 case GameState.Game:
                     MapManager.Instance.CurrentSubMap.Draw(spriteBatch, tilesheet);
                     MapManager.Instance.CurrentSubMap.MapInventory.Draw(spriteBatch);
                     PlayerManager.Instance.Player.Draw(spriteBatch);
                     spriteBatch.Draw(hud, new Rectangle(15, 15, 130, 55), Color.NavajoWhite);
                     spriteBatch.DrawString(basicFont, "Artifacts: " + PlayerManager.Instance.PlayerInventory.Count, new Vector2(25, 20), Color.Black);
+                    if(PlayerManager.Instance.PlayerInventory.Count >= 15)
+                    {
+                        spriteBatch.DrawString(basicFont, "MISSION_COMPLETE", new Vector2(289,170), Color.Black);
+                        spriteBatch.DrawString(basicFont, "press enter", new Vector2(334, 190), Color.LightGreen);
+                    }
                     break;
 
                 case GameState.Inventory:
@@ -365,6 +386,11 @@ namespace GroupProject
                     spriteBatch.DrawString(basicFont, "equipment", new Vector2(GraphicsDevice.Viewport.Width / 2 - 55, 10), Color.Black);
                     spriteBatch.DrawString(basicFont, "to_help: H", new Vector2(600, 10), Color.White);
                     spriteBatch.DrawString(basicFont, "to_inventory: I", new Vector2(60, 10), Color.White);
+                    break;
+
+                case GameState.End:
+                    spriteBatch.Draw(menuWall, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+                    spriteBatch.DrawString(basicFont, "thanks for playing", new Vector2(289, 170), Color.Black);
                     break;
 
             }
