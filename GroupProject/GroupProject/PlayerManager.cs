@@ -12,6 +12,7 @@ namespace GroupProject
         private static PlayerManager instance;
         private Player player;
         private PlayerInventory playerInventory;
+        private PlayerEquipment playerEquipment;
 
         //Properties
         public static PlayerManager Instance
@@ -28,6 +29,7 @@ namespace GroupProject
 
         public Player Player { get { return player; } }
         public PlayerInventory PlayerInventory { get { return playerInventory; } }
+        public PlayerEquipment PlayerEquipment { get { return playerEquipment; } }
 
         //Constructors
 
@@ -48,6 +50,14 @@ namespace GroupProject
         {
             if(playerInventory == null)
                 playerInventory = new PlayerInventory();
+        }
+
+        public void CreatePlayerEquipment()
+        {
+            if(playerEquipment == null)
+            {
+                playerEquipment = new PlayerEquipment();
+            }
         }
 
         

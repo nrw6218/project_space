@@ -14,10 +14,12 @@ namespace GroupProject
         private int mapIndex;
         private List<Block> walls;
         private MapInventory mapInventory;
+        private MapEquipment mapEquipment;
 
         //Properties
         public int MapIndex { get { return mapIndex; } }
         public MapInventory MapInventory { get { return mapInventory; } }
+        public MapEquipment MapEquipment { get { return mapEquipment; } }
 
         //Constructors
         public SubMap(int[,] intMap, int mapIndex)
@@ -25,6 +27,7 @@ namespace GroupProject
             this.mapIndex = mapIndex;
             walls = new List<Block>();
             mapInventory = new MapInventory();
+            mapEquipment = new MapEquipment();
 
             //make blocks and add them to map
             subMap = new Block[intMap.GetLength(0), intMap.GetLength(1)];

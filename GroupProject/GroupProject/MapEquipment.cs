@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GroupProject
 {
-    class MapEquipment
+    public class MapEquipment
     {
         //Fields
         private List<Item> currentEquipment;
@@ -16,6 +16,11 @@ namespace GroupProject
         public List<Item> CurrentEquipment
         {
             get { return currentEquipment; }
+        }
+
+        public int Count
+        {
+            get { return currentEquipment.Count; }
         }
 
         //Constructor
@@ -42,7 +47,7 @@ namespace GroupProject
         /// Adds an item to the map's equipment
         /// </summary>
         /// <param name="i">Item to add</param>
-        public void AddToInventory(Item i)
+        public void AddToEquipment(Item i)
         {
             currentEquipment.Add(i);
         }
@@ -51,7 +56,7 @@ namespace GroupProject
         /// Removes an item from the map's equipment (to be used when the player picks up)
         /// </summary>
         /// <param name="i">Item to be removed</param>
-        public void RemoveFromInventory(Item i)
+        public void RemoveFromEquipment(Item i)
         {
             currentEquipment.Remove(i);
         }

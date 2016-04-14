@@ -35,11 +35,10 @@ namespace GroupProject
             int x = 50;
             int y = 50;
             int count = 0;
-
-
+            
             foreach (Item i in currentEquipment)
             {
-                i.Draw(spriteBatch, new Rectangle(x, y, 50, 50), Color.Yellow);
+                i.Draw(spriteBatch, new Rectangle(x, y, 50, 50), Color.Coral);
                 x += 100;
                 count++;
                 if (count == 5)

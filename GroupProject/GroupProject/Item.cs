@@ -15,7 +15,7 @@ namespace GroupProject
         private Texture2D texture;
         private String description;
         private bool isInInventory;
-
+        private bool isInEquipment;
         private Entity entity;
 
         //Properties
@@ -45,6 +45,7 @@ namespace GroupProject
             entity = new Entity(mapposition);
             entity.SetTexture(texture);
             isInInventory = true;
+            isInEquipment = true;
         }
         public Item(Texture2D _texture, String _description, Rectangle _mapposition)
         {
@@ -54,6 +55,7 @@ namespace GroupProject
             entity.SetTexture(texture);
             mapposition = _mapposition;
             isInInventory = false;
+            isInEquipment = false;
         }
 
 
@@ -82,6 +84,12 @@ namespace GroupProject
         {
             PlayerManager.Instance.PlayerInventory.AddToInventory(this);
             isInInventory = true;
+        }
+
+        public void AddToPlayerEquipment()
+        {
+            PlayerManager.Instance.PlayerEquipment.AddToEquipment(this);
+            isInEquipment = true;
         }
     }
 }

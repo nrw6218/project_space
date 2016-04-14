@@ -80,6 +80,7 @@ namespace GroupProject
             MapManager.Instance.NewMap("../../../Content/Level 1.map");
             PlayerManager.Instance.CreatePlayer();
             PlayerManager.Instance.CreatePlayerInventory();
+            PlayerManager.Instance.CreatePlayerEquipment();
 
             base.Initialize();
         }
@@ -116,7 +117,7 @@ namespace GroupProject
             MapManager.Instance.CurrentMap.GetSubmap(0, 2).MapInventory.AddToInventory(new Item(box, "Mysterious Box", new Rectangle(200, 200, 50, 50)));
             MapManager.Instance.CurrentMap.GetSubmap(0, 2).MapInventory.AddToInventory(new Item(artifact, "Advanced Camera", new Rectangle(200, 250, 50, 50)));
             MapManager.Instance.CurrentMap.GetSubmap(0, 2).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(320, 200, 50, 50)));
-            MapManager.Instance.CurrentMap.GetSubmap(0, 2).MapInventory.AddToInventory(new Item(key, "Card Key", new Rectangle(100, 100, 25, 30)));
+            MapManager.Instance.CurrentMap.GetSubmap(0, 2).MapEquipment.AddToEquipment(new Item(key, "Card Key", new Rectangle(100, 100, 25, 30)));
 
             MapManager.Instance.CurrentMap.GetSubmap(2, 0).MapInventory.AddToInventory(new Item(artifact, "Advanced Camera", new Rectangle(200, 250, 50, 50)));
             MapManager.Instance.CurrentMap.GetSubmap(2, 1).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(320, 200, 50, 50)));
@@ -126,7 +127,7 @@ namespace GroupProject
             MapManager.Instance.CurrentMap.GetSubmap(4, 0).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(70, 200, 50, 50)));
 
             MapManager.Instance.CurrentMap.GetSubmap(4, 1).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(200, 200, 50, 50)));
-            MapManager.Instance.CurrentMap.GetSubmap(4, 1).MapInventory.AddToInventory(new Item(key, "Card Key", new Rectangle(300, 150, 25, 30)));
+            MapManager.Instance.CurrentMap.GetSubmap(4, 1).MapEquipment.AddToEquipment(new Item(key, "Card Key", new Rectangle(300, 150, 25, 30)));
         }
 
         /// <summary>
@@ -266,6 +267,17 @@ namespace GroupProject
                                     MapManager.Instance.CurrentSubMap.MapInventory.RemoveFromInventory(MapManager.Instance.CurrentSubMap.MapInventory.CurrentInventory[i]);
                                 }
                             }
+                        }
+                        if (MapManager.Instance.CurrentSubMap.MapEquipment.CurrentEquipment.Count != 0)
+                        {
+                            for (int i = 0; i < MapManager.Instance.CurrentSubMap.MapEquipment.CurrentEquipment.Count; i++)
+                            {
+                                if (PlayerManager.Instance.Player.Rectangle.Intersects(MapManager.Instance.CurrentSubMap.MapEquipment.CurrentEquipment[i].MapPosition))
+                                {
+                                    MapManager.Instance.CurrentSubMap.MapEquipment.CurrentEquipment[i].AddToPlayerEquipment();
+                                    MapManager.Instance.CurrentSubMap.MapEquipment.RemoveFromEquipment(MapManager.Instance.CurrentSubMap.MapEquipment.CurrentEquipment[i]);
+                                }
+                            }
 
                         }
                     }
@@ -323,6 +335,11 @@ namespace GroupProject
                     }
                     break;
                 case GameState.Equipment:
+                    if (currentKb.IsKeyDown(Keys.U) && previousKb.IsKeyUp(Keys.U))
+                    {
+                        PlayerManager.Instance.PlayerEquipment.AddToEquipment(new Item(crate, "test"));
+                    }
+
                     if (currentKb.IsKeyDown(Keys.I) && previousKb.IsKeyUp(Keys.I))
                     {
                         gameState = GameState.Inventory;
@@ -381,6 +398,7 @@ namespace GroupProject
                 case GameState.Game:
                     MapManager.Instance.CurrentSubMap.Draw(spriteBatch, tilesheet);
                     MapManager.Instance.CurrentSubMap.MapInventory.Draw(spriteBatch);
+                    MapManager.Instance.CurrentSubMap.MapEquipment.Draw(spriteBatch);
                     PlayerManager.Instance.Player.Draw(spriteBatch);
                     spriteBatch.Draw(hud, new Rectangle(15, 15, 130, 55), Color.NavajoWhite);
                     spriteBatch.DrawString(basicFont, "Artifacts: " + PlayerManager.Instance.PlayerInventory.Count, new Vector2(25, 20), Color.Black);
@@ -408,6 +426,7 @@ namespace GroupProject
 
                 case GameState.Equipment:
                     spriteBatch.Draw(menuWall, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.Coral);
+                    PlayerManager.Instance.PlayerEquipment.Draw(spriteBatch);
                     spriteBatch.DrawString(basicFont, "equipment", new Vector2(GraphicsDevice.Viewport.Width / 2 - 55, 10), Color.Black);
                     spriteBatch.DrawString(basicFont, "to_help: H", new Vector2(600, 10), Color.White);
                     spriteBatch.DrawString(basicFont, "to_inventory: I", new Vector2(60, 10), Color.White);
