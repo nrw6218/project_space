@@ -182,6 +182,7 @@ namespace GroupProject
                         this.IsMouseVisible = true;
                     }
                     break;
+
                 case GameState.Game:
                     PlayerManager.Instance.Player.PreviousX = PlayerManager.Instance.Player.X;
                     PlayerManager.Instance.Player.PreviousY = PlayerManager.Instance.Player.Y;
@@ -191,13 +192,16 @@ namespace GroupProject
                     if (PlayerManager.Instance.PlayerInventory.Count < 15)
                         moveBy = MovementDistance(PlayerManager.Instance.Player.Speed, (currentKb.IsKeyDown(Keys.W) != currentKb.IsKeyDown(Keys.S)) && (currentKb.IsKeyDown(Keys.A) != currentKb.IsKeyDown(Keys.D)));
 
+                    //handles wall collision
+                    /**************************************************************************/
+
                     //move the player horizontally in the correct direction
                     if (currentKb.IsKeyDown(Keys.A))
                         PlayerManager.Instance.Player.X -= moveBy;
                     if (currentKb.IsKeyDown(Keys.D))
                         PlayerManager.Instance.Player.X += moveBy;
 
-                    //handles wall collision
+                    
                     List<Block> collidingWalls = MapManager.Instance.CurrentSubMap.CollidingWalls();
 
                     foreach (Block w in collidingWalls)
@@ -227,6 +231,10 @@ namespace GroupProject
                         else if (PlayerManager.Instance.Player.Y > PlayerManager.Instance.Player.PreviousY)
                             PlayerManager.Instance.Player.Y = w.Rectangle.Y - PlayerManager.Instance.Player.Rectangle.Height;
                     }
+                    //End Wall Collision
+                    /******************************************************************************/
+
+                    MapManager.Instance.DoorCheck(currentKb);
 
                     //Stop the player from moving if they have collected 15 artifacts
                     if (PlayerManager.Instance.PlayerInventory.Count >= 15)
@@ -334,6 +342,7 @@ namespace GroupProject
                         MapManager.Instance.CurrentSubMap.MapInventory.AddToInventory(new Item(crate, "test", new Rectangle(100, 100, 50, 50)));
                     }
                     break;
+
                 case GameState.Equipment:
                     if (currentKb.IsKeyDown(Keys.U) && previousKb.IsKeyUp(Keys.U))
                     {

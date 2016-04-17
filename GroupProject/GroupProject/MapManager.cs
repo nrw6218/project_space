@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GroupProject
@@ -89,6 +90,12 @@ namespace GroupProject
         public void MoveSubmap(int mapIndex)
         {
             currentMap.SetCurrentSubmap(mapIndex);
+        }
+
+        public void DoorCheck(KeyboardState ks)
+        {
+            if (ks.IsKeyDown(Keys.Space))
+                CurrentSubMap.UnlockDoors();
         }
     }
 }

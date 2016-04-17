@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GroupProject
@@ -13,6 +14,7 @@ namespace GroupProject
         private Block[,] subMap;
         private int mapIndex;
         private List<Block> walls;
+        private List<Door> doors;
         private MapInventory mapInventory;
         private MapEquipment mapEquipment;
 
@@ -26,6 +28,8 @@ namespace GroupProject
         {
             this.mapIndex = mapIndex;
             walls = new List<Block>();
+            doors = new List<Door>();
+
             mapInventory = new MapInventory();
             mapEquipment = new MapEquipment();
 
@@ -35,10 +39,19 @@ namespace GroupProject
             {
                 for (int j = 0; j < subMap.GetLength(1); j++)
                 {
-                    subMap[i, j] = new Block(j, i, intMap[i, j]);
-                    if (intMap[i, j] == 00 || intMap[i, j] == 01 || intMap[i, j] == 10 || intMap[i, j] == 30 || intMap[i, j] == 31 || intMap[i, j] == 33)
+                    if (intMap[i, j] == 30)
+                    {
+                        subMap[i, j] = new Door(j, i, intMap[i, j]);
                         walls.Add(subMap[i, j]);
-                    
+                        doors.Add((Door)subMap[i, j]);
+                    }
+                    else
+                    {
+                        subMap[i, j] = new Block(j, i, intMap[i, j]);
+
+                        if (intMap[i, j] == 00 || intMap[i, j] == 01 || intMap[i, j] == 10 || intMap[i, j] == 33)
+                            walls.Add(subMap[i, j]);
+                    }
                 }
             }
 
@@ -66,5 +79,20 @@ namespace GroupProject
             }
             return collindingWalls;
         }
+
+        //only access through mapManager
+        public void UnlockDoors()
+        {
+            foreach (Door d in doors)
+            {
+                if (d.Locked && PlayerManager.Instance.Player.Rectangle.Intersects(d.UnlockRect))
+                {
+                    Console.WriteLine("door");
+                    d.Unlock();
+                    walls.Remove(d);
+                }
+            }
+        }
+
     }
 }

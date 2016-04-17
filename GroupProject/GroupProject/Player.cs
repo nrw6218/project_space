@@ -14,6 +14,8 @@ namespace GroupProject
         private int previousX;
         private int previousY;
 
+        public enum state { Attacking, PickingItem };
+
         public int PreviousX
         {
             get { return previousX; }
@@ -50,6 +52,10 @@ namespace GroupProject
         }
 
         //Methods
+        public void TakeDamage(int dmg)
+        {
+            hp -= dmg;
 
+        }
     }
 }

@@ -7,34 +7,36 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GroupProject
 {
-    class Door : Entity
+    class Door : Block
     {
         //Fields
-        private Texture2D tex;
-        private Boolean isLocked;
-        private Vector2 position;
-
+        private bool locked;
+        private Rectangle unlockeRect;
+        private static int UNLOCK_RANGE = 10;
+      
         //Properties
-        public Boolean IsLocked
-        {
-            get { return isLocked; }
-            set { isLocked = value; }
-        }
+        public bool Locked { get { return locked; } }
+
+        public Rectangle UnlockRect { get { return unlockeRect; } }
 
         //Constructor
-        public Door(Rectangle rect, Texture2D tex, Vector2 position)
-            :base(rect)
+        public Door(int x, int y, int textureId)
+            :base(x, y , textureId)
         {
-            this.tex = tex;
-            this.isLocked = true;
-            this.position = position;
+            locked = true;
+
+            unlockeRect = new Rectangle(
+                x * Block.BLOCK_SIZE - UNLOCK_RANGE,
+                y * Block.BLOCK_SIZE - UNLOCK_RANGE,
+                Block.BLOCK_SIZE + UNLOCK_RANGE * 2,
+                Block.BLOCK_SIZE + UNLOCK_RANGE* 2);
         }
 
         //Methods
         public void Unlock()
         {
-            this.tex = null;
-            this.isLocked = false;
+            locked = false;
+            textureId = Block.DEFAULT_BLOCK;
         }
     }
 }

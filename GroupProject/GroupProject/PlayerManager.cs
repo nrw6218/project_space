@@ -41,7 +41,7 @@ namespace GroupProject
             int width = 64;
             int height = 64;
             int hp = 10;
-            double speed = 2;
+            double speed = 3;
             if (player == null)
                 player = new Player(x, y, width, height, hp , speed);
         }

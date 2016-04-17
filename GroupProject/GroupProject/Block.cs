@@ -13,13 +13,13 @@ namespace GroupProject
         protected Rectangle rectangle;
         //two digit number in yx form, 25 is the 6th texture in the 3rd row
         protected int textureId;
-        protected bool collidable;
 
         //Properties
         public Rectangle Rectangle { get { return rectangle; } }
 
         public static int BLOCK_SIZE { get { return 64; } }
         public static int TEXURE_SIZE { get { return 96; } }
+        public static int DEFAULT_BLOCK { get { return 44; } }
 
         //Constructors
         public Block(int x, int y, int textureId)
@@ -28,7 +28,7 @@ namespace GroupProject
             rectangle = new Rectangle(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
         }
 
-        public void Draw(SpriteBatch spriteBatch, Texture2D spriteSheet)
+        virtual public void Draw(SpriteBatch spriteBatch, Texture2D spriteSheet)
         {
             spriteBatch.Draw(
                 spriteSheet,
