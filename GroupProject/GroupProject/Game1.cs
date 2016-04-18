@@ -112,12 +112,12 @@ namespace GroupProject
             PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(box, "Mysterious Box"));
             PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(artifact, "Advanced Camera"));
             MapManager.Instance.CurrentSubMap.MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(300, 200, 50, 50)));
-            MapManager.Instance.CurrentSubMap.MapInventory.AddToInventory(new Item(box, "Mysterious Box", new Rectangle(400, 80, 50, 50)));
+            MapManager.Instance.CurrentSubMap.MapEquipment.AddToEquipment(new Item(key, "Key", new Rectangle(200, 100, 25, 30)));
 
             MapManager.Instance.CurrentMap.GetSubmap(0, 2).MapInventory.AddToInventory(new Item(box, "Mysterious Box", new Rectangle(200, 200, 50, 50)));
             MapManager.Instance.CurrentMap.GetSubmap(0, 2).MapInventory.AddToInventory(new Item(artifact, "Advanced Camera", new Rectangle(200, 250, 50, 50)));
             MapManager.Instance.CurrentMap.GetSubmap(0, 2).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(320, 200, 50, 50)));
-            MapManager.Instance.CurrentMap.GetSubmap(0, 2).MapEquipment.AddToEquipment(new Item(key, "Card Key", new Rectangle(100, 100, 25, 30)));
+            MapManager.Instance.CurrentMap.GetSubmap(0, 2).MapEquipment.AddToEquipment(new Item(key, "Key", new Rectangle(100, 100, 25, 30)));
 
             MapManager.Instance.CurrentMap.GetSubmap(2, 0).MapInventory.AddToInventory(new Item(artifact, "Advanced Camera", new Rectangle(200, 250, 50, 50)));
             MapManager.Instance.CurrentMap.GetSubmap(2, 1).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(320, 200, 50, 50)));
@@ -127,7 +127,7 @@ namespace GroupProject
             MapManager.Instance.CurrentMap.GetSubmap(4, 0).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(70, 200, 50, 50)));
 
             MapManager.Instance.CurrentMap.GetSubmap(4, 1).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(200, 200, 50, 50)));
-            MapManager.Instance.CurrentMap.GetSubmap(4, 1).MapEquipment.AddToEquipment(new Item(key, "Card Key", new Rectangle(300, 150, 25, 30)));
+            MapManager.Instance.CurrentMap.GetSubmap(4, 1).MapEquipment.AddToEquipment(new Item(key, "Key", new Rectangle(300, 150, 25, 30)));
         }
 
         /// <summary>
@@ -234,7 +234,9 @@ namespace GroupProject
                     //End Wall Collision
                     /******************************************************************************/
 
-                    MapManager.Instance.DoorCheck(currentKb);
+                    //Check to see if player can unlock a door
+                    if (previousKb.IsKeyUp(Keys.Space))
+                        MapManager.Instance.DoorCheck(currentKb);
 
                     //Stop the player from moving if they have collected 15 artifacts
                     if (PlayerManager.Instance.PlayerInventory.Count >= 15)

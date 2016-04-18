@@ -11,6 +11,7 @@ namespace GroupProject
     {
         //Fields
         private List<Item> currentEquipment;
+        private int keyCount;
 
         //Properties
         public List<Item> CurrentEquipment
@@ -18,10 +19,17 @@ namespace GroupProject
             get { return currentEquipment; }
         }
 
+        public int KeyCount
+        {
+            get { return keyCount; }
+            set { keyCount = value; }
+        }
+
         //Constructor
         public PlayerEquipment()
         {
             currentEquipment = new List<Item>();
+            keyCount = 0;
         }
 
         //Methods
@@ -57,6 +65,26 @@ namespace GroupProject
         public void AddToEquipment(Item i)
         {
             currentEquipment.Add(i);
+            if(i.Description == "Key")
+            {
+                keyCount++;
+            }
+        }
+
+        public void RemoveKey()
+        {
+            if(keyCount > 0)
+            {
+                for(int i = 0; i < currentEquipment.Count; i++)
+                {
+                    if(currentEquipment[i].Description == "Key")
+                    {
+                        currentEquipment.RemoveAt(i);
+                        keyCount--;
+                        return;
+                    }
+                }
+            }
         }
     }
 }

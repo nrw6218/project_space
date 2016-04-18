@@ -35,7 +35,6 @@ namespace GroupProject
         {
             get { return description; }
         }
-
         
         //Constructors
         public Item(Texture2D _texture, String _description)
