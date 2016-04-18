@@ -97,7 +97,6 @@ namespace GroupProject
             if (ks.IsKeyDown(Keys.Space) && PlayerManager.Instance.PlayerEquipment.KeyCount > 0)
             {
                 CurrentSubMap.UnlockDoors();
-                PlayerManager.Instance.PlayerEquipment.RemoveKey();
             }
         }
     }

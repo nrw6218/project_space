@@ -89,6 +89,7 @@ namespace GroupProject
                 {
                     Console.WriteLine("door");
                     d.Unlock();
+                    PlayerManager.Instance.PlayerEquipment.RemoveKey();
                     walls.Remove(d);
                 }
             }
