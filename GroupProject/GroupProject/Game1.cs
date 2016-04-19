@@ -408,6 +408,10 @@ namespace GroupProject
 
                 case GameState.Game:
                     MapManager.Instance.CurrentSubMap.Draw(spriteBatch, tilesheet);
+                    if (MapManager.Instance.CurrentSubMap == MapManager.Instance.CurrentMap.GetSubmap(0, 1))
+                    {
+                        spriteBatch.Draw(logo, new Rectangle(285, 150, 200, 100), Color.White);
+                    }
                     MapManager.Instance.CurrentSubMap.MapInventory.Draw(spriteBatch);
                     MapManager.Instance.CurrentSubMap.MapEquipment.Draw(spriteBatch);
                     PlayerManager.Instance.Player.Draw(spriteBatch);
@@ -418,6 +422,7 @@ namespace GroupProject
                         spriteBatch.DrawString(basicFont, "MISSION_COMPLETE", new Vector2(289,170), Color.Black);
                         spriteBatch.DrawString(basicFont, "press enter", new Vector2(334, 190), Color.LightGreen);
                     }
+                    
                     break;
 
                 case GameState.Inventory:
