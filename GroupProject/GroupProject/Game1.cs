@@ -146,7 +146,15 @@ namespace GroupProject
             MapManager.Instance.CurrentMap.GetSubmap(4, 1).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(200, 200, 50, 50)));
             MapManager.Instance.CurrentMap.GetSubmap(4, 1).MapEquipment.AddToEquipment(new Item(key, "Key", new Rectangle(300, 150, 25, 30)));
 
+            MapManager.Instance.CurrentMap.GetSubmap(4, 2).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(80, 80, 50, 50)));
+            MapManager.Instance.CurrentMap.GetSubmap(4, 2).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(70, 200, 50, 50)));
+
             EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 1, MapManager.Instance.CurrentMap.GetSubmap(0, 2), enemy);
+            EnemyManager.Instance.CreateEnemy(400, 100, 50, 50, 3, 1, MapManager.Instance.CurrentMap.GetSubmap(0, 2), enemy);
+            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 1, MapManager.Instance.CurrentMap.GetSubmap(0, 1), enemy);
+            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 1, MapManager.Instance.CurrentMap.GetSubmap(2, 1), enemy);
+            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 1, MapManager.Instance.CurrentMap.GetSubmap(3, 2), enemy);
+            EnemyManager.Instance.CreateEnemy(200, 200, 50, 50, 3, 1, MapManager.Instance.CurrentMap.GetSubmap(3, 2), enemy);
         }
 
         /// <summary>
