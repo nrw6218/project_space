@@ -23,7 +23,7 @@ namespace GroupProject
         {
             get { return mapposition; }
         }
-        
+
 
         public Attack(Rectangle m, Texture2D t)
         {
@@ -37,7 +37,6 @@ namespace GroupProject
         {
             spriteBatch.Draw(texture, mapposition, Color.White);
         }
-
 
 
     }

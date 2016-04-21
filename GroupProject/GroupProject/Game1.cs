@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 //http://www.puppygames.net/chaz/
 //
 
-    
+
 namespace GroupProject
 {
     /// <summary>
@@ -26,10 +26,6 @@ namespace GroupProject
         Texture2D box;
         Texture2D artifact;
         Texture2D key;
-        Texture2D weaponRight;
-        Texture2D weaponUp;
-        Texture2D weaponLeft;
-        Texture2D weaponDown;
 
         //For use in main menu and inventory screens
         Texture2D menuWall;
@@ -43,6 +39,17 @@ namespace GroupProject
 
         //For use in tracking the mouse state
         MouseState ms;
+
+        //Enemytexture
+        Texture2D enemy;
+
+        //attack
+        Texture2D weaponRight;
+        Texture2D weaponUp;
+        Texture2D weaponLeft;
+        Texture2D weaponDown;
+
+
         //for deconstructing a magnatude when using a 45degree angle int componets
         const double ANGLE_MULTIPLIER = 0.70710678118;
 
@@ -86,9 +93,6 @@ namespace GroupProject
             PlayerManager.Instance.CreatePlayerInventory();
             PlayerManager.Instance.CreatePlayerEquipment();
 
-            EnemyManager.Instance.CreateEnemy();
-
-
             base.Initialize();
         }
 
@@ -113,12 +117,12 @@ namespace GroupProject
             box = Content.Load<Texture2D>("Crate2");
             artifact = Content.Load<Texture2D>("Artifact2");
             logo = Content.Load<Texture2D>("CompanyLogo");
+            enemy = Content.Load<Texture2D>("Hilary");
             weaponRight = Content.Load<Texture2D>("energyBlastRight");
             weaponLeft = Content.Load<Texture2D>("energyBlastLeft");
             weaponUp = Content.Load<Texture2D>("energyBlastUp");
             weaponDown = Content.Load<Texture2D>("energyBlastDown");
 
-            EnemyManager.Instance.Enemy.SetTexture(astro);
 
             PlayerManager.Instance.Player.SetTexture(astro);
             PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(crate, "Crate"));
@@ -141,6 +145,8 @@ namespace GroupProject
 
             MapManager.Instance.CurrentMap.GetSubmap(4, 1).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(200, 200, 50, 50)));
             MapManager.Instance.CurrentMap.GetSubmap(4, 1).MapEquipment.AddToEquipment(new Item(key, "Key", new Rectangle(300, 150, 25, 30)));
+
+            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 1, MapManager.Instance.CurrentMap.GetSubmap(0, 2), enemy);
         }
 
         /// <summary>
@@ -159,7 +165,7 @@ namespace GroupProject
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            framesThisGameFrame = gameTime.ElapsedGameTime.TotalSeconds / SECONDS_PER_FRAME; 
+            framesThisGameFrame = gameTime.ElapsedGameTime.TotalSeconds / SECONDS_PER_FRAME;
 
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
@@ -214,7 +220,7 @@ namespace GroupProject
                     if (currentKb.IsKeyDown(Keys.D))
                         PlayerManager.Instance.Player.X += moveBy;
 
-                    
+
                     List<Block> collidingWalls = MapManager.Instance.CurrentSubMap.CollidingWalls();
 
                     foreach (Block w in collidingWalls)
@@ -305,7 +311,7 @@ namespace GroupProject
                         }
                     }
 
-                    if(PlayerManager.Instance.Player.X + PlayerManager.Instance.Player.Width/2 < 0)
+                    if (PlayerManager.Instance.Player.X + PlayerManager.Instance.Player.Width / 2 < 0)
                     {
                         MapManager.Instance.MoveSubmap(Direction.Left);
                         PlayerManager.Instance.Player.X = graphics.PreferredBackBufferWidth - PlayerManager.Instance.Player.Width / 2;
@@ -332,29 +338,55 @@ namespace GroupProject
                     if (currentKb.IsKeyDown(Keys.Right))
                     {
                         Attack pAttack = new Attack(new Rectangle(PlayerManager.Instance.Player.X + 50, PlayerManager.Instance.Player.Y + 20, 100, 30), weaponRight);
-                        if (pAttack.MapPosition.Intersects(EnemyManager.Instance.Enemy.Rectangle))
-                            EnemyManager.Instance.Enemy.Hp -= 1;
+                        foreach (Enemy a in EnemyManager.Instance.EnemyList)
+                        {
+                            if (a.Location == MapManager.Instance.CurrentSubMap)
+                            {
+                                if (pAttack.MapPosition.Intersects(a.Rectangle))
+                                    a.Hp -= 1;
+                            }
+                        }
                     }
                     if (currentKb.IsKeyDown(Keys.Up))
                     {
-                        Attack pAttack = new Attack(new Rectangle(PlayerManager.Instance.Player.X + 20, PlayerManager.Instance.Player.Y-90, 30, 100), weaponUp);
-                        if (pAttack.MapPosition.Intersects(EnemyManager.Instance.Enemy.Rectangle))
-                            EnemyManager.Instance.Enemy.Hp -= 1;
+                        Attack pAttack = new Attack(new Rectangle(PlayerManager.Instance.Player.X + 20, PlayerManager.Instance.Player.Y - 90, 30, 100), weaponUp);
+                        foreach (Enemy a in EnemyManager.Instance.EnemyList)
+                        {
+                            if (a.Location == MapManager.Instance.CurrentSubMap)
+                            {
+                                if (pAttack.MapPosition.Intersects(a.Rectangle))
+                                    a.Hp -= 1;
+                            }
+                        }
                     }
                     if (currentKb.IsKeyDown(Keys.Left))
                     {
-                        Attack pAttack = new Attack(new Rectangle(PlayerManager.Instance.Player.X-85, PlayerManager.Instance.Player.Y + 20, 100, 30), weaponLeft);
-                        if (pAttack.MapPosition.Intersects(EnemyManager.Instance.Enemy.Rectangle))
-                            EnemyManager.Instance.Enemy.Hp -= 1;
+                        Attack pAttack = new Attack(new Rectangle(PlayerManager.Instance.Player.X - 85, PlayerManager.Instance.Player.Y + 20, 100, 30), weaponLeft);
+                        foreach (Enemy a in EnemyManager.Instance.EnemyList)
+                        {
+                            if (a.Location == MapManager.Instance.CurrentSubMap)
+                            {
+                                if (pAttack.MapPosition.Intersects(a.Rectangle))
+                                    a.Hp -= 1;
+                            }
+                        }
                     }
                     if (currentKb.IsKeyDown(Keys.Down))
                     {
                         Attack pAttack = new Attack(new Rectangle(PlayerManager.Instance.Player.X + 20, PlayerManager.Instance.Player.Y + 55, 30, 100), weaponDown);
-                        if (pAttack.MapPosition.Intersects(EnemyManager.Instance.Enemy.Rectangle))
-                            EnemyManager.Instance.Enemy.Hp -= 1;
+                        foreach (Enemy a in EnemyManager.Instance.EnemyList)
+                        {
+                            if (a.Location == MapManager.Instance.CurrentSubMap)
+                            {
+                                if (pAttack.MapPosition.Intersects(a.Rectangle))
+                                    a.Hp -= 1;
+                            }
+                        }
                     }
                     //End player attacks
 
+                    //handles enemies
+                    EnemyManager.Instance.Update();
 
 
                     break;
@@ -457,35 +489,34 @@ namespace GroupProject
                     MapManager.Instance.CurrentSubMap.MapInventory.Draw(spriteBatch);
                     MapManager.Instance.CurrentSubMap.MapEquipment.Draw(spriteBatch);
                     PlayerManager.Instance.Player.Draw(spriteBatch);
-                    EnemyManager.Instance.Enemy.Draw(spriteBatch);
+                    EnemyManager.Instance.Draw(spriteBatch);
                     spriteBatch.Draw(hud, new Rectangle(15, 15, 130, 55), Color.NavajoWhite);
                     spriteBatch.DrawString(basicFont, "Artifacts: " + PlayerManager.Instance.PlayerInventory.Count, new Vector2(25, 20), Color.Black);
-                    if(PlayerManager.Instance.PlayerInventory.Count >= 15)
+                    if (PlayerManager.Instance.PlayerInventory.Count >= 15)
                     {
-                        spriteBatch.DrawString(basicFont, "MISSION_COMPLETE", new Vector2(289,170), Color.Black);
+                        spriteBatch.DrawString(basicFont, "MISSION_COMPLETE", new Vector2(289, 170), Color.Black);
                         spriteBatch.DrawString(basicFont, "press enter", new Vector2(334, 190), Color.LightGreen);
                     }
 
-                    //Player attacks for now
-
+                    //playerattach
                     if (currentKb.IsKeyDown(Keys.Right))
                     {
-                        spriteBatch.Draw(weaponRight, new Rectangle(PlayerManager.Instance.Player.X+50, PlayerManager.Instance.Player.Y+20, 100, 30), Color.White);
+                        spriteBatch.Draw(weaponRight, new Rectangle(PlayerManager.Instance.Player.X + 50, PlayerManager.Instance.Player.Y + 20, 100, 30), Color.White);
                     }
                     if (currentKb.IsKeyDown(Keys.Up))
                     {
-                        spriteBatch.Draw(weaponUp, new Rectangle(PlayerManager.Instance.Player.X + 20, PlayerManager.Instance.Player.Y-90, 30, 100), Color.White);
+                        spriteBatch.Draw(weaponUp, new Rectangle(PlayerManager.Instance.Player.X + 20, PlayerManager.Instance.Player.Y - 90, 30, 100), Color.White);
                     }
                     if (currentKb.IsKeyDown(Keys.Left))
                     {
-                        spriteBatch.Draw(weaponLeft, new Rectangle(PlayerManager.Instance.Player.X-85, PlayerManager.Instance.Player.Y + 20, 100, 30), Color.White);
+                        spriteBatch.Draw(weaponLeft, new Rectangle(PlayerManager.Instance.Player.X - 85, PlayerManager.Instance.Player.Y + 20, 100, 30), Color.White);
                     }
                     if (currentKb.IsKeyDown(Keys.Down))
                     {
                         spriteBatch.Draw(weaponDown, new Rectangle(PlayerManager.Instance.Player.X + 20, PlayerManager.Instance.Player.Y + 55, 30, 100), Color.White);
                     }
-                    //End player attacks
 
+                    //End player attacks
 
 
                     break;
@@ -496,11 +527,11 @@ namespace GroupProject
                     spriteBatch.DrawString(basicFont, "inventory", new Vector2(GraphicsDevice.Viewport.Width / 2 - 55, 10), Color.Black);
                     spriteBatch.DrawString(basicFont, "to_help: H", new Vector2(600, 10), Color.White);
                     spriteBatch.DrawString(basicFont, "to_equipment: E", new Vector2(60, 10), Color.White);
-                    foreach(Item i in PlayerManager.Instance.PlayerInventory.Currinventory)
+                    foreach (Item i in PlayerManager.Instance.PlayerInventory.Currinventory)
                     {
                         if (i.MapPosition.Contains(ms.Position))
                         {
-                            i.Draw(spriteBatch, new Rectangle(200, 100, 300, 300),Color.Green);
+                            i.Draw(spriteBatch, new Rectangle(200, 100, 300, 300), Color.Green);
                         }
                     }
                     break;
