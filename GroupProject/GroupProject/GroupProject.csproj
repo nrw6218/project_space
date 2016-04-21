@@ -42,6 +42,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Attack.cs" />
     <Compile Include="Block.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Door.cs" />

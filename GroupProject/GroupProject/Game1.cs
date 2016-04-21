@@ -26,6 +26,10 @@ namespace GroupProject
         Texture2D box;
         Texture2D artifact;
         Texture2D key;
+        Texture2D weaponRight;
+        Texture2D weaponUp;
+        Texture2D weaponLeft;
+        Texture2D weaponDown;
 
         //For use in main menu and inventory screens
         Texture2D menuWall;
@@ -82,6 +86,9 @@ namespace GroupProject
             PlayerManager.Instance.CreatePlayerInventory();
             PlayerManager.Instance.CreatePlayerEquipment();
 
+            EnemyManager.Instance.CreateEnemy();
+
+
             base.Initialize();
         }
 
@@ -106,6 +113,12 @@ namespace GroupProject
             box = Content.Load<Texture2D>("Crate2");
             artifact = Content.Load<Texture2D>("Artifact2");
             logo = Content.Load<Texture2D>("CompanyLogo");
+            weaponRight = Content.Load<Texture2D>("energyBlastRight");
+            weaponLeft = Content.Load<Texture2D>("energyBlastLeft");
+            weaponUp = Content.Load<Texture2D>("energyBlastUp");
+            weaponDown = Content.Load<Texture2D>("energyBlastDown");
+
+            EnemyManager.Instance.Enemy.SetTexture(astro);
 
             PlayerManager.Instance.Player.SetTexture(astro);
             PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(crate, "Crate"));
@@ -314,6 +327,35 @@ namespace GroupProject
                     }
 
 
+                    //Player attacks for now
+
+                    if (currentKb.IsKeyDown(Keys.Right))
+                    {
+                        Attack pAttack = new Attack(new Rectangle(PlayerManager.Instance.Player.X + 50, PlayerManager.Instance.Player.Y + 20, 100, 30), weaponRight);
+                        if (pAttack.MapPosition.Intersects(EnemyManager.Instance.Enemy.Rectangle))
+                            EnemyManager.Instance.Enemy.Hp -= 1;
+                    }
+                    if (currentKb.IsKeyDown(Keys.Up))
+                    {
+                        Attack pAttack = new Attack(new Rectangle(PlayerManager.Instance.Player.X + 20, PlayerManager.Instance.Player.Y-90, 30, 100), weaponUp);
+                        if (pAttack.MapPosition.Intersects(EnemyManager.Instance.Enemy.Rectangle))
+                            EnemyManager.Instance.Enemy.Hp -= 1;
+                    }
+                    if (currentKb.IsKeyDown(Keys.Left))
+                    {
+                        Attack pAttack = new Attack(new Rectangle(PlayerManager.Instance.Player.X-85, PlayerManager.Instance.Player.Y + 20, 100, 30), weaponLeft);
+                        if (pAttack.MapPosition.Intersects(EnemyManager.Instance.Enemy.Rectangle))
+                            EnemyManager.Instance.Enemy.Hp -= 1;
+                    }
+                    if (currentKb.IsKeyDown(Keys.Down))
+                    {
+                        Attack pAttack = new Attack(new Rectangle(PlayerManager.Instance.Player.X + 20, PlayerManager.Instance.Player.Y + 55, 30, 100), weaponDown);
+                        if (pAttack.MapPosition.Intersects(EnemyManager.Instance.Enemy.Rectangle))
+                            EnemyManager.Instance.Enemy.Hp -= 1;
+                    }
+                    //End player attacks
+
+
 
                     break;
                 case GameState.Inventory:
@@ -415,6 +457,7 @@ namespace GroupProject
                     MapManager.Instance.CurrentSubMap.MapInventory.Draw(spriteBatch);
                     MapManager.Instance.CurrentSubMap.MapEquipment.Draw(spriteBatch);
                     PlayerManager.Instance.Player.Draw(spriteBatch);
+                    EnemyManager.Instance.Enemy.Draw(spriteBatch);
                     spriteBatch.Draw(hud, new Rectangle(15, 15, 130, 55), Color.NavajoWhite);
                     spriteBatch.DrawString(basicFont, "Artifacts: " + PlayerManager.Instance.PlayerInventory.Count, new Vector2(25, 20), Color.Black);
                     if(PlayerManager.Instance.PlayerInventory.Count >= 15)
@@ -422,7 +465,29 @@ namespace GroupProject
                         spriteBatch.DrawString(basicFont, "MISSION_COMPLETE", new Vector2(289,170), Color.Black);
                         spriteBatch.DrawString(basicFont, "press enter", new Vector2(334, 190), Color.LightGreen);
                     }
-                    
+
+                    //Player attacks for now
+
+                    if (currentKb.IsKeyDown(Keys.Right))
+                    {
+                        spriteBatch.Draw(weaponRight, new Rectangle(PlayerManager.Instance.Player.X+50, PlayerManager.Instance.Player.Y+20, 100, 30), Color.White);
+                    }
+                    if (currentKb.IsKeyDown(Keys.Up))
+                    {
+                        spriteBatch.Draw(weaponUp, new Rectangle(PlayerManager.Instance.Player.X + 20, PlayerManager.Instance.Player.Y-90, 30, 100), Color.White);
+                    }
+                    if (currentKb.IsKeyDown(Keys.Left))
+                    {
+                        spriteBatch.Draw(weaponLeft, new Rectangle(PlayerManager.Instance.Player.X-85, PlayerManager.Instance.Player.Y + 20, 100, 30), Color.White);
+                    }
+                    if (currentKb.IsKeyDown(Keys.Down))
+                    {
+                        spriteBatch.Draw(weaponDown, new Rectangle(PlayerManager.Instance.Player.X + 20, PlayerManager.Instance.Player.Y + 55, 30, 100), Color.White);
+                    }
+                    //End player attacks
+
+
+
                     break;
 
                 case GameState.Inventory:

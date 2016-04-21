@@ -18,6 +18,7 @@ namespace GroupProject
         /// How many pixels per frame the character can move
         /// </summary>
         public double Speed { get { return speed; } }
+        public int Hp { get { return hp; } set { hp = value; } }
 
         //Constructor
         public Character(Rectangle rectangle, int hp, double speed)
