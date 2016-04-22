@@ -13,9 +13,7 @@ namespace GroupProject
         private Rectangle invenposition;
         private Rectangle mapposition;
         private Texture2D texture;
-        private String description;
-        private bool isInInventory;
-        private bool isInEquipment;
+        private string description;
         private Entity entity;
 
         //Properties
@@ -31,30 +29,26 @@ namespace GroupProject
             set { mapposition = value; }
         }
 
-        public String Description
+        public string Description
         {
             get { return description; }
         }
         
         //Constructors
-        public Item(Texture2D _texture, String _description)
+        public Item(Texture2D _texture, string _description)
         {
             texture = _texture;
             description = _description;
             entity = new Entity(mapposition);
             entity.SetTexture(texture);
-            isInInventory = true;
-            isInEquipment = true;
         }
-        public Item(Texture2D _texture, String _description, Rectangle _mapposition)
+        public Item(Texture2D _texture, string _description, Rectangle _mapposition)
         {
             texture = _texture;
             description = _description;
             entity = new Entity(mapposition);
             entity.SetTexture(texture);
             mapposition = _mapposition;
-            isInInventory = false;
-            isInEquipment = false;
         }
 
 
@@ -62,7 +56,7 @@ namespace GroupProject
         //methods
 
         //Overloads other version of method by allowing the user to choose a color
-        public void Draw(SpriteBatch spriteBatch, Rectangle position, Color color)
+        public void Draw(SpriteBatch spriteBatch, Rectangle position, Color color, bool isInInventory = false)
         {
             if (isInInventory)
                 spriteBatch.Draw(texture, position, color);
@@ -71,24 +65,12 @@ namespace GroupProject
         }
 
 
-        public void Draw(SpriteBatch spriteBatch, Rectangle position)
+        public void Draw(SpriteBatch spriteBatch, Rectangle position, bool isInInventory = false)
         {
             if (isInInventory)
                 spriteBatch.Draw(texture, position, Color.White);
             if (!isInInventory)
                 spriteBatch.Draw(texture, mapposition, Color.White);
-        }
-    
-        public void AddToPlayerInventory()
-        {
-            PlayerManager.Instance.PlayerInventory.AddToInventory(this);
-            isInInventory = true;
-        }
-
-        public void AddToPlayerEquipment()
-        {
-            PlayerManager.Instance.PlayerEquipment.AddToEquipment(this);
-            isInEquipment = true;
         }
     }
 }

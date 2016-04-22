@@ -11,7 +11,6 @@ namespace GroupProject
     {
         //Fields
         private static EnemyManager instance;
-        private List<Enemy> enemylist;
 
         //Properties
         public static EnemyManager Instance
@@ -26,11 +25,6 @@ namespace GroupProject
             }
         }
 
-        public List<Enemy> EnemyList
-        {
-            get { return enemylist; }
-        }
-
         //Constructor
 
         //Methods
@@ -38,33 +32,19 @@ namespace GroupProject
         /// <summary>
         /// Creates a new instance of an enemy
         /// </summary>
-        public void CreateEnemy(int x, int y, int width, int height, int hp, double speed, SubMap _location, Texture2D _texture)
+        public void CreateEnemy(int x, int y, int width, int height, int hp, double speed, int row, int col, Texture2D _texture)
         {
-            if (enemylist == null)
-                enemylist = new List<Enemy>();
-
-            enemylist.Add(new Enemy(x, y, width, height, hp, speed, _location, _texture));
+            MapManager.Instance.CurrentMap.GetSubmap(row, col).Enemies.Add(new Enemy(x, y, width, height, hp, speed, _texture));
         }
 
         public void Update()
-        {
-            for (int i = 0; i < enemylist.Count; i++)
+        {           
+            for(int i  = MapManager.Instance.CurrentSubMap.Enemies.Count -1; i>=0; i--)
             {
-                if (enemylist[i].Location == MapManager.Instance.CurrentSubMap && enemylist[i].Hp <= 0)
-                    enemylist.RemoveAt(i);
-                else if (enemylist[i].Location == MapManager.Instance.CurrentSubMap)
-                    enemylist[i].Update();
-            }
-        }
-
-        public void Draw(SpriteBatch spritebatch)
-        {
-            foreach (Enemy a in enemylist)
-            {
-                if (a.Location == MapManager.Instance.CurrentSubMap)
-                {
-                    a.Draw(spritebatch);
-                }
+                if (MapManager.Instance.CurrentSubMap.Enemies[i].Hp <= 0)
+                    MapManager.Instance.CurrentSubMap.Enemies.RemoveAt(i);
+                else
+                    MapManager.Instance.CurrentSubMap.Enemies[i].Update();
             }
         }
 

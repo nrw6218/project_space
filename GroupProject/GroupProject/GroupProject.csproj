@@ -50,8 +50,6 @@
     <Compile Include="EnemyManager.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="MapEquipment.cs" />
-    <Compile Include="MapInventory.cs" />
     <Compile Include="PlayerEquipment.cs" />
     <Compile Include="PlayerInventory.cs" />
     <Compile Include="Item.cs" />

@@ -128,33 +128,29 @@ namespace GroupProject
             PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(crate, "Crate"));
             PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(box, "Mysterious Box"));
             PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(artifact, "Advanced Camera"));
-            MapManager.Instance.CurrentSubMap.MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(300, 200, 50, 50)));
-            MapManager.Instance.CurrentSubMap.MapEquipment.AddToEquipment(new Item(key, "Key", new Rectangle(200, 100, 25, 30)));
 
-            MapManager.Instance.CurrentMap.GetSubmap(0, 2).MapInventory.AddToInventory(new Item(box, "Mysterious Box", new Rectangle(200, 200, 50, 50)));
-            MapManager.Instance.CurrentMap.GetSubmap(0, 2).MapInventory.AddToInventory(new Item(artifact, "Advanced Camera", new Rectangle(200, 250, 50, 50)));
-            MapManager.Instance.CurrentMap.GetSubmap(0, 2).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(320, 200, 50, 50)));
-            MapManager.Instance.CurrentMap.GetSubmap(0, 2).MapEquipment.AddToEquipment(new Item(key, "Key", new Rectangle(100, 100, 25, 30)));
+            MapManager.Instance.AddItemToInventory(0, 0, new Item(crate, "Crate", new Rectangle(300, 200, 50, 50)));
+            MapManager.Instance.AddItemToEquiptment(0, 0, new Item(key, "Key", new Rectangle(200, 100, 25, 30)));
+            MapManager.Instance.AddItemToInventory(0, 2, new Item(box, "Mysterious Box", new Rectangle(200, 200, 50, 50)));
+            MapManager.Instance.AddItemToInventory(0, 2, new Item(artifact, "Advanced Camera", new Rectangle(200, 250, 50, 50)));
+            MapManager.Instance.AddItemToInventory(0, 2, new Item(crate, "Crate", new Rectangle(320, 200, 50, 50)));
+            MapManager.Instance.AddItemToEquiptment(0, 2, new Item(key, "Key", new Rectangle(100, 100, 25, 30)));
+            MapManager.Instance.AddItemToInventory(2, 0, new Item(artifact, "Advanced Camera", new Rectangle(200, 250, 50, 50)));
+            MapManager.Instance.AddItemToInventory(2, 1, new Item(crate, "Crate", new Rectangle(320, 200, 50, 50)));
+            MapManager.Instance.AddItemToInventory(3, 1, new Item(crate, "Crate", new Rectangle(320, 200, 50, 50)));
+            MapManager.Instance.AddItemToInventory(4, 0, new Item(crate, "Crate", new Rectangle(80, 80, 50, 50)));
+            MapManager.Instance.AddItemToInventory(4, 0, new Item(crate, "Crate", new Rectangle(70, 200, 50, 50)));
+            MapManager.Instance.AddItemToInventory(4, 1, new Item(crate, "Crate", new Rectangle(200, 200, 50, 50)));
+            MapManager.Instance.AddItemToEquiptment(4, 1, new Item(key, "Key", new Rectangle(300, 150, 25, 30)));
+            MapManager.Instance.AddItemToInventory(4, 2, new Item(crate, "Crate", new Rectangle(80, 80, 50, 50)));
+            MapManager.Instance.AddItemToInventory(4, 2, new Item(crate, "Crate", new Rectangle(70, 200, 50, 50)));
 
-            MapManager.Instance.CurrentMap.GetSubmap(2, 0).MapInventory.AddToInventory(new Item(artifact, "Advanced Camera", new Rectangle(200, 250, 50, 50)));
-            MapManager.Instance.CurrentMap.GetSubmap(2, 1).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(320, 200, 50, 50)));
-            MapManager.Instance.CurrentMap.GetSubmap(3, 1).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(320, 200, 50, 50)));
-
-            MapManager.Instance.CurrentMap.GetSubmap(4, 0).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(80, 80, 50, 50)));
-            MapManager.Instance.CurrentMap.GetSubmap(4, 0).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(70, 200, 50, 50)));
-
-            MapManager.Instance.CurrentMap.GetSubmap(4, 1).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(200, 200, 50, 50)));
-            MapManager.Instance.CurrentMap.GetSubmap(4, 1).MapEquipment.AddToEquipment(new Item(key, "Key", new Rectangle(300, 150, 25, 30)));
-
-            MapManager.Instance.CurrentMap.GetSubmap(4, 2).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(80, 80, 50, 50)));
-            MapManager.Instance.CurrentMap.GetSubmap(4, 2).MapInventory.AddToInventory(new Item(crate, "Crate", new Rectangle(70, 200, 50, 50)));
-
-            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 1, MapManager.Instance.CurrentMap.GetSubmap(0, 2), enemy);
-            EnemyManager.Instance.CreateEnemy(400, 100, 50, 50, 3, 1, MapManager.Instance.CurrentMap.GetSubmap(0, 2), enemy);
-            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 1, MapManager.Instance.CurrentMap.GetSubmap(0, 1), enemy);
-            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 1, MapManager.Instance.CurrentMap.GetSubmap(2, 1), enemy);
-            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 1, MapManager.Instance.CurrentMap.GetSubmap(3, 2), enemy);
-            EnemyManager.Instance.CreateEnemy(200, 200, 50, 50, 3, 1, MapManager.Instance.CurrentMap.GetSubmap(3, 2), enemy);
+            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 1, 0, 2, enemy);
+            EnemyManager.Instance.CreateEnemy(400, 100, 50, 50, 3, 1, 0, 2, enemy);
+            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 1, 0, 1, enemy);
+            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 1, 2, 1, enemy);
+            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 1, 3, 2, enemy);
+            EnemyManager.Instance.CreateEnemy(200, 200, 50, 50, 3, 1, 3, 2, enemy);
         }
 
         /// <summary>
@@ -292,34 +288,31 @@ namespace GroupProject
                         gameState = GameState.Equipment;
                         this.IsMouseVisible = true;
                     }
+
+                    //inventory and equipment
+
                     if (currentKb.IsKeyDown(Keys.Space))
                     {
-                        if (MapManager.Instance.CurrentSubMap.MapInventory.CurrentInventory.Count != 0)
+                        for(int i = MapManager.Instance.CurrentSubMap.Inventory.Count - 1; i >= 0; i--)
                         {
-                            for (int i = 0; i < MapManager.Instance.CurrentSubMap.MapInventory.CurrentInventory.Count; i++)
+                            if (PlayerManager.Instance.Player.Rectangle.Intersects(MapManager.Instance.CurrentSubMap.Inventory[i].MapPosition))
                             {
-                                if (PlayerManager.Instance.Player.Rectangle.Intersects(MapManager.Instance.CurrentSubMap.MapInventory.CurrentInventory[i].MapPosition))
-                                {
-                                    MapManager.Instance.CurrentSubMap.MapInventory.CurrentInventory[i].AddToPlayerInventory();
-                                    MapManager.Instance.CurrentSubMap.MapInventory.RemoveFromInventory(MapManager.Instance.CurrentSubMap.MapInventory.CurrentInventory[i]);
-                                }
+                                PlayerManager.Instance.PlayerInventory.AddToInventory(MapManager.Instance.CurrentSubMap.Inventory[i]);
+                                MapManager.Instance.CurrentSubMap.Inventory.RemoveAt(i);
                             }
                         }
-                        if (MapManager.Instance.CurrentSubMap.MapEquipment.CurrentEquipment.Count != 0)
+                        for (int i = MapManager.Instance.CurrentSubMap.Equipment.Count - 1; i >= 0; i--)
                         {
-                            for (int i = 0; i < MapManager.Instance.CurrentSubMap.MapEquipment.CurrentEquipment.Count; i++)
+                            if (PlayerManager.Instance.Player.Rectangle.Intersects(MapManager.Instance.CurrentSubMap.Equipment[i].MapPosition))
                             {
-                                if (PlayerManager.Instance.Player.Rectangle.Intersects(MapManager.Instance.CurrentSubMap.MapEquipment.CurrentEquipment[i].MapPosition))
-                                {
-                                    MapManager.Instance.CurrentSubMap.MapEquipment.CurrentEquipment[i].AddToPlayerEquipment();
-                                    MapManager.Instance.CurrentSubMap.MapEquipment.RemoveFromEquipment(MapManager.Instance.CurrentSubMap.MapEquipment.CurrentEquipment[i]);
-                                }
+                                PlayerManager.Instance.PlayerEquipment.AddToEquipment(MapManager.Instance.CurrentSubMap.Equipment[i]);
+                                MapManager.Instance.CurrentSubMap.Equipment.RemoveAt(i);
                             }
-
                         }
                     }
 
-                    if (PlayerManager.Instance.Player.X + PlayerManager.Instance.Player.Width / 2 < 0)
+                        //moves submap when player walks to an edge
+                        if (PlayerManager.Instance.Player.X + PlayerManager.Instance.Player.Width / 2 < 0)
                     {
                         MapManager.Instance.MoveSubmap(Direction.Left);
                         PlayerManager.Instance.Player.X = graphics.PreferredBackBufferWidth - PlayerManager.Instance.Player.Width / 2;
@@ -346,49 +339,37 @@ namespace GroupProject
                     if (currentKb.IsKeyDown(Keys.Right))
                     {
                         Attack pAttack = new Attack(new Rectangle(PlayerManager.Instance.Player.X + 50, PlayerManager.Instance.Player.Y + 20, 100, 30), weaponRight);
-                        foreach (Enemy a in EnemyManager.Instance.EnemyList)
+                        foreach (Enemy a in MapManager.Instance.CurrentSubMap.Enemies)
                         {
-                            if (a.Location == MapManager.Instance.CurrentSubMap)
-                            {
-                                if (pAttack.MapPosition.Intersects(a.Rectangle))
-                                    a.Hp -= 1;
-                            }
+                            if (pAttack.MapPosition.Intersects(a.Rectangle))
+                                a.Hp -= 1;
                         }
                     }
                     if (currentKb.IsKeyDown(Keys.Up))
                     {
                         Attack pAttack = new Attack(new Rectangle(PlayerManager.Instance.Player.X + 20, PlayerManager.Instance.Player.Y - 90, 30, 100), weaponUp);
-                        foreach (Enemy a in EnemyManager.Instance.EnemyList)
+                        foreach (Enemy a in MapManager.Instance.CurrentSubMap.Enemies)
                         {
-                            if (a.Location == MapManager.Instance.CurrentSubMap)
-                            {
-                                if (pAttack.MapPosition.Intersects(a.Rectangle))
-                                    a.Hp -= 1;
-                            }
+                            if (pAttack.MapPosition.Intersects(a.Rectangle))
+                                a.Hp -= 1;
                         }
                     }
                     if (currentKb.IsKeyDown(Keys.Left))
                     {
                         Attack pAttack = new Attack(new Rectangle(PlayerManager.Instance.Player.X - 85, PlayerManager.Instance.Player.Y + 20, 100, 30), weaponLeft);
-                        foreach (Enemy a in EnemyManager.Instance.EnemyList)
+                        foreach (Enemy a in MapManager.Instance.CurrentSubMap.Enemies)
                         {
-                            if (a.Location == MapManager.Instance.CurrentSubMap)
-                            {
-                                if (pAttack.MapPosition.Intersects(a.Rectangle))
-                                    a.Hp -= 1;
-                            }
+                            if (pAttack.MapPosition.Intersects(a.Rectangle))
+                                a.Hp -= 1;
                         }
                     }
                     if (currentKb.IsKeyDown(Keys.Down))
                     {
                         Attack pAttack = new Attack(new Rectangle(PlayerManager.Instance.Player.X + 20, PlayerManager.Instance.Player.Y + 55, 30, 100), weaponDown);
-                        foreach (Enemy a in EnemyManager.Instance.EnemyList)
+                        foreach (Enemy a in MapManager.Instance.CurrentSubMap.Enemies)
                         {
-                            if (a.Location == MapManager.Instance.CurrentSubMap)
-                            {
-                                if (pAttack.MapPosition.Intersects(a.Rectangle))
-                                    a.Hp -= 1;
-                            }
+                            if (pAttack.MapPosition.Intersects(a.Rectangle))
+                                a.Hp -= 1;
                         }
                     }
                     //End player attacks
@@ -423,7 +404,7 @@ namespace GroupProject
 
                     if (currentKb.IsKeyDown(Keys.Y) && previousKb.IsKeyUp(Keys.Y))
                     {
-                        MapManager.Instance.CurrentSubMap.MapInventory.AddToInventory(new Item(crate, "test", new Rectangle(100, 100, 50, 50)));
+                        MapManager.Instance.CurrentSubMap.Inventory.Add(new Item(crate, "test", new Rectangle(100, 100, 50, 50)));
                     }
                     break;
 
@@ -494,10 +475,8 @@ namespace GroupProject
                     {
                         spriteBatch.Draw(logo, new Rectangle(285, 150, 200, 100), Color.White);
                     }
-                    MapManager.Instance.CurrentSubMap.MapInventory.Draw(spriteBatch);
-                    MapManager.Instance.CurrentSubMap.MapEquipment.Draw(spriteBatch);
+
                     PlayerManager.Instance.Player.Draw(spriteBatch);
-                    EnemyManager.Instance.Draw(spriteBatch);
                     spriteBatch.Draw(hud, new Rectangle(15, 15, 130, 55), Color.NavajoWhite);
                     spriteBatch.DrawString(basicFont, "Artifacts: " + PlayerManager.Instance.PlayerInventory.Count, new Vector2(25, 20), Color.Black);
                     if (PlayerManager.Instance.PlayerInventory.Count >= 15)

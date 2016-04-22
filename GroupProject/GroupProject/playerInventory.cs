@@ -32,7 +32,7 @@ namespace GroupProject
 
             foreach(Item a in currinventory)
             {
-                a.Draw(spriteBatch, new Rectangle(x, y, 50, 50),Color.LightGreen);
+                a.Draw(spriteBatch, new Rectangle(x, y, 50, 50),Color.LightGreen, true);
                 x += 100;
                 count++;
                 if (count == 5)

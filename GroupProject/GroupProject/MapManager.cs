@@ -99,5 +99,15 @@ namespace GroupProject
                 CurrentSubMap.UnlockDoors();
             }
         }
+
+        public void AddItemToInventory(int row, int col, Item i)
+        {
+            currentMap.GetSubmap(row, col).Inventory.Add(i);
+        }
+
+        public void AddItemToEquiptment(int row, int col, Item i)
+        {
+            currentMap.GetSubmap(row, col).Equipment.Add(i);
+        }
     }
 }

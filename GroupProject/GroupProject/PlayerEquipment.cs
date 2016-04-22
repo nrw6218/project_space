@@ -46,7 +46,7 @@ namespace GroupProject
             
             foreach (Item i in currentEquipment)
             {
-                i.Draw(spriteBatch, new Rectangle(x, y, 50, 50), Color.Coral);
+                i.Draw(spriteBatch, new Rectangle(x, y, 50, 50), Color.Coral, true);
                 x += 100;
                 count++;
                 if (count == 5)

@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GroupProject
 {
-    class Character : Entity
+    public class Character : Entity
     {
         //Fields
         protected double speed;

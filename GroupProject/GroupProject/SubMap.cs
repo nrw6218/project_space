@@ -15,13 +15,15 @@ namespace GroupProject
         private int mapIndex;
         private List<Block> walls;
         private List<Door> doors;
-        private MapInventory mapInventory;
-        private MapEquipment mapEquipment;
+        private List<Item> inventory;
+        private List<Item> equipment;
+        private List<Enemy> enemies;
 
         //Properties
         public int MapIndex { get { return mapIndex; } }
-        public MapInventory MapInventory { get { return mapInventory; } }
-        public MapEquipment MapEquipment { get { return mapEquipment; } }
+        public List<Item> Inventory { get { return inventory; } }
+        public List<Item> Equipment { get { return equipment; } }
+        public List<Enemy> Enemies { get { return enemies; } }
 
         //Constructors
         public SubMap(int[,] intMap, int mapIndex)
@@ -30,8 +32,10 @@ namespace GroupProject
             walls = new List<Block>();
             doors = new List<Door>();
 
-            mapInventory = new MapInventory();
-            mapEquipment = new MapEquipment();
+            inventory = new List<Item>();
+            equipment = new List<Item>();
+
+            enemies = new List<Enemy>();        
 
             //make blocks and add them to map
             subMap = new Block[intMap.GetLength(0), intMap.GetLength(1)];
@@ -67,6 +71,15 @@ namespace GroupProject
                     subMap[i, j].Draw(spriteBatch, spriteSheet);
                 }
             }
+
+            foreach(Item i in inventory)
+                i.Draw(spriteBatch, i.MapPosition);
+
+            foreach (Item i in equipment)
+                i.Draw(spriteBatch, i.MapPosition);
+
+            foreach (Enemy e in enemies)
+                e.Draw(spriteBatch);
         }
 
         public List<Block> CollidingWalls()

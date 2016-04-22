@@ -7,19 +7,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GroupProject
 {
-    class Enemy : Character
+    public class Enemy : Character
     {
         //Fields
         private int previousX;
         private int previousY;
-        private SubMap location;
         //Properties
         public bool Hostile { get { return PlayerManager.Instance.Player.Karma < 0; } }
-
-        public SubMap Location
-        {
-            get { return location; }
-        }
 
         //Constructor
         public Enemy(Rectangle rectangle, int hp, double speed)
@@ -29,12 +23,11 @@ namespace GroupProject
             previousY = Y;
         }
 
-        public Enemy(int x, int y, int width, int height, int hp, double speed, SubMap _location, Texture2D _texture)
+        public Enemy(int x, int y, int width, int height, int hp, double speed, Texture2D _texture)
             : base(x, y, width, height, hp, speed)
         {
             previousX = x;
             previousY = y;
-            location = _location;
             this.texture = _texture;
         }
 
@@ -43,7 +36,6 @@ namespace GroupProject
         {
                 this.Move();
                 this.Attack();
-
         }
 
         private void Move()
