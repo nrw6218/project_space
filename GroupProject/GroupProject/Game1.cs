@@ -219,41 +219,22 @@ namespace GroupProject
                     /**************************************************************************/
 
                     //move the player horizontally in the correct direction
+                    int moveX = 0;
+                    int moveY= 0;
+
                     if (currentKb.IsKeyDown(Keys.A))
-                        PlayerManager.Instance.Player.X -= moveBy;
+                        moveX -= moveBy;
                     if (currentKb.IsKeyDown(Keys.D))
-                        PlayerManager.Instance.Player.X += moveBy;
+                        moveX += moveBy;
 
-
-                    List<Block> collidingWalls = MapManager.Instance.CurrentSubMap.CollidingWalls();
-
-                    foreach (Block w in collidingWalls)
-                    {
-                        //if the player is moving to the left, hitting a block on its right side
-                        if (PlayerManager.Instance.Player.X < PlayerManager.Instance.Player.PreviousX)
-                            PlayerManager.Instance.Player.X = w.Rectangle.X + w.Rectangle.Width;
-                        //if the player is moving to the right, hitting a block on its left side
-                        else if (PlayerManager.Instance.Player.X > PlayerManager.Instance.Player.PreviousX)
-                            PlayerManager.Instance.Player.X = w.Rectangle.X - PlayerManager.Instance.Player.Rectangle.Width;
-                    }
-
-                    //move the player vertically in the correct direction
                     if (currentKb.IsKeyDown(Keys.W))
-                        PlayerManager.Instance.Player.Y -= moveBy;
+                        moveY -= moveBy;
                     if (currentKb.IsKeyDown(Keys.S))
-                        PlayerManager.Instance.Player.Y += moveBy;
+                        moveY += moveBy;
 
-                    collidingWalls = MapManager.Instance.CurrentSubMap.CollidingWalls();
+                    MapManager.Instance.CurrentSubMap.CollidingWalls(PlayerManager.Instance.Player, moveX, moveY);
 
-                    foreach (Block w in collidingWalls)
-                    {
-                        //if the player is moving up, hitting a block on its bottom
-                        if (PlayerManager.Instance.Player.Y < PlayerManager.Instance.Player.PreviousY)
-                            PlayerManager.Instance.Player.Y = w.Rectangle.Y + w.Rectangle.Height;
-                        //if the player is moving down, hitting a block on its top
-                        else if (PlayerManager.Instance.Player.Y > PlayerManager.Instance.Player.PreviousY)
-                            PlayerManager.Instance.Player.Y = w.Rectangle.Y - PlayerManager.Instance.Player.Rectangle.Height;
-                    }
+                    
                     //End Wall Collision
                     /******************************************************************************/
 

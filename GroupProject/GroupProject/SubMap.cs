@@ -82,15 +82,47 @@ namespace GroupProject
                 e.Draw(spriteBatch);
         }
 
-        public List<Block> CollidingWalls()
+        public void CollidingWalls(Character c, int x, int y)
         {
             List<Block> collindingWalls = new List<Block>();
+
+            c.X += x;
+
             foreach(Block w in walls)
             {
-                if (PlayerManager.Instance.Player.Rectangle.Intersects(w.Rectangle))
+                if (c.Rectangle.Intersects(w.Rectangle))
                     collindingWalls.Add(w);
             }
-            return collindingWalls;
+
+            foreach (Block w in collindingWalls)
+            {
+                //if the character is moving to the left, hitting a block on its right side
+                if (c.X < c.PreviousX)
+                    c.X = w.Rectangle.X + w.Rectangle.Width;
+                //if the character is moving to the right, hitting a block on its left side
+                else if (c.X > c.PreviousX)
+                    c.X = w.Rectangle.X - c.Rectangle.Width;
+            }
+
+            c.Y += y;
+            collindingWalls.Clear();
+
+            foreach (Block w in walls)
+            {
+                if (c.Rectangle.Intersects(w.Rectangle))
+                    collindingWalls.Add(w);
+            }
+
+            foreach (Block w in collindingWalls)
+            {
+                //if the character is moving up, hitting a block on its bottom
+                if (c.Y < c.PreviousY)
+                    c.Y = w.Rectangle.Y + w.Rectangle.Height;
+                //if the character is moving down, hitting a block on its top
+                else if (c.Y > c.PreviousY)
+                    c.Y = w.Rectangle.Y - c.Rectangle.Height;
+            }
+
         }
 
         //only access through mapManager

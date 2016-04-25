@@ -11,21 +11,10 @@ namespace GroupProject
     {
         //Fields
         private int karma;
-        private int previousX;
-        private int previousY;
 
         public enum state { Attacking, PickingItem };
 
-        public int PreviousX
-        {
-            get { return previousX; }
-            set { previousX = value; }
-        }
-        public int PreviousY
-        {
-            get { return previousY; }
-            set { previousY = value; }
-        }
+        
 
         //Properties
         public int Karma

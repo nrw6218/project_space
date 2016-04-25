@@ -10,8 +10,6 @@ namespace GroupProject
     public class Enemy : Character
     {
         //Fields
-        private int previousX;
-        private int previousY;
         //Properties
         public bool Hostile { get { return PlayerManager.Instance.Player.Karma < 0; } }
 
@@ -32,52 +30,31 @@ namespace GroupProject
         }
 
         //Methods
-        public void Update()
+        public override void Update()
         {
-                this.Move();
-                this.Attack();
+            base.Update();
+            Move();
+            Attack();
         }
 
         private void Move()
         {
-            Rectangle playerloc = PlayerManager.Instance.Player.Rectangle;
-
             //move the player horizontally in the correct direction
+            int x;
+            int y;
 
-            if (playerloc.X > this.X)
-                this.X += 1;
+            if (PlayerManager.Instance.Player.X > this.X)
+                x = 1;
             else
-                this.X -= 1;
-
-            List<Block> collidingWalls = MapManager.Instance.CurrentSubMap.CollidingWalls();
-
-            foreach (Block w in collidingWalls)
-            {
-                //if the enemy is moving to the left, hitting a block on its right side
-                if (this.X < this.previousX)
-                    this.X = w.Rectangle.X + w.Rectangle.Width;
-                //if the enemy is moving to the right, hitting a block on its left side
-                else if (this.X > this.previousX)
-                    this.X = w.Rectangle.X - this.Rectangle.Width;
-            }
-
-            //move the enemy vertically in the correct direction
-            if (playerloc.Y > this.Y)
-                this.Y += 5;
+                x = -1;
+          
+            if (PlayerManager.Instance.Player.Y > this.Y)
+                y = 5;
             else
-                this.Y -= 5;
+                y = -5;
 
-            collidingWalls = MapManager.Instance.CurrentSubMap.CollidingWalls();
+            MapManager.Instance.CurrentSubMap.CollidingWalls(this, x, y);
 
-            foreach (Block w in collidingWalls)
-            {
-                //if the enemy is moving up, hitting a block on its bottom
-                if (this.Y < this.previousY)
-                    this.Y = w.Rectangle.Y + w.Rectangle.Height;
-                //if the enemy is moving down, hitting a block on its top
-                else if (this.Y > this.previousY)
-                    this.Y = w.Rectangle.Y - this.Rectangle.Height;
-            }
         }
 
         private void Attack()

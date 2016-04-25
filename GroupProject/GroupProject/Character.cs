@@ -13,12 +13,26 @@ namespace GroupProject
         protected double speed;
         protected int hp;
 
+        protected int previousX;
+        protected int previousY;
+
         //Properties
         /// <summary>
         /// How many pixels per frame the character can move
         /// </summary>
         public double Speed { get { return speed; } }
         public int Hp { get { return hp; } set { hp = value; } }
+
+        public int PreviousX
+        {
+            get { return previousX; }
+            set { previousX = value; }
+        }
+        public int PreviousY
+        {
+            get { return previousY; }
+            set { previousY = value; }
+        }
 
         //Constructor
         public Character(Rectangle rectangle, int hp, double speed)
@@ -38,5 +52,10 @@ namespace GroupProject
         }
 
         //Methods
+        public virtual void Update()
+        {
+            previousX = X;
+            previousY = Y;
+        }
     }
 }
