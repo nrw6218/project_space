@@ -40,21 +40,14 @@ namespace GroupProject
         private void Move()
         {
             //move the player horizontally in the correct direction
-            int x;
-            int y;
+            int adjecent = PlayerManager.Instance.Player.X - this.X;
+            int opposite = PlayerManager.Instance.Player.Y - this.Y;
+            double hypotenuse = Math.Sqrt(Math.Pow((PlayerManager.Instance.Player.X - this.X), 2) + Math.Pow((PlayerManager.Instance.Player.Y - this.Y), 2));            
 
-            if (PlayerManager.Instance.Player.X > this.X)
-                x = 1;
-            else
-                x = -1;
-          
-            if (PlayerManager.Instance.Player.Y > this.Y)
-                y = 5;
-            else
-                y = -5;
+            int x = (int)(this.speed * (adjecent/hypotenuse));
+            int y = (int)(this.speed * (opposite / hypotenuse));
 
             MapManager.Instance.CurrentSubMap.CollidingWalls(this, x, y);
-
         }
 
         private void Attack()

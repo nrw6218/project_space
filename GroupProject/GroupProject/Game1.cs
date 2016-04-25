@@ -145,12 +145,12 @@ namespace GroupProject
             MapManager.Instance.AddItemToInventory(4, 2, new Item(crate, "Crate", new Rectangle(80, 80, 50, 50)));
             MapManager.Instance.AddItemToInventory(4, 2, new Item(crate, "Crate", new Rectangle(70, 200, 50, 50)));
 
-            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 1, 0, 2, enemy);
-            EnemyManager.Instance.CreateEnemy(400, 100, 50, 50, 3, 1, 0, 2, enemy);
-            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 1, 0, 1, enemy);
-            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 1, 2, 1, enemy);
-            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 1, 3, 2, enemy);
-            EnemyManager.Instance.CreateEnemy(200, 200, 50, 50, 3, 1, 3, 2, enemy);
+            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 3, 0, 2, enemy);
+            EnemyManager.Instance.CreateEnemy(400, 100, 50, 50, 3, 3, 0, 2, enemy);
+            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 3, 0, 1, enemy);
+            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 3, 2, 1, enemy);
+            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 3, 3, 2, enemy);
+            EnemyManager.Instance.CreateEnemy(200, 200, 50, 50, 3, 3, 3, 2, enemy);
         }
 
         /// <summary>
