@@ -10,6 +10,7 @@ item
 100
 key
 end
+
 start
 0
 1
@@ -17,6 +18,7 @@ enemy
 200
 100
 end
+
 start
 0
 2
@@ -43,6 +45,7 @@ enemy
 400
 100
 end
+
 start
 2
 0
@@ -51,6 +54,7 @@ item
 250
 artifact
 end
+
 start
 2
 1
@@ -62,6 +66,7 @@ enemy
 200
 100
 end
+
 start
 3
 1
@@ -70,6 +75,7 @@ item
 200
 crate
 end
+
 start
 3
 2
@@ -80,6 +86,7 @@ enemy
 200
 200
 end
+
 start
 4
 0
@@ -90,7 +97,9 @@ crate
 item
 70
 200
+crate
 end
+
 start
 4
 1
@@ -103,6 +112,7 @@ item
 150
 key
 end
+
 start
 4
 2
