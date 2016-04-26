@@ -88,7 +88,7 @@ namespace GroupProject
             currentKb = Keyboard.GetState();
             previousKb = currentKb;
 
-            MapManager.Instance.NewMap("../../../Content/Level 1.map");
+            
             PlayerManager.Instance.CreatePlayer();
             PlayerManager.Instance.CreatePlayerInventory();
             PlayerManager.Instance.CreatePlayerEquipment();
@@ -123,34 +123,18 @@ namespace GroupProject
             weaponUp = Content.Load<Texture2D>("energyBlastUp");
             weaponDown = Content.Load<Texture2D>("energyBlastDown");
 
+            TextureManager.Instance.Textures.Add("crate", crate);
+            TextureManager.Instance.Textures.Add("box", box);
+            TextureManager.Instance.Textures.Add("artifact", artifact);
+            TextureManager.Instance.Textures.Add("key", key);
+            TextureManager.Instance.Textures.Add("enemy", enemy);
+
+            MapManager.Instance.NewMap("../../../Content/Level 1");
 
             PlayerManager.Instance.Player.SetTexture(astro);
             PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(crate, "Crate"));
             PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(box, "Mysterious Box"));
-            PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(artifact, "Advanced Camera"));
-
-            MapManager.Instance.AddItemToInventory(0, 0, new Item(crate, "Crate", new Rectangle(300, 200, 50, 50)));
-            MapManager.Instance.AddItemToEquiptment(0, 0, new Item(key, "Key", new Rectangle(200, 100, 25, 30)));
-            MapManager.Instance.AddItemToInventory(0, 2, new Item(box, "Mysterious Box", new Rectangle(200, 200, 50, 50)));
-            MapManager.Instance.AddItemToInventory(0, 2, new Item(artifact, "Advanced Camera", new Rectangle(200, 250, 50, 50)));
-            MapManager.Instance.AddItemToInventory(0, 2, new Item(crate, "Crate", new Rectangle(320, 200, 50, 50)));
-            MapManager.Instance.AddItemToEquiptment(0, 2, new Item(key, "Key", new Rectangle(100, 100, 25, 30)));
-            MapManager.Instance.AddItemToInventory(2, 0, new Item(artifact, "Advanced Camera", new Rectangle(200, 250, 50, 50)));
-            MapManager.Instance.AddItemToInventory(2, 1, new Item(crate, "Crate", new Rectangle(320, 200, 50, 50)));
-            MapManager.Instance.AddItemToInventory(3, 1, new Item(crate, "Crate", new Rectangle(320, 200, 50, 50)));
-            MapManager.Instance.AddItemToInventory(4, 0, new Item(crate, "Crate", new Rectangle(80, 80, 50, 50)));
-            MapManager.Instance.AddItemToInventory(4, 0, new Item(crate, "Crate", new Rectangle(70, 200, 50, 50)));
-            MapManager.Instance.AddItemToInventory(4, 1, new Item(crate, "Crate", new Rectangle(200, 200, 50, 50)));
-            MapManager.Instance.AddItemToEquiptment(4, 1, new Item(key, "Key", new Rectangle(300, 150, 25, 30)));
-            MapManager.Instance.AddItemToInventory(4, 2, new Item(crate, "Crate", new Rectangle(80, 80, 50, 50)));
-            MapManager.Instance.AddItemToInventory(4, 2, new Item(crate, "Crate", new Rectangle(70, 200, 50, 50)));
-
-            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 3, 0, 2, enemy);
-            EnemyManager.Instance.CreateEnemy(400, 100, 50, 50, 3, 3, 0, 2, enemy);
-            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 3, 0, 1, enemy);
-            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 3, 2, 1, enemy);
-            EnemyManager.Instance.CreateEnemy(200, 100, 50, 50, 3, 3, 3, 2, enemy);
-            EnemyManager.Instance.CreateEnemy(200, 200, 50, 50, 3, 3, 3, 2, enemy);
+            PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(artifact, "Advanced Camera"));         
         }
 
         /// <summary>
