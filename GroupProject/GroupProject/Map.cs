@@ -49,6 +49,11 @@ namespace GroupProject
         }    
 
         //Methods
+
+        /// <summary>
+        /// Sets the current subamp to a new one
+        /// </summary>
+        /// <param name="mapIndex">2 digit number, first digit is the row, second digit is the col</param>
         public void SetCurrentSubmap(int mapIndex)
         {
             if ((mapIndex / 10 >= 0 || mapIndex / 10 < MapRows) && (mapIndex % 10 >= 0 || mapIndex % 10 < MapColumns))
@@ -57,6 +62,12 @@ namespace GroupProject
                 throw new IndexOutOfRangeException();
         }
 
+        /// <summary>
+        /// Returns a submap
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <returns></returns>
         public SubMap GetSubmap(int row, int col)
         {
             return map[row, col];

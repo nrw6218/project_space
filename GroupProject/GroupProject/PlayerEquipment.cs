@@ -14,18 +14,11 @@ namespace GroupProject
         private int keyCount;
 
         //Properties
-        public List<Item> CurrentEquipment
-        {
-            get { return currentEquipment; }
-        }
+        public List<Item> CurrentEquipment { get { return currentEquipment; } }
 
-        public int KeyCount
-        {
-            get { return keyCount; }
-            set { keyCount = value; }
-        }
+        public int KeyCount { get { return keyCount; }}
 
-        //Constructor
+        //Constructors
         public PlayerEquipment()
         {
             currentEquipment = new List<Item>();
@@ -71,6 +64,9 @@ namespace GroupProject
             }
         }
 
+        /// <summary>
+        /// Removes a key from the player's equipment
+        /// </summary>
         public void RemoveKey()
         {
             if(keyCount > 0)

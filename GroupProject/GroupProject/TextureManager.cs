@@ -10,9 +10,6 @@ namespace GroupProject
     public class TextureManager
     {
         private static TextureManager instance;
-
-        private Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
-
         public static TextureManager Instance
         {
             get
@@ -24,7 +21,17 @@ namespace GroupProject
                 return instance;
             }
         }
+        private TextureManager()
+        {
+            textures = new Dictionary<string, Texture2D>();
+        }
 
+        //Fields
+        private Dictionary<string, Texture2D> textures;
+                
+        //Properties
         public Dictionary<string, Texture2D> Textures { get { return textures; } }
+
+        //Methods
     }
 }

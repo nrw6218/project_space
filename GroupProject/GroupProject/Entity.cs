@@ -54,6 +54,7 @@ namespace GroupProject
         }
 
         //Methods
+
         /// <summary>
         /// Sets the texture if it hasent been set before
         /// </summary>

@@ -12,14 +12,10 @@ namespace GroupProject
         //Fields
         protected double speed;
         protected int hp;
-
         protected int previousX;
         protected int previousY;
 
         //Properties
-        /// <summary>
-        /// How many pixels per frame the character can move
-        /// </summary>
         public double Speed { get { return speed; } }
         public int Hp { get { return hp; } set { hp = value; } }
 
@@ -34,7 +30,7 @@ namespace GroupProject
             set { previousY = value; }
         }
 
-        //Constructor
+        //Constructors
         public Character(Rectangle rectangle, int hp, double speed)
             :base(rectangle)
         {
@@ -52,6 +48,10 @@ namespace GroupProject
         }
 
         //Methods
+
+        /// <summary>
+        /// Updates character position
+        /// </summary>
         public virtual void Update()
         {
             previousX = X;

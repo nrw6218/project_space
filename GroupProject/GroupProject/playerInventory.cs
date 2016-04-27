@@ -10,19 +10,24 @@ namespace GroupProject
 {
     public class PlayerInventory
     {
-        List<Item> currinventory;
+        //Fields
+        private List<Item> inventory;
 
-        public List<Item> Currinventory { get { return currinventory; } }
+        //Properties
+        public List<Item> Inventory { get { return inventory; } }
 
-        public int Count
-        {
-            get { return currinventory.Count; }
-        }
-
+        //Constructors
         public PlayerInventory()
         {
-            currinventory = new List<Item>(0);
+            inventory = new List<Item>(0);
         }
+
+        //Methods
+
+        /// <summary>
+        /// Draws the player's inventory to the screen with it's items 
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch)
         {
             int x = 50;
@@ -30,7 +35,7 @@ namespace GroupProject
             int count = 0;
             
 
-            foreach(Item a in currinventory)
+            foreach(Item a in inventory)
             {
                 a.Draw(spriteBatch, new Rectangle(x, y, 50, 50),Color.LightGreen, true);
                 x += 100;
@@ -42,13 +47,6 @@ namespace GroupProject
                     y += 100;
                 }
             }
-        }
-
-        public void AddToInventory(Item a)
-        {
-            currinventory.Add(a);
-        }
-
-        
+        }        
     }
 }

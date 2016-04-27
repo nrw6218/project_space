@@ -88,11 +88,6 @@ namespace GroupProject
             currentKb = Keyboard.GetState();
             previousKb = currentKb;
 
-            
-            PlayerManager.Instance.CreatePlayer();
-            PlayerManager.Instance.CreatePlayerInventory();
-            PlayerManager.Instance.CreatePlayerEquipment();
-
             base.Initialize();
         }
 
@@ -102,8 +97,12 @@ namespace GroupProject
         /// </summary>
         protected override void LoadContent()
         {
+            
+
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            Profiler.Instance.Initialize(200, spriteBatch, GraphicsDevice);
 
             tilesheet = Content.Load<Texture2D>("tilesheet");
             Texture2D bot = Content.Load<Texture2D>("botcombat");
@@ -129,12 +128,14 @@ namespace GroupProject
             TextureManager.Instance.Textures.Add("key", key);
             TextureManager.Instance.Textures.Add("enemy", enemy);
 
+            TextureManager.Instance.Textures.Add("tilesheet", tilesheet);
+
             MapManager.Instance.NewMap("../../../Content/Level 1");
 
             PlayerManager.Instance.Player.SetTexture(astro);
-            PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(crate, "Crate"));
-            PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(box, "Mysterious Box"));
-            PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(artifact, "Advanced Camera"));         
+            PlayerManager.Instance.PlayerInventory.Inventory.Add(new Item(crate, "Crate"));
+            PlayerManager.Instance.PlayerInventory.Inventory.Add(new Item(box, "Mysterious Box"));
+            PlayerManager.Instance.PlayerInventory.Inventory.Add(new Item(artifact, "Advanced Camera"));         
         }
 
         /// <summary>
@@ -153,6 +154,8 @@ namespace GroupProject
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            Profiler.Instance.StartTimer();
+
             framesThisGameFrame = gameTime.ElapsedGameTime.TotalSeconds / SECONDS_PER_FRAME;
 
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -160,6 +163,8 @@ namespace GroupProject
 
             previousKb = currentKb;
             currentKb = Keyboard.GetState();
+
+            
 
             switch (gameState)
             {
@@ -191,12 +196,11 @@ namespace GroupProject
                     break;
 
                 case GameState.Game:
-                    PlayerManager.Instance.Player.PreviousX = PlayerManager.Instance.Player.X;
-                    PlayerManager.Instance.Player.PreviousY = PlayerManager.Instance.Player.Y;
+                    PlayerManager.Instance.Player.Update();
 
                     //if the player is moving change the moveby
                     int moveBy = 0;
-                    if (PlayerManager.Instance.PlayerInventory.Count < 15)
+                    if (PlayerManager.Instance.PlayerInventory.Inventory.Count < 15)
                         moveBy = MovementDistance(PlayerManager.Instance.Player.Speed, (currentKb.IsKeyDown(Keys.W) != currentKb.IsKeyDown(Keys.S)) && (currentKb.IsKeyDown(Keys.A) != currentKb.IsKeyDown(Keys.D)));
 
                     //handles wall collision
@@ -227,7 +231,7 @@ namespace GroupProject
                         MapManager.Instance.DoorCheck(currentKb);
 
                     //Stop the player from moving if they have collected 15 artifacts
-                    if (PlayerManager.Instance.PlayerInventory.Count >= 15)
+                    if (PlayerManager.Instance.PlayerInventory.Inventory.Count >= 15)
                     {
                         moveBy = 0;
                         if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
@@ -262,7 +266,7 @@ namespace GroupProject
                         {
                             if (PlayerManager.Instance.Player.Rectangle.Intersects(MapManager.Instance.CurrentSubMap.Inventory[i].MapPosition))
                             {
-                                PlayerManager.Instance.PlayerInventory.AddToInventory(MapManager.Instance.CurrentSubMap.Inventory[i]);
+                                PlayerManager.Instance.PlayerInventory.Inventory.Add(MapManager.Instance.CurrentSubMap.Inventory[i]);
                                 MapManager.Instance.CurrentSubMap.Inventory.RemoveAt(i);
                             }
                         }
@@ -364,7 +368,7 @@ namespace GroupProject
 
                     if (currentKb.IsKeyDown(Keys.U) && previousKb.IsKeyUp(Keys.U))
                     {
-                        PlayerManager.Instance.PlayerInventory.AddToInventory(new Item(crate, "test"));
+                        PlayerManager.Instance.PlayerInventory.Inventory.Add(new Item(crate, "test"));
                     }
 
                     if (currentKb.IsKeyDown(Keys.Y) && previousKb.IsKeyUp(Keys.Y))
@@ -398,7 +402,7 @@ namespace GroupProject
                 case GameState.Puzzle:
                     break;
             }
-
+            Profiler.Instance.StopTimer();
             base.Update(gameTime);
         }
 
@@ -410,8 +414,13 @@ namespace GroupProject
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            
+
             // TODO: Add your drawing code here
             spriteBatch.Begin();
+
+            
+
             switch (gameState)
             {
                 case GameState.MainMenu:
@@ -435,7 +444,7 @@ namespace GroupProject
                     break;
 
                 case GameState.Game:
-                    MapManager.Instance.CurrentSubMap.Draw(spriteBatch, tilesheet);
+                    MapManager.Instance.CurrentSubMap.Draw(spriteBatch);
                     if (MapManager.Instance.CurrentSubMap == MapManager.Instance.CurrentMap.GetSubmap(0, 1))
                     {
                         spriteBatch.Draw(logo, new Rectangle(285, 150, 200, 100), Color.White);
@@ -443,8 +452,8 @@ namespace GroupProject
 
                     PlayerManager.Instance.Player.Draw(spriteBatch);
                     spriteBatch.Draw(hud, new Rectangle(15, 15, 130, 55), Color.NavajoWhite);
-                    spriteBatch.DrawString(basicFont, "Artifacts: " + PlayerManager.Instance.PlayerInventory.Count, new Vector2(25, 20), Color.Black);
-                    if (PlayerManager.Instance.PlayerInventory.Count >= 15)
+                    spriteBatch.DrawString(basicFont, "Artifacts: " + PlayerManager.Instance.PlayerInventory.Inventory.Count, new Vector2(25, 20), Color.Black);
+                    if (PlayerManager.Instance.PlayerInventory.Inventory.Count >= 15)
                     {
                         spriteBatch.DrawString(basicFont, "MISSION_COMPLETE", new Vector2(289, 170), Color.Black);
                         spriteBatch.DrawString(basicFont, "press enter", new Vector2(334, 190), Color.LightGreen);
@@ -479,7 +488,7 @@ namespace GroupProject
                     spriteBatch.DrawString(basicFont, "inventory", new Vector2(GraphicsDevice.Viewport.Width / 2 - 55, 10), Color.Black);
                     spriteBatch.DrawString(basicFont, "to_help: H", new Vector2(600, 10), Color.White);
                     spriteBatch.DrawString(basicFont, "to_equipment: E", new Vector2(60, 10), Color.White);
-                    foreach (Item i in PlayerManager.Instance.PlayerInventory.Currinventory)
+                    foreach (Item i in PlayerManager.Instance.PlayerInventory.Inventory)
                     {
                         if (i.MapPosition.Contains(ms.Position))
                         {
@@ -502,6 +511,7 @@ namespace GroupProject
                     break;
 
             }
+            Profiler.Instance.Draw(50, 50);
             spriteBatch.End();
 
             base.Draw(gameTime);

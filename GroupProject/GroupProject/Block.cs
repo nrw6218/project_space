@@ -29,10 +29,17 @@ namespace GroupProject
             rectangle = new Rectangle(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
         }
 
-        virtual public void Draw(SpriteBatch spriteBatch, Texture2D spriteSheet)
+        //Methods
+
+        /// <summary>
+        /// Draws the block
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="spriteSheet"></param>
+        virtual public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(
-                spriteSheet,
+                TextureManager.Instance.Textures["tilesheet"],
                 rectangle,
                 new Rectangle(
                     (textureId % 10) * TEXURE_SIZE,
@@ -42,7 +49,5 @@ namespace GroupProject
                     ),
                 Color.White);
         }
-                
-        //Methods
     }
 }

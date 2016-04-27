@@ -9,10 +9,7 @@ namespace GroupProject
 {
     class EnemyManager
     {
-        //Fields
         private static EnemyManager instance;
-
-        //Properties
         public static EnemyManager Instance
         {
             get
@@ -24,8 +21,13 @@ namespace GroupProject
                 return instance;
             }
         }
+        private EnemyManager() { }
 
-        //Constructor
+        //Fields
+
+        //Properties
+
+        //Constructors
 
         //Methods
 

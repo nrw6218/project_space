@@ -10,10 +10,11 @@ namespace GroupProject
     public class Enemy : Character
     {
         //Fields
+
         //Properties
         public bool Hostile { get { return PlayerManager.Instance.Player.Karma < 0; } }
 
-        //Constructor
+        //Constructors
         public Enemy(Rectangle rectangle, int hp, double speed)
             : base(rectangle, hp, speed)
         {
@@ -30,6 +31,10 @@ namespace GroupProject
         }
 
         //Methods
+
+        /// <summary>
+        /// Updates enemy's postition and AI
+        /// </summary>
         public override void Update()
         {
             base.Update();
@@ -37,6 +42,9 @@ namespace GroupProject
             Attack();
         }
 
+        /// <summary>
+        /// Moves the enemy towards the player
+        /// </summary>
         private void Move()
         {
             //move the player horizontally in the correct direction
@@ -50,6 +58,9 @@ namespace GroupProject
             MapManager.Instance.CurrentSubMap.CollidingWalls(this, x, y);
         }
 
+        /// <summary>
+        /// Enemy tries to Attack the player
+        /// </summary>
         private void Attack()
         {
             if (this.Rectangle.Intersects(PlayerManager.Instance.Player.Rectangle))

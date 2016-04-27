@@ -8,13 +8,7 @@ namespace GroupProject
 {
     class PlayerManager
     {
-        //Fields
         private static PlayerManager instance;
-        private Player player;
-        private PlayerInventory playerInventory;
-        private PlayerEquipment playerEquipment;
-
-        //Properties
         public static PlayerManager Instance
         {
             get
@@ -26,15 +20,7 @@ namespace GroupProject
                 return instance;
             }
         }
-
-        public Player Player { get { return player; } }
-        public PlayerInventory PlayerInventory { get { return playerInventory; } }
-        public PlayerEquipment PlayerEquipment { get { return playerEquipment; } }
-
-        //Constructors
-
-        //Methods
-        public void CreatePlayer()
+        private PlayerManager()
         {
             int x = 100;
             int y = 100;
@@ -42,24 +28,23 @@ namespace GroupProject
             int height = 64;
             int hp = 10;
             double speed = 3;
-            if (player == null)
-                player = new Player(x, y, width, height, hp , speed);
+            player = new Player(x, y, width, height, hp, speed);
+            playerInventory = new PlayerInventory();
+            playerEquipment = new PlayerEquipment();
         }
 
-        public void CreatePlayerInventory()
-        {
-            if(playerInventory == null)
-                playerInventory = new PlayerInventory();
-        }
+        //Fields
+        private Player player;
+        private PlayerInventory playerInventory;
+        private PlayerEquipment playerEquipment;
 
-        public void CreatePlayerEquipment()
-        {
-            if(playerEquipment == null)
-            {
-                playerEquipment = new PlayerEquipment();
-            }
-        }
+        //Properties       
+        public Player Player { get { return player; } }
+        public PlayerInventory PlayerInventory { get { return playerInventory; } }
+        public PlayerEquipment PlayerEquipment { get { return playerEquipment; } }
 
-        
+        //Constructors
+
+        //Methods      
     }
 }

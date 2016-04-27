@@ -14,17 +14,15 @@ namespace GroupProject
         //Will probably evenually need its own manager and would also be able 
         //to be used for enemy attacks if a manager was made.
 
-
+        //Fields
         private Rectangle mapposition;
         private Texture2D texture;
         private Entity entity;
 
-        public Rectangle MapPosition
-        {
-            get { return mapposition; }
-        }
+        //Properties
+        public Rectangle MapPosition { get { return mapposition; } }
 
-
+        //Constructors
         public Attack(Rectangle m, Texture2D t)
         {
             entity = new Entity(mapposition);
@@ -33,6 +31,12 @@ namespace GroupProject
             texture = t;
         }
 
+        //Methods
+
+        /// <summary>
+        /// Draws attack sprite
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, mapposition, Color.White);

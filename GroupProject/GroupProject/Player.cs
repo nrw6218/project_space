@@ -11,11 +11,9 @@ namespace GroupProject
     {
         //Fields
         private int karma;
-
-        public enum state { Attacking, PickingItem };
-
+        private State playerState;
+        private enum State { Attacking, PickingItem };
         
-
         //Properties
         public int Karma
         {

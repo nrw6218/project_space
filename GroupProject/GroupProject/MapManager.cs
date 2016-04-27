@@ -14,14 +14,6 @@ namespace GroupProject
     public class MapManager
     {
         private static MapManager instance;
-
-        private MapManager() { }        
-
-        private Map currentMap;
-
-        public Map CurrentMap { get { return currentMap; } }
-        public SubMap CurrentSubMap { get { return currentMap.CurrentSubMap; } }
-
         public static MapManager Instance
         {
             get
@@ -33,8 +25,23 @@ namespace GroupProject
                 return instance;
             }
         }
+        private MapManager() { }    
+            
+        //Fields
+        private Map currentMap;
 
-        //edit to make work
+        //Properties
+        public Map CurrentMap { get { return currentMap; } }
+        public SubMap CurrentSubMap { get { return currentMap.CurrentSubMap; } }
+
+        //Constructors
+        
+        //Methods
+
+        /// <summary>
+        /// Loads new map from file
+        /// </summary>
+        /// <param name="file">file path</param>
         public void NewMap(string file)
         {
             Stream inStream = File.OpenRead(file+".map");
@@ -134,6 +141,10 @@ namespace GroupProject
             sr.Close();
         }
         
+        /// <summary>
+        /// Changes the submap to an adjacent one
+        /// </summary>
+        /// <param name="dir">Driection the new submap is from the original</param>
         public void MoveSubmap(Direction dir)
         {
             int row = CurrentSubMap.MapIndex / 10;
@@ -160,11 +171,19 @@ namespace GroupProject
             currentMap.SetCurrentSubmap(mapIndex);
         }
 
+        /// <summary>
+        /// Moves subamp to a specific submap
+        /// </summary>
+        /// <param name="mapIndex"></param>
         public void MoveSubmap(int mapIndex)
         {
             currentMap.SetCurrentSubmap(mapIndex);
         }
 
+        /// <summary>
+        /// Checks to see if player is opening a door
+        /// </summary>
+        /// <param name="ks">Keyboardsstate</param>
         public void DoorCheck(KeyboardState ks)
         {
             if (ks.IsKeyDown(Keys.Space) && PlayerManager.Instance.PlayerEquipment.KeyCount > 0)
@@ -173,11 +192,23 @@ namespace GroupProject
             }
         }
 
+        /// <summary>
+        /// Adds Item to the inventory of a submap
+        /// </summary>
+        /// <param name="row">Row int the map[,]</param>
+        /// <param name="col">col int the map[,]</param>
+        /// <param name="i">The item to add</param>
         public void AddItemToInventory(int row, int col, Item i)
         {
             currentMap.GetSubmap(row, col).Inventory.Add(i);
         }
 
+        /// <summary>
+        /// Adds item to the equipment of a submap
+        /// </summary>
+        /// <param name="row">Row int the map[,]</param>
+        /// <param name="col">col int the map[,]</param>
+        /// <param name="i">The item to add</param>
         public void AddItemToEquiptment(int row, int col, Item i)
         {
             currentMap.GetSubmap(row, col).Equipment.Add(i);

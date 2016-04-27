@@ -57,6 +57,7 @@
     <Compile Include="MapManager.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PlayerManager.cs" />
+    <Compile Include="Profiler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SubMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

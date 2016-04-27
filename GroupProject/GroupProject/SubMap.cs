@@ -62,13 +62,13 @@ namespace GroupProject
         }
         
         //Methods
-        public void Draw(SpriteBatch spriteBatch, Texture2D spriteSheet)
+        public void Draw(SpriteBatch spriteBatch)
         {
             for (int i = 0; i < subMap.GetLength(0); i++)
             {
                 for (int j = 0; j < subMap.GetLength(1); j++)
                 {
-                    subMap[i, j].Draw(spriteBatch, spriteSheet);
+                    subMap[i, j].Draw(spriteBatch);
                 }
             }
 

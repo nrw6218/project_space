@@ -17,7 +17,6 @@ namespace GroupProject
         private Entity entity;
 
         //Properties
-
         public Rectangle InvenPosition
         {
             get { return invenposition; }
@@ -55,7 +54,13 @@ namespace GroupProject
 
         //methods
 
-        //Overloads other version of method by allowing the user to choose a color
+        /// <summary>
+        /// Draws the item to the screen
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="position"></param>
+        /// <param name="color"></param>
+        /// <param name="isInInventory">Whether the item is being drawn to the gameword or the inventory</param>
         public void Draw(SpriteBatch spriteBatch, Rectangle position, Color color, bool isInInventory = false)
         {
             if (isInInventory)
@@ -67,10 +72,7 @@ namespace GroupProject
 
         public void Draw(SpriteBatch spriteBatch, Rectangle position, bool isInInventory = false)
         {
-            if (isInInventory)
-                spriteBatch.Draw(texture, position, Color.White);
-            if (!isInInventory)
-                spriteBatch.Draw(texture, mapposition, Color.White);
+            Draw(spriteBatch, position, Color.White, isInInventory);
         }
     }
 }

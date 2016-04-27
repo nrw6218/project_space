@@ -33,6 +33,10 @@ namespace GroupProject
         }
 
         //Methods
+
+        /// <summary>
+        /// Unlocks a door
+        /// </summary>
         public void Unlock()
         {
             locked = false;
