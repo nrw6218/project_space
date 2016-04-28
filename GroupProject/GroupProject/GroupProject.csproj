@@ -50,6 +50,7 @@
     <Compile Include="EnemyManager.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="PlayerAttackManager.cs" />
     <Compile Include="PlayerEquipment.cs" />
     <Compile Include="PlayerInventory.cs" />
     <Compile Include="Item.cs" />

@@ -132,13 +132,31 @@ namespace GroupProject
             {
                 if (d.Locked && PlayerManager.Instance.Player.Rectangle.Intersects(d.UnlockRect))
                 {
-                    Console.WriteLine("door");
-                    d.Unlock();
-                    PlayerManager.Instance.PlayerEquipment.RemoveKey();
-                    walls.Remove(d);
+                    UnlockAllConnectingDoors(d.Y, d.X);                    
+                    PlayerManager.Instance.PlayerEquipment.RemoveKey();                    
+                    break;
                 }
             }
         }
 
+        private void UnlockAllConnectingDoors(int row, int col)
+        {
+            if(row >= 0 && row < subMap.GetLength(0) && col >= 0 && col < subMap.GetLength(1))
+            {
+                if(subMap[row, col].IsDoor)
+                {
+                    Door d = (Door)subMap[row, col];
+                    if (d.Locked)
+                    {
+                        d.Unlock();
+                        walls.Remove(d);
+                        UnlockAllConnectingDoors(row + 1, col);
+                        UnlockAllConnectingDoors(row - 1, col);
+                        UnlockAllConnectingDoors(row, col - 1);
+                        UnlockAllConnectingDoors(row, col + 1);
+                    }
+                }
+            }
+        }
     }
 }

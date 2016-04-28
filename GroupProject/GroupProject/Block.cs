@@ -14,8 +14,15 @@ namespace GroupProject
         protected Rectangle rectangle;
         //two digit number in yx form, 25 is the 6th texture in the 3rd row
         protected int textureId;
+        protected int x;
+        protected int y;
+        protected bool isDoor;
 
         //Properties
+        public int X { get { return x; } }
+        public int Y { get { return y; } }
+        public bool IsDoor { get { return isDoor; } }
+
         public Rectangle Rectangle { get { return rectangle; } }
 
         public static int BLOCK_SIZE { get { return 64; } }
@@ -25,7 +32,10 @@ namespace GroupProject
         //Constructors
         public Block(int x, int y, int textureId)
         {
+            this.x = x;
+            this.y = y;
             this.textureId = textureId;
+            isDoor = false;
             rectangle = new Rectangle(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
         }
 

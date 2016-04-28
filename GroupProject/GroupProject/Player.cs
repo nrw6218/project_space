@@ -13,7 +13,7 @@ namespace GroupProject
         private int karma;
         private State playerState;
         private enum State { Attacking, PickingItem };
-        
+
         //Properties
         public int Karma
         {
@@ -42,7 +42,6 @@ namespace GroupProject
         public void TakeDamage(int dmg)
         {
             hp -= dmg;
-
-        }
+        }        
     }
 }

@@ -102,7 +102,7 @@ namespace GroupProject
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Profiler.Instance.Initialize(200, spriteBatch, GraphicsDevice);
+            Profiler.Instance.Initialize(500, spriteBatch, GraphicsDevice);
 
             tilesheet = Content.Load<Texture2D>("tilesheet");
             Texture2D bot = Content.Load<Texture2D>("botcombat");
@@ -130,7 +130,12 @@ namespace GroupProject
 
             TextureManager.Instance.Textures.Add("tilesheet", tilesheet);
 
-            MapManager.Instance.NewMap("../../../Content/Level 1");
+            TextureManager.Instance.Textures.Add("weaponUp", weaponUp);
+            TextureManager.Instance.Textures.Add("weaponDown", weaponDown);
+            TextureManager.Instance.Textures.Add("weaponLeft", weaponLeft);
+            TextureManager.Instance.Textures.Add("weaponRight", weaponRight);
+
+            MapManager.Instance.NewMap("../../../Content/Levels/Level 1");
 
             PlayerManager.Instance.Player.SetTexture(astro);
             PlayerManager.Instance.PlayerInventory.Inventory.Add(new Item(crate, "Crate"));
@@ -154,7 +159,7 @@ namespace GroupProject
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            Profiler.Instance.StartTimer();
+            //Profiler.Instance.StartTimer();
 
             framesThisGameFrame = gameTime.ElapsedGameTime.TotalSeconds / SECONDS_PER_FRAME;
 
@@ -281,7 +286,7 @@ namespace GroupProject
                     }
 
                         //moves submap when player walks to an edge
-                        if (PlayerManager.Instance.Player.X + PlayerManager.Instance.Player.Width / 2 < 0)
+                    if (PlayerManager.Instance.Player.X + PlayerManager.Instance.Player.Width / 2 < 0)
                     {
                         MapManager.Instance.MoveSubmap(Direction.Left);
                         PlayerManager.Instance.Player.X = graphics.PreferredBackBufferWidth - PlayerManager.Instance.Player.Width / 2;
@@ -303,44 +308,16 @@ namespace GroupProject
                     }
 
 
-                    //Player attacks for now
-
-                    if (currentKb.IsKeyDown(Keys.Right))
-                    {
-                        Attack pAttack = new Attack(new Rectangle(PlayerManager.Instance.Player.X + 50, PlayerManager.Instance.Player.Y + 20, 100, 30), weaponRight);
-                        foreach (Enemy a in MapManager.Instance.CurrentSubMap.Enemies)
-                        {
-                            if (pAttack.MapPosition.Intersects(a.Rectangle))
-                                a.Hp -= 1;
-                        }
-                    }
+                    //Player attacks
                     if (currentKb.IsKeyDown(Keys.Up))
-                    {
-                        Attack pAttack = new Attack(new Rectangle(PlayerManager.Instance.Player.X + 20, PlayerManager.Instance.Player.Y - 90, 30, 100), weaponUp);
-                        foreach (Enemy a in MapManager.Instance.CurrentSubMap.Enemies)
-                        {
-                            if (pAttack.MapPosition.Intersects(a.Rectangle))
-                                a.Hp -= 1;
-                        }
-                    }
-                    if (currentKb.IsKeyDown(Keys.Left))
-                    {
-                        Attack pAttack = new Attack(new Rectangle(PlayerManager.Instance.Player.X - 85, PlayerManager.Instance.Player.Y + 20, 100, 30), weaponLeft);
-                        foreach (Enemy a in MapManager.Instance.CurrentSubMap.Enemies)
-                        {
-                            if (pAttack.MapPosition.Intersects(a.Rectangle))
-                                a.Hp -= 1;
-                        }
-                    }
-                    if (currentKb.IsKeyDown(Keys.Down))
-                    {
-                        Attack pAttack = new Attack(new Rectangle(PlayerManager.Instance.Player.X + 20, PlayerManager.Instance.Player.Y + 55, 30, 100), weaponDown);
-                        foreach (Enemy a in MapManager.Instance.CurrentSubMap.Enemies)
-                        {
-                            if (pAttack.MapPosition.Intersects(a.Rectangle))
-                                a.Hp -= 1;
-                        }
-                    }
+                        PlayerManager.Instance.PlayerAttackManager.Attack(Direction.Up);
+                    else if (currentKb.IsKeyDown(Keys.Down))
+                        PlayerManager.Instance.PlayerAttackManager.Attack(Direction.Down);
+                    else if (currentKb.IsKeyDown(Keys.Left))
+                        PlayerManager.Instance.PlayerAttackManager.Attack(Direction.Left);
+                    else if (currentKb.IsKeyDown(Keys.Right))
+                        PlayerManager.Instance.PlayerAttackManager.Attack(Direction.Right);
+
                     //End player attacks
 
                     //handles enemies
@@ -402,7 +379,7 @@ namespace GroupProject
                 case GameState.Puzzle:
                     break;
             }
-            Profiler.Instance.StopTimer();
+            //Profiler.Instance.StopTimer();
             base.Update(gameTime);
         }
 
@@ -460,22 +437,14 @@ namespace GroupProject
                     }
 
                     //playerattach
-                    if (currentKb.IsKeyDown(Keys.Right))
-                    {
-                        spriteBatch.Draw(weaponRight, new Rectangle(PlayerManager.Instance.Player.X + 50, PlayerManager.Instance.Player.Y + 20, 100, 30), Color.White);
-                    }
                     if (currentKb.IsKeyDown(Keys.Up))
-                    {
-                        spriteBatch.Draw(weaponUp, new Rectangle(PlayerManager.Instance.Player.X + 20, PlayerManager.Instance.Player.Y - 90, 30, 100), Color.White);
-                    }
-                    if (currentKb.IsKeyDown(Keys.Left))
-                    {
-                        spriteBatch.Draw(weaponLeft, new Rectangle(PlayerManager.Instance.Player.X - 85, PlayerManager.Instance.Player.Y + 20, 100, 30), Color.White);
-                    }
-                    if (currentKb.IsKeyDown(Keys.Down))
-                    {
-                        spriteBatch.Draw(weaponDown, new Rectangle(PlayerManager.Instance.Player.X + 20, PlayerManager.Instance.Player.Y + 55, 30, 100), Color.White);
-                    }
+                        PlayerManager.Instance.PlayerAttackManager.Draw(spriteBatch, Direction.Up);
+                    else if (currentKb.IsKeyDown(Keys.Down))
+                        PlayerManager.Instance.PlayerAttackManager.Draw(spriteBatch, Direction.Down);
+                    else if (currentKb.IsKeyDown(Keys.Left))
+                        PlayerManager.Instance.PlayerAttackManager.Draw(spriteBatch, Direction.Left);
+                    else if (currentKb.IsKeyDown(Keys.Right))
+                        PlayerManager.Instance.PlayerAttackManager.Draw(spriteBatch, Direction.Right);
 
                     //End player attacks
 
@@ -511,7 +480,7 @@ namespace GroupProject
                     break;
 
             }
-            Profiler.Instance.Draw(50, 50);
+            //Profiler.Instance.Draw(50, 50);
             spriteBatch.End();
 
             base.Draw(gameTime);

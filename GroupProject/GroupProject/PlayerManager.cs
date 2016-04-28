@@ -31,17 +31,20 @@ namespace GroupProject
             player = new Player(x, y, width, height, hp, speed);
             playerInventory = new PlayerInventory();
             playerEquipment = new PlayerEquipment();
+            playerAttackManager = new PlayerAttackManager();
         }
 
         //Fields
         private Player player;
         private PlayerInventory playerInventory;
         private PlayerEquipment playerEquipment;
+        private PlayerAttackManager playerAttackManager;
 
         //Properties       
         public Player Player { get { return player; } }
         public PlayerInventory PlayerInventory { get { return playerInventory; } }
         public PlayerEquipment PlayerEquipment { get { return playerEquipment; } }
+        public PlayerAttackManager PlayerAttackManager { get { return playerAttackManager; } }
 
         //Constructors
 

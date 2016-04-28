@@ -13,6 +13,7 @@ namespace GroupProject
         private bool locked;
         private Rectangle unlockeRect;
         private static int UNLOCK_RANGE = 10;
+
       
         //Properties
         public bool Locked { get { return locked; } }
@@ -24,7 +25,7 @@ namespace GroupProject
             :base(x, y , textureId)
         {
             locked = true;
-
+            base.isDoor = true;
             unlockeRect = new Rectangle(
                 x * Block.BLOCK_SIZE - UNLOCK_RANGE,
                 y * Block.BLOCK_SIZE - UNLOCK_RANGE,
@@ -41,6 +42,7 @@ namespace GroupProject
         {
             locked = false;
             textureId = Block.DEFAULT_BLOCK;
+
         }
     }
 }
