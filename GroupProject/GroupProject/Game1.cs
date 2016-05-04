@@ -53,7 +53,7 @@ namespace GroupProject
         //for deconstructing a magnatude when using a 45degree angle int componets
         const double ANGLE_MULTIPLIER = 0.70710678118;
 
-        enum GameState { MainMenu, Help, Game, Inventory, Equipment, Puzzle, End };
+        enum GameState { MainMenu, Help, Game, Inventory, Equipment, Puzzle, End, Hub };
         GameState gameState;
 
         static double FPS = 60.0;
@@ -199,8 +199,8 @@ namespace GroupProject
                         this.IsMouseVisible = true;
                     }
                     break;
-
-                case GameState.Game:
+                case GameState.Hub:
+                    MapManager.Instance.NewMap("../../../Content/Levels/Ship Hub");
                     PlayerManager.Instance.Player.Update();
 
                     //if the player is moving change the moveby
@@ -213,7 +213,132 @@ namespace GroupProject
 
                     //move the player horizontally in the correct direction
                     int moveX = 0;
-                    int moveY= 0;
+                    int moveY = 0;
+
+                    if (currentKb.IsKeyDown(Keys.A))
+                        moveX -= moveBy;
+                    if (currentKb.IsKeyDown(Keys.D))
+                        moveX += moveBy;
+
+                    if (currentKb.IsKeyDown(Keys.W))
+                        moveY -= moveBy;
+                    if (currentKb.IsKeyDown(Keys.S))
+                        moveY += moveBy;
+
+                    MapManager.Instance.CurrentSubMap.CollidingWalls(PlayerManager.Instance.Player, moveX, moveY);
+
+
+                    //End Wall Collision
+                    /******************************************************************************/
+
+                    //Check to see if player can unlock a door
+                    if (previousKb.IsKeyUp(Keys.Space))
+                        MapManager.Instance.DoorCheck(currentKb);
+
+                    //Stop the player from moving if they have collected 15 artifacts
+                    if (PlayerManager.Instance.PlayerInventory.Inventory.Count >= 15)
+                    {
+                        moveBy = 0;
+                        if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
+                        {
+                            gameState = GameState.End;
+                            this.IsMouseVisible = true;
+                        }
+                    }
+
+                    //Keys to open help, inventory and equipment screens
+                    if (currentKb.IsKeyDown(Keys.H) && previousKb.IsKeyUp(Keys.H))
+                    {
+                        gameState = GameState.Help;
+                        this.IsMouseVisible = true;
+                    }
+                    if (currentKb.IsKeyDown(Keys.I) && previousKb.IsKeyUp(Keys.I))
+                    {
+                        gameState = GameState.Inventory;
+                        this.IsMouseVisible = true;
+                    }
+                    if (currentKb.IsKeyDown(Keys.E) && previousKb.IsKeyUp(Keys.E))
+                    {
+                        gameState = GameState.Equipment;
+                        this.IsMouseVisible = true;
+                    }
+
+                    //inventory and equipment
+
+                    if (currentKb.IsKeyDown(Keys.Space))
+                    {
+                        for (int i = MapManager.Instance.CurrentSubMap.Inventory.Count - 1; i >= 0; i--)
+                        {
+                            if (PlayerManager.Instance.Player.Rectangle.Intersects(MapManager.Instance.CurrentSubMap.Inventory[i].MapPosition))
+                            {
+                                PlayerManager.Instance.PlayerInventory.Inventory.Add(MapManager.Instance.CurrentSubMap.Inventory[i]);
+                                MapManager.Instance.CurrentSubMap.Inventory.RemoveAt(i);
+                            }
+                        }
+                        for (int i = MapManager.Instance.CurrentSubMap.Equipment.Count - 1; i >= 0; i--)
+                        {
+                            if (PlayerManager.Instance.Player.Rectangle.Intersects(MapManager.Instance.CurrentSubMap.Equipment[i].MapPosition))
+                            {
+                                PlayerManager.Instance.PlayerEquipment.AddToEquipment(MapManager.Instance.CurrentSubMap.Equipment[i]);
+                                MapManager.Instance.CurrentSubMap.Equipment.RemoveAt(i);
+                            }
+                        }
+                    }
+
+                    //moves submap when player walks to an edge
+                    if (PlayerManager.Instance.Player.X + PlayerManager.Instance.Player.Width / 2 < 0)
+                    {
+                        MapManager.Instance.MoveSubmap(Direction.Left);
+                        PlayerManager.Instance.Player.X = graphics.PreferredBackBufferWidth - PlayerManager.Instance.Player.Width / 2;
+                    }
+                    else if (PlayerManager.Instance.Player.X + PlayerManager.Instance.Player.Width / 2 > graphics.PreferredBackBufferWidth)
+                    {
+                        MapManager.Instance.MoveSubmap(Direction.Right);
+                        PlayerManager.Instance.Player.X = PlayerManager.Instance.Player.Width / 2;
+                    }
+                    else if (PlayerManager.Instance.Player.Y + PlayerManager.Instance.Player.Height / 2 < 0)
+                    {
+                        MapManager.Instance.MoveSubmap(Direction.Up);
+                        PlayerManager.Instance.Player.Y = graphics.PreferredBackBufferHeight - PlayerManager.Instance.Player.Height / 2;
+                    }
+                    else if (PlayerManager.Instance.Player.Y + PlayerManager.Instance.Player.Height / 2 > graphics.PreferredBackBufferHeight)
+                    {
+                        MapManager.Instance.MoveSubmap(Direction.Down);
+                        PlayerManager.Instance.Player.Y = PlayerManager.Instance.Player.Height / 2;
+                    }
+
+
+                    //Player attacks
+                    if (currentKb.IsKeyDown(Keys.Up))
+                        PlayerManager.Instance.PlayerAttackManager.Attack(Direction.Up);
+                    else if (currentKb.IsKeyDown(Keys.Down))
+                        PlayerManager.Instance.PlayerAttackManager.Attack(Direction.Down);
+                    else if (currentKb.IsKeyDown(Keys.Left))
+                        PlayerManager.Instance.PlayerAttackManager.Attack(Direction.Left);
+                    else if (currentKb.IsKeyDown(Keys.Right))
+                        PlayerManager.Instance.PlayerAttackManager.Attack(Direction.Right);
+
+                    //End player attacks
+
+                    //handles enemies
+                    EnemyManager.Instance.Update();
+
+
+                    break;
+                case GameState.Game:
+                    PlayerManager.Instance.Player.Update();
+
+                    //if the player is moving change the moveby
+                    moveBy = 0;
+                    if (PlayerManager.Instance.PlayerInventory.Inventory.Count < 15)
+                        moveBy = MovementDistance(PlayerManager.Instance.Player.Speed, (currentKb.IsKeyDown(Keys.W) != currentKb.IsKeyDown(Keys.S)) && (currentKb.IsKeyDown(Keys.A) != currentKb.IsKeyDown(Keys.D)));
+
+                    //handles wall collision
+                    /**************************************************************************/
+
+                    //move the player horizontally in the correct direction
+                    moveX = 0;
+                    moveY= 0;
 
                     if (currentKb.IsKeyDown(Keys.A))
                         moveX -= moveBy;
@@ -376,7 +501,12 @@ namespace GroupProject
                         this.IsMouseVisible = true;
                     }
                     break;
-                case GameState.Puzzle:
+                case GameState.End:
+                    if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
+                    {
+                        gameState = GameState.Hub;
+                        this.IsMouseVisible = false;
+                    }
                     break;
             }
             //Profiler.Instance.StopTimer();
