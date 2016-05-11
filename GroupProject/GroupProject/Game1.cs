@@ -53,7 +53,7 @@ namespace GroupProject
         //for deconstructing a magnatude when using a 45degree angle int componets
         const double ANGLE_MULTIPLIER = 0.70710678118;
 
-        enum GameState { MainMenu, Help, Game, Inventory, Equipment, Puzzle, End, Hub };
+        enum GameState { MainMenu, Help, Game, Inventory, Equipment, Puzzle, End, Hub, Death };
         GameState gameState;
 
         static double FPS = 60.0;
@@ -174,7 +174,7 @@ namespace GroupProject
             switch (gameState)
             {
                 case GameState.MainMenu:
-                    if (currentKb.IsKeyDown(Keys.Enter))
+                    if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
                         gameState = GameState.Help;
                     break;
                 case GameState.Help:
@@ -199,8 +199,10 @@ namespace GroupProject
                         this.IsMouseVisible = true;
                     }
                     break;
+
                 case GameState.Hub:
                     MapManager.Instance.NewMap("../../../Content/Levels/Ship Hub");
+                    MapManager.Instance.CurrentMap.SetCurrentSubmap(01);
                     PlayerManager.Instance.Player.Update();
 
                     //if the player is moving change the moveby
@@ -235,23 +237,7 @@ namespace GroupProject
                     if (previousKb.IsKeyUp(Keys.Space))
                         MapManager.Instance.DoorCheck(currentKb);
 
-                    //Stop the player from moving if they have collected 15 artifacts
-                    if (PlayerManager.Instance.PlayerInventory.Inventory.Count >= 15)
-                    {
-                        moveBy = 0;
-                        if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
-                        {
-                            gameState = GameState.End;
-                            this.IsMouseVisible = true;
-                        }
-                    }
-
-                    //Keys to open help, inventory and equipment screens
-                    if (currentKb.IsKeyDown(Keys.H) && previousKb.IsKeyUp(Keys.H))
-                    {
-                        gameState = GameState.Help;
-                        this.IsMouseVisible = true;
-                    }
+                    //Keys to open inventory and equipment screens
                     if (currentKb.IsKeyDown(Keys.I) && previousKb.IsKeyUp(Keys.I))
                     {
                         gameState = GameState.Inventory;
@@ -307,26 +293,16 @@ namespace GroupProject
                         PlayerManager.Instance.Player.Y = PlayerManager.Instance.Player.Height / 2;
                     }
 
-
-                    //Player attacks
-                    if (currentKb.IsKeyDown(Keys.Up))
-                        PlayerManager.Instance.PlayerAttackManager.Attack(Direction.Up);
-                    else if (currentKb.IsKeyDown(Keys.Down))
-                        PlayerManager.Instance.PlayerAttackManager.Attack(Direction.Down);
-                    else if (currentKb.IsKeyDown(Keys.Left))
-                        PlayerManager.Instance.PlayerAttackManager.Attack(Direction.Left);
-                    else if (currentKb.IsKeyDown(Keys.Right))
-                        PlayerManager.Instance.PlayerAttackManager.Attack(Direction.Right);
-
-                    //End player attacks
-
-                    //handles enemies
-                    EnemyManager.Instance.Update();
-
-
                     break;
+
                 case GameState.Game:
                     PlayerManager.Instance.Player.Update();
+
+                    //If the player has no health, switch to the death state
+                    if(PlayerManager.Instance.Player.Hp <= 0)
+                    {
+                        gameState = GameState.Death;
+                    }
 
                     //if the player is moving change the moveby
                     moveBy = 0;
@@ -450,6 +426,7 @@ namespace GroupProject
 
 
                     break;
+
                 case GameState.Inventory:
                     ms = Mouse.GetState();
                     if (currentKb.IsKeyDown(Keys.I) && previousKb.IsKeyUp(Keys.I))
@@ -501,10 +478,19 @@ namespace GroupProject
                         this.IsMouseVisible = true;
                     }
                     break;
+
                 case GameState.End:
                     if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
                     {
                         gameState = GameState.Hub;
+                        this.IsMouseVisible = false;
+                    }
+                    break;
+
+                case GameState.Death:
+                    if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
+                    {
+                        gameState = GameState.MainMenu;
                         this.IsMouseVisible = false;
                     }
                     break;
@@ -550,6 +536,16 @@ namespace GroupProject
                     spriteBatch.Draw(astro, new Rectangle(500, 100, 130, 150), Color.White);
                     break;
 
+                case GameState.Hub:
+                    MapManager.Instance.CurrentSubMap.Draw(spriteBatch);
+                    if (MapManager.Instance.CurrentSubMap == MapManager.Instance.CurrentMap.GetSubmap(0, 1))
+                    {
+                        spriteBatch.Draw(logo, new Rectangle(285, 150, 200, 100), Color.White);
+                    }
+
+                    PlayerManager.Instance.Player.Draw(spriteBatch);
+                    break;
+
                 case GameState.Game:
                     MapManager.Instance.CurrentSubMap.Draw(spriteBatch);
                     if (MapManager.Instance.CurrentSubMap == MapManager.Instance.CurrentMap.GetSubmap(0, 1))
@@ -558,8 +554,9 @@ namespace GroupProject
                     }
 
                     PlayerManager.Instance.Player.Draw(spriteBatch);
-                    spriteBatch.Draw(hud, new Rectangle(15, 15, 130, 55), Color.NavajoWhite);
+                    spriteBatch.Draw(hud, new Rectangle(15, 15, 130, 90), Color.NavajoWhite);
                     spriteBatch.DrawString(basicFont, "Artifacts: " + PlayerManager.Instance.PlayerInventory.Inventory.Count, new Vector2(25, 20), Color.Black);
+                    spriteBatch.DrawString(basicFont, "Health: " + PlayerManager.Instance.Player.Hp, new Vector2(25, 38), Color.Black);
                     if (PlayerManager.Instance.PlayerInventory.Inventory.Count >= 15)
                     {
                         spriteBatch.DrawString(basicFont, "MISSION_COMPLETE", new Vector2(289, 170), Color.Black);
@@ -607,6 +604,11 @@ namespace GroupProject
                 case GameState.End:
                     spriteBatch.Draw(menuWall, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
                     spriteBatch.DrawString(basicFont, "thanks for playing", new Vector2(289, 170), Color.Black);
+                    break;
+
+                case GameState.Death:
+                    spriteBatch.Draw(menuWall, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.Red);
+                    spriteBatch.DrawString(basicFont, "mission_failed", new Vector2(289, 170), Color.Black);
                     break;
 
             }

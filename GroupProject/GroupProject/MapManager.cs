@@ -31,7 +31,11 @@ namespace GroupProject
         private Map currentMap;
 
         //Properties
-        public Map CurrentMap { get { return currentMap; } }
+        public Map CurrentMap
+        {
+            get { return currentMap; }
+            set { currentMap = value; }
+        }
         public SubMap CurrentSubMap { get { return currentMap.CurrentSubMap; } }
 
         //Constructors

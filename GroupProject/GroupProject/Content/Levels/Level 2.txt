@@ -167,6 +167,7 @@ start
 1
 enemy
 200
+200
 item
 350
 200
