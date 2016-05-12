@@ -9,6 +9,10 @@ item
 200
 100
 key
+item
+400
+100
+health
 end
 
 start
@@ -111,6 +115,10 @@ item
 300
 150
 key
+item
+400
+200
+health
 end
 
 start
@@ -124,4 +132,8 @@ item
 70
 200
 crate
+item
+300
+100
+health
 end

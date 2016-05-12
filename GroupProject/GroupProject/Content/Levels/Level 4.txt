@@ -178,6 +178,10 @@ enemy
 enemy
 300
 200
+item
+400
+100
+health
 end
 
 start

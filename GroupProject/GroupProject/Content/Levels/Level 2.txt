@@ -23,6 +23,10 @@ enemy
 enemy
 100
 240
+item
+400
+100
+health
 end
 
 start
@@ -55,6 +59,10 @@ crate
 enemy
 250
 200
+item
+400
+100
+health
 end
 
 start
@@ -160,6 +168,10 @@ box
 enemy
 350
 120
+item
+400
+100
+health
 end
 
 start

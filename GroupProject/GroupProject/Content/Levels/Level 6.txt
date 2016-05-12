@@ -68,6 +68,10 @@ item
 300
 100
 crate
+item
+200
+200
+health
 end
 
 start
@@ -147,6 +151,10 @@ item
 350
 150
 artifact
+item
+300
+200
+health
 end
 
 start
