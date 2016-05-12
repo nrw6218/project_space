@@ -133,6 +133,15 @@ namespace GroupProject
                                             "Key",
                                             new Rectangle(x, y, 25, 30)));
                                     break;
+                                case "health":
+                                    AddItemToEquiptment(
+                                        row,
+                                        col,
+                                        new Item(
+                                            TextureManager.Instance.Textures[line],
+                                            "Health",
+                                            new Rectangle(x, y, 25, 30)));
+                                    break;
                             }
                         }
                         else if (line == "enemy")

@@ -26,6 +26,8 @@ namespace GroupProject
         Texture2D box;
         Texture2D artifact;
         Texture2D key;
+        Texture2D health;
+        Item HealthBox;
 
         //For use in main menu and inventory screens
         Texture2D menuWall;
@@ -113,10 +115,11 @@ namespace GroupProject
             hud = Content.Load<Texture2D>("hudBack");
             astro = Content.Load<Texture2D>("astroFront");
             key = Content.Load<Texture2D>("Card");
+            health = Content.Load<Texture2D>("Health");
             box = Content.Load<Texture2D>("Crate2");
             artifact = Content.Load<Texture2D>("Artifact2");
             logo = Content.Load<Texture2D>("CompanyLogo");
-            enemy = Content.Load<Texture2D>("Hilary");
+            enemy = Content.Load<Texture2D>("Electric Enemy");
             weaponRight = Content.Load<Texture2D>("energyBlastRight");
             weaponLeft = Content.Load<Texture2D>("energyBlastLeft");
             weaponUp = Content.Load<Texture2D>("energyBlastUp");
@@ -126,6 +129,7 @@ namespace GroupProject
             TextureManager.Instance.Textures.Add("box", box);
             TextureManager.Instance.Textures.Add("artifact", artifact);
             TextureManager.Instance.Textures.Add("key", key);
+            TextureManager.Instance.Textures.Add("health", health);
             TextureManager.Instance.Textures.Add("enemy", enemy);
 
             TextureManager.Instance.Textures.Add("tilesheet", tilesheet);
@@ -140,7 +144,13 @@ namespace GroupProject
             PlayerManager.Instance.Player.SetTexture(astro);
             PlayerManager.Instance.PlayerInventory.Inventory.Add(new Item(crate, "Crate"));
             PlayerManager.Instance.PlayerInventory.Inventory.Add(new Item(box, "Mysterious Box"));
-            PlayerManager.Instance.PlayerInventory.Inventory.Add(new Item(artifact, "Advanced Camera"));         
+            PlayerManager.Instance.PlayerInventory.Inventory.Add(new Item(artifact, "Advanced Camera"));
+
+            //Add health to the player's inventory
+            HealthBox = new Item(health, "Health");
+            PlayerManager.Instance.PlayerEquipment.AddToEquipment(new Item(health,"Health"));
+            PlayerManager.Instance.PlayerEquipment.AddToEquipment(new Item(health, "Health"));
+            PlayerManager.Instance.PlayerEquipment.AddToEquipment(new Item(health, "Health"));
         }
 
         /// <summary>
@@ -477,6 +487,12 @@ namespace GroupProject
                         gameState = GameState.Help;
                         this.IsMouseVisible = true;
                     }
+                    //If the player hits space and health is less than 100, check for any health packs and use one
+                    if(currentKb.IsKeyDown(Keys.Space) && previousKb.IsKeyUp(Keys.Space) && PlayerManager.Instance.Player.Hp < 100)
+                    {
+                        if(PlayerManager.Instance.PlayerEquipment.RemoveHealth() == true)
+                            PlayerManager.Instance.Player.Hp = 100;
+                    }
                     break;
 
                 case GameState.End:
@@ -519,6 +535,7 @@ namespace GroupProject
                 case GameState.MainMenu:
                     spriteBatch.Draw(mainLogo, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
                     spriteBatch.DrawString(basicFont, "press enter", new Vector2(223, GraphicsDevice.Viewport.Height / 2 + 60), Color.White);
+                    PlayerManager.Instance.Player.Hp = 100;
                     break;
 
                 case GameState.Help:
@@ -548,10 +565,10 @@ namespace GroupProject
 
                 case GameState.Game:
                     MapManager.Instance.CurrentSubMap.Draw(spriteBatch);
-                    if (MapManager.Instance.CurrentSubMap == MapManager.Instance.CurrentMap.GetSubmap(0, 1))
+                    /*/if (MapManager.Instance.CurrentSubMap == MapManager.Instance.CurrentMap.GetSubmap(0, 1))
                     {
                         spriteBatch.Draw(logo, new Rectangle(285, 150, 200, 100), Color.White);
-                    }
+                    }/*/
 
                     PlayerManager.Instance.Player.Draw(spriteBatch);
                     spriteBatch.Draw(hud, new Rectangle(15, 15, 130, 90), Color.NavajoWhite);
@@ -597,6 +614,7 @@ namespace GroupProject
                     spriteBatch.Draw(menuWall, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.Coral);
                     PlayerManager.Instance.PlayerEquipment.Draw(spriteBatch);
                     spriteBatch.DrawString(basicFont, "equipment", new Vector2(GraphicsDevice.Viewport.Width / 2 - 55, 10), Color.Black);
+                    spriteBatch.DrawString(basicFont, "use_health: space", new Vector2(GraphicsDevice.Viewport.Width / 2 - 85, 350), Color.Black);
                     spriteBatch.DrawString(basicFont, "to_help: H", new Vector2(600, 10), Color.White);
                     spriteBatch.DrawString(basicFont, "to_inventory: I", new Vector2(60, 10), Color.White);
                     break;

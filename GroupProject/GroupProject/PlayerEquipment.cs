@@ -82,5 +82,18 @@ namespace GroupProject
                 }
             }
         }
+
+        public Boolean RemoveHealth()
+        {
+            for (int i = 0; i < currentEquipment.Count; i++)
+            {
+                if (currentEquipment[i].Description == "Health")
+                {
+                    currentEquipment.RemoveAt(i);
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
