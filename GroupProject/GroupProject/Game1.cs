@@ -54,6 +54,7 @@ namespace GroupProject
 
         //Keep track of level
         int currentLevel;
+        bool completeGame = false;
 
 
         //for deconstructing a magnatude when using a 45degree angle int componets
@@ -218,7 +219,8 @@ namespace GroupProject
 
                 case GameState.Hub:
                     PlayerManager.Instance.Player.Update();
-
+                    if (currentLevel == 5)
+                        completeGame = true;
                     //if the player is moving change the moveby
                     int moveBy = 0;
                     if (PlayerManager.Instance.PlayerInventory.Inventory.Count < 15)
@@ -522,8 +524,15 @@ namespace GroupProject
                 case GameState.Load:
                     if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
                     {
-                        gameState = GameState.Game;
-                        this.IsMouseVisible = false;
+                        if (currentLevel == 1 && completeGame == false)
+                        {
+                            gameState = GameState.Help;
+                        }
+                        else
+                        {
+                            gameState = GameState.Game;
+                            this.IsMouseVisible = false;
+                        }
                     }
                     MapManager.Instance.NewMap("../../../Content/Levels/Level " + currentLevel);
                     PlayerManager.Instance.PlayerInventory.Inventory.Clear();
@@ -601,12 +610,17 @@ namespace GroupProject
                     spriteBatch.DrawString(basicFont, "Level: " + currentLevel, new Vector2(25, 20), Color.Black);
                     spriteBatch.DrawString(basicFont, "Health: " + PlayerManager.Instance.Player.Hp, new Vector2(25, 38), Color.Black);
                     //Change the hud depending on the player's current level
-                    if(currentLevel == 1)
+                    if(currentLevel == 1 && completeGame == false)
                     {
                         spriteBatch.DrawString(basicFont, "Welcome to your safehouse...", new Vector2(260, 275),Color.Black);
                         spriteBatch.DrawString(basicFont, "At each site, uncover 15 artifacts to discover the history of this lost planet.", new Vector2(50, 300), Color.Black);
                     }
-                    
+                    if (currentLevel == 1 && completeGame == true)
+                    {
+                        spriteBatch.DrawString(basicFont, "MISSION COMPLETE", new Vector2(295, 275), Color.Black);
+                        spriteBatch.DrawString(basicFont, "You may continue to explore for more artifacts if you wish...", new Vector2(115, 300), Color.Black);
+                    }
+
                     break;
 
                 case GameState.Game:
