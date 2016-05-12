@@ -254,8 +254,11 @@ namespace GroupProject
                     //Keys to open inventory and equipment screens
                     if (currentKb.IsKeyDown(Keys.L) && previousKb.IsKeyUp(Keys.L))
                     {
-                        gameState = GameState.Load;
-                        this.IsMouseVisible = true;
+                        if (PlayerManager.Instance.Player.Rectangle.Intersects(new Rectangle(200, 20, 150, 50)) || PlayerManager.Instance.Player.Rectangle.Intersects(new Rectangle(417, 20, 150, 50)))
+                        {
+                            gameState = GameState.Load;
+                            this.IsMouseVisible = true;
+                        }
                     }
 
                     //inventory and equipment
@@ -580,6 +583,11 @@ namespace GroupProject
                     spriteBatch.Draw(crate, new Rectangle(650, 200, 50, 50), Color.NavajoWhite);
                     spriteBatch.Draw(screen, new Rectangle(200, 20, 150, 70), Color.NavajoWhite);
                     spriteBatch.Draw(screen, new Rectangle(417, 20, 150, 70), Color.NavajoWhite);
+                    if(PlayerManager.Instance.Player.Rectangle.Intersects(new Rectangle(200,20,150,50)) || PlayerManager.Instance.Player.Rectangle.Intersects(new Rectangle(417, 20, 150, 50)))
+                    {
+                            spriteBatch.Draw(hud, new Rectangle(208, 345, 350, 50), Color.NavajoWhite);
+                            spriteBatch.DrawString(basicFont, "Press L to Launch to New Location", new Vector2(225, 350), Color.Black);
+                    }
                     //Draw the player
                     PlayerManager.Instance.Player.Draw(spriteBatch);
                     spriteBatch.Draw(hud, new Rectangle(15, 15, 130, 90), Color.NavajoWhite);
@@ -588,14 +596,8 @@ namespace GroupProject
                     //Change the hud depending on the player's current level
                     if(currentLevel == 1)
                     {
-                        spriteBatch.DrawString(basicFont, "Welcome to your safehouse...", new Vector2(260, 250), Color.Black);
-                        spriteBatch.DrawString(basicFont, "Press L to launch to a new site...", new Vector2(240, 275), Color.Black);
+                        spriteBatch.DrawString(basicFont, "Welcome to your safehouse...", new Vector2(260, 275),Color.Black);
                         spriteBatch.DrawString(basicFont, "At each site, uncover 15 artifacts to discover the history of this lost planet.", new Vector2(50, 300), Color.Black);
-                    }
-                    else
-                    {
-                        spriteBatch.Draw(hud, new Rectangle(208, 345, 350, 50), Color.NavajoWhite);
-                        spriteBatch.DrawString(basicFont, "Press L to Launch to New Location", new Vector2(225, 350), Color.Black);
                     }
                     
                     break;
