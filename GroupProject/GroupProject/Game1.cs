@@ -355,7 +355,14 @@ namespace GroupProject
                         if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
                         {
                             gameState = GameState.End;
-                            currentLevel++;
+                            if (currentLevel < 5)
+                            {
+                                currentLevel++;
+                            }
+                            else
+                            {
+                                currentLevel = 1;
+                            }
                             this.IsMouseVisible = true;
                         }
                     }
