@@ -35,6 +35,7 @@ namespace GroupProject
         Texture2D hud;
         Texture2D astro;
         Texture2D logo;
+        Texture2D screen;
 
         //Font for in-game text
         SpriteFont basicFont;
@@ -128,6 +129,7 @@ namespace GroupProject
             weaponLeft = Content.Load<Texture2D>("energyBlastLeft");
             weaponUp = Content.Load<Texture2D>("energyBlastUp");
             weaponDown = Content.Load<Texture2D>("energyBlastDown");
+            screen = Content.Load<Texture2D>("Screen");
 
             TextureManager.Instance.Textures.Add("crate", crate);
             TextureManager.Instance.Textures.Add("box", box);
@@ -143,7 +145,7 @@ namespace GroupProject
             TextureManager.Instance.Textures.Add("weaponLeft", weaponLeft);
             TextureManager.Instance.Textures.Add("weaponRight", weaponRight);
 
-            MapManager.Instance.NewMap("../../../Content/Levels/Level " + currentLevel);
+            MapManager.Instance.NewMap("../../../Content/Levels/Ship Hub");
 
             PlayerManager.Instance.Player.SetTexture(astro);
             PlayerManager.Instance.PlayerInventory.Inventory.Add(new Item(crate, "Crate"));
@@ -189,7 +191,7 @@ namespace GroupProject
             {
                 case GameState.MainMenu:
                     if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
-                        gameState = GameState.Help;
+                        gameState = GameState.Hub;
                     break;
                 case GameState.Help:
                     if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
@@ -250,16 +252,6 @@ namespace GroupProject
                         MapManager.Instance.DoorCheck(currentKb);
 
                     //Keys to open inventory and equipment screens
-                    if (currentKb.IsKeyDown(Keys.I) && previousKb.IsKeyUp(Keys.I))
-                    {
-                        gameState = GameState.Inventory;
-                        this.IsMouseVisible = true;
-                    }
-                    if (currentKb.IsKeyDown(Keys.E) && previousKb.IsKeyUp(Keys.E))
-                    {
-                        gameState = GameState.Equipment;
-                        this.IsMouseVisible = true;
-                    }
                     if (currentKb.IsKeyDown(Keys.L) && previousKb.IsKeyUp(Keys.L))
                     {
                         gameState = GameState.Load;
@@ -510,6 +502,10 @@ namespace GroupProject
                         this.IsMouseVisible = false;
                     }
                     MapManager.Instance.NewMap("../../../Content/Levels/Ship Hub");
+                    foreach(Item i in PlayerManager.Instance.PlayerInventory.Inventory)
+                    {
+                        MapManager.Instance.AddItemToInventory(0, 0, i);
+                    }
                     PlayerManager.Instance.PlayerInventory.Inventory.Clear();
                     break;
 
@@ -574,7 +570,34 @@ namespace GroupProject
 
                 case GameState.Hub:
                     MapManager.Instance.CurrentSubMap.Draw(spriteBatch);
+                    //Draw items to fill the area
+                    spriteBatch.Draw(crate, new Rectangle(200, 200, 50, 50), Color.NavajoWhite);
+                    spriteBatch.Draw(artifact, new Rectangle(400, 150, 80, 80), Color.NavajoWhite);
+                    spriteBatch.Draw(box, new Rectangle(150, 70, 30, 30), Color.NavajoWhite);
+                    spriteBatch.Draw(box, new Rectangle(500, 170, 30, 30), Color.NavajoWhite);
+                    spriteBatch.Draw(box, new Rectangle(200, 100, 30, 30), Color.NavajoWhite);
+                    spriteBatch.Draw(crate, new Rectangle(600, 250, 50, 50), Color.NavajoWhite);
+                    spriteBatch.Draw(crate, new Rectangle(650, 200, 50, 50), Color.NavajoWhite);
+                    spriteBatch.Draw(screen, new Rectangle(200, 20, 150, 70), Color.NavajoWhite);
+                    spriteBatch.Draw(screen, new Rectangle(417, 20, 150, 70), Color.NavajoWhite);
+                    //Draw the player
                     PlayerManager.Instance.Player.Draw(spriteBatch);
+                    spriteBatch.Draw(hud, new Rectangle(15, 15, 130, 90), Color.NavajoWhite);
+                    spriteBatch.DrawString(basicFont, "Level: " + currentLevel, new Vector2(25, 20), Color.Black);
+                    spriteBatch.DrawString(basicFont, "Health: " + PlayerManager.Instance.Player.Hp, new Vector2(25, 38), Color.Black);
+                    //Change the hud depending on the player's current level
+                    if(currentLevel == 1)
+                    {
+                        spriteBatch.DrawString(basicFont, "Welcome to your safehouse...", new Vector2(260, 250), Color.Black);
+                        spriteBatch.DrawString(basicFont, "Press L to launch to a new site...", new Vector2(240, 275), Color.Black);
+                        spriteBatch.DrawString(basicFont, "At each site, uncover 15 artifacts to discover the history of this lost planet.", new Vector2(50, 300), Color.Black);
+                    }
+                    else
+                    {
+                        spriteBatch.Draw(hud, new Rectangle(208, 345, 350, 50), Color.NavajoWhite);
+                        spriteBatch.DrawString(basicFont, "Press L to Launch to New Location", new Vector2(225, 350), Color.Black);
+                    }
+                    
                     break;
 
                 case GameState.Game:
