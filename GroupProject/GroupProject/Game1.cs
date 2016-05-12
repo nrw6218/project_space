@@ -51,11 +51,14 @@ namespace GroupProject
         Texture2D weaponLeft;
         Texture2D weaponDown;
 
+        //Keep track of level
+        int currentLevel;
+
 
         //for deconstructing a magnatude when using a 45degree angle int componets
         const double ANGLE_MULTIPLIER = 0.70710678118;
 
-        enum GameState { MainMenu, Help, Game, Inventory, Equipment, Puzzle, End, Hub, Death };
+        enum GameState { MainMenu, Help, Game, Inventory, Equipment, Puzzle, End, Hub, Death, Load };
         GameState gameState;
 
         static double FPS = 60.0;
@@ -89,6 +92,7 @@ namespace GroupProject
             framesThisGameFrame = 0;
             currentKb = Keyboard.GetState();
             previousKb = currentKb;
+            currentLevel = 1;
 
             base.Initialize();
         }
@@ -139,7 +143,7 @@ namespace GroupProject
             TextureManager.Instance.Textures.Add("weaponLeft", weaponLeft);
             TextureManager.Instance.Textures.Add("weaponRight", weaponRight);
 
-            MapManager.Instance.NewMap("../../../Content/Levels/Level 1");
+            MapManager.Instance.NewMap("../../../Content/Levels/Level " + currentLevel);
 
             PlayerManager.Instance.Player.SetTexture(astro);
             PlayerManager.Instance.PlayerInventory.Inventory.Add(new Item(crate, "Crate"));
@@ -211,8 +215,6 @@ namespace GroupProject
                     break;
 
                 case GameState.Hub:
-                    MapManager.Instance.NewMap("../../../Content/Levels/Ship Hub");
-                    MapManager.Instance.CurrentMap.SetCurrentSubmap(01);
                     PlayerManager.Instance.Player.Update();
 
                     //if the player is moving change the moveby
@@ -256,6 +258,11 @@ namespace GroupProject
                     if (currentKb.IsKeyDown(Keys.E) && previousKb.IsKeyUp(Keys.E))
                     {
                         gameState = GameState.Equipment;
+                        this.IsMouseVisible = true;
+                    }
+                    if (currentKb.IsKeyDown(Keys.L) && previousKb.IsKeyUp(Keys.L))
+                    {
+                        gameState = GameState.Load;
                         this.IsMouseVisible = true;
                     }
 
@@ -353,6 +360,7 @@ namespace GroupProject
                         if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
                         {
                             gameState = GameState.End;
+                            currentLevel++;
                             this.IsMouseVisible = true;
                         }
                     }
@@ -501,8 +509,19 @@ namespace GroupProject
                         gameState = GameState.Hub;
                         this.IsMouseVisible = false;
                     }
+                    MapManager.Instance.NewMap("../../../Content/Levels/Ship Hub");
+                    PlayerManager.Instance.PlayerInventory.Inventory.Clear();
                     break;
 
+                case GameState.Load:
+                    if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
+                    {
+                        gameState = GameState.Game;
+                        this.IsMouseVisible = false;
+                    }
+                    MapManager.Instance.NewMap("../../../Content/Levels/Level " + currentLevel);
+                    PlayerManager.Instance.PlayerInventory.Inventory.Clear();
+                    break;
                 case GameState.Death:
                     if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
                     {
@@ -555,11 +574,6 @@ namespace GroupProject
 
                 case GameState.Hub:
                     MapManager.Instance.CurrentSubMap.Draw(spriteBatch);
-                    if (MapManager.Instance.CurrentSubMap == MapManager.Instance.CurrentMap.GetSubmap(0, 1))
-                    {
-                        spriteBatch.Draw(logo, new Rectangle(285, 150, 200, 100), Color.White);
-                    }
-
                     PlayerManager.Instance.Player.Draw(spriteBatch);
                     break;
 
@@ -621,7 +635,12 @@ namespace GroupProject
 
                 case GameState.End:
                     spriteBatch.Draw(menuWall, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
-                    spriteBatch.DrawString(basicFont, "thanks for playing", new Vector2(289, 170), Color.Black);
+                    spriteBatch.DrawString(basicFont, "returning to safehouse...", new Vector2(269, 170), Color.Black);
+                    break;
+
+                case GameState.Load:
+                    spriteBatch.Draw(menuWall, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+                    spriteBatch.DrawString(basicFont, "entering unknown location...", new Vector2(265, 170), Color.Black);
                     break;
 
                 case GameState.Death:
