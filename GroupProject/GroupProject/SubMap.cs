@@ -53,7 +53,7 @@ namespace GroupProject
                     {
                         subMap[i, j] = new Block(j, i, intMap[i, j]);
 
-                        if (intMap[i, j] == 00 || intMap[i, j] == 01 || intMap[i, j] == 10 || intMap[i, j] == 33)
+                        if (intMap[i, j] == 00 || intMap[i, j] == 01 || intMap[i, j] == 10 || intMap[i, j] == 33 || intMap[i, j] == 31)
                             walls.Add(subMap[i, j]);
                     }
                 }
