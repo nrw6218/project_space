@@ -76,6 +76,7 @@ namespace GroupProject
         int[] saveGames;
         int saveGameIndex;
         bool saveGameDelete;
+        bool hubSave;
 
         public Game1()
         {
@@ -103,6 +104,7 @@ namespace GroupProject
             saveGames = new int[3];
             saveGameIndex = 0;
             saveGameDelete = false;
+            hubSave = true;
 
             base.Initialize();
         }
@@ -284,9 +286,13 @@ namespace GroupProject
                     break;
 
                 case GameState.Hub:
-                    StreamWriter swH = new StreamWriter("../../../Content/Saves/save" + saveGameIndex+".txt");
-                    swH.WriteLine(currentLevel.ToString());
-                    swH.Close();
+                    if (hubSave)
+                    {
+                        StreamWriter swH = new StreamWriter("../../../Content/Saves/save" + saveGameIndex + ".txt");
+                        swH.WriteLine(currentLevel.ToString());
+                        swH.Close();
+                        hubSave = false;
+                    }
                     PlayerManager.Instance.Player.Update();
                     if (currentLevel == 5)
                         completeGame = true;
@@ -324,6 +330,7 @@ namespace GroupProject
                         if (PlayerManager.Instance.Player.Rectangle.Intersects(new Rectangle(200, 20, 150, 50)) || PlayerManager.Instance.Player.Rectangle.Intersects(new Rectangle(417, 20, 150, 50)))
                         {
                             PlayerManager.Instance.Player.Hp = 100;
+                            hubSave = true;
                             gameState = GameState.Load;
                             this.IsMouseVisible = true;
                         }
