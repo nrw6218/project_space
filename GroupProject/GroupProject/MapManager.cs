@@ -53,7 +53,7 @@ namespace GroupProject
             int mapHeight = input.ReadInt32();
             int mapWidth = input.ReadInt32();    
             int subMapHeight = 6;
-            int subMapWidth = 12;
+            int subMapWidth = 12;            
 
             //loads ints from file 
             int[,][,] mapIntArry = new int[mapHeight, mapWidth][,];

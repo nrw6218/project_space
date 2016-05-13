@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
 
 //Assets borrowed from the following sources:
 //http://s267.photobucket.com/user/RandomDave15/media/PSP%20wallpapers/Games/Untitled.png.html
@@ -60,7 +61,7 @@ namespace GroupProject
         //for deconstructing a magnatude when using a 45degree angle int componets
         const double ANGLE_MULTIPLIER = 0.70710678118;
 
-        enum GameState { MainMenu, Help, Game, Inventory, Equipment, Puzzle, End, Hub, Death, Load };
+        enum GameState { MainMenu,SaveGame, Help, Game, Inventory, Equipment, Puzzle, End, Hub, Death, Load };
         GameState gameState;
 
         static double FPS = 60.0;
@@ -71,6 +72,10 @@ namespace GroupProject
         KeyboardState previousKb;
 
         Texture2D tilesheet;
+
+        int[] saveGames;
+        int saveGameIndex;
+        bool saveGameDelete;
 
         public Game1()
         {
@@ -94,7 +99,10 @@ namespace GroupProject
             framesThisGameFrame = 0;
             currentKb = Keyboard.GetState();
             previousKb = currentKb;
-            currentLevel = 1;
+
+            saveGames = new int[3];
+            saveGameIndex = 0;
+            saveGameDelete = false;
 
             base.Initialize();
         }
@@ -105,7 +113,20 @@ namespace GroupProject
         /// </summary>
         protected override void LoadContent()
         {
-            
+            StreamReader sr = new StreamReader("../../../Content/Saves/save0.txt");
+            string line = sr.ReadLine();
+            saveGames[0] = int.Parse(line);
+            sr.Close();
+
+            sr = new StreamReader("../../../Content/Saves/save1.txt");
+            line = sr.ReadLine();
+            saveGames[1] = int.Parse(line);
+            sr.Close();
+
+            sr = new StreamReader("../../../Content/Saves/save2.txt");
+            line = sr.ReadLine();
+            saveGames[2] = int.Parse(line);
+            sr.Close();
 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -192,8 +213,53 @@ namespace GroupProject
             {
                 case GameState.MainMenu:
                     if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
-                        gameState = GameState.Hub;
+                        gameState = GameState.SaveGame;
                     break;
+
+                case GameState.SaveGame:
+                    if(currentKb.IsKeyDown(Keys.Down) && previousKb.IsKeyUp(Keys.Down))
+                    {
+                        saveGameIndex++;
+                        if (saveGameIndex > 3)
+                            saveGameIndex = 0;
+                    }
+                    if (currentKb.IsKeyDown(Keys.Up) && previousKb.IsKeyUp(Keys.Up))
+                    {
+                        saveGameIndex--;
+                        if (saveGameIndex < 0)
+                            saveGameIndex = 3;
+                    }
+                    if (!saveGameDelete)
+                    {
+                        if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
+                        {
+                            if (saveGameIndex < 3)
+                            {
+                                currentLevel = saveGames[saveGameIndex];
+                                gameState = GameState.Hub;
+                            }
+                            else
+                            {
+                                saveGameDelete = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
+                        {
+                            if (saveGameIndex < 3)
+                            {
+                                saveGames[saveGameIndex] = 1;
+                                StreamWriter sw = new StreamWriter("../../../Content/Saves/save" + saveGameIndex+".txt");
+                                sw.WriteLine("1");
+                                sw.Close();
+                            }
+                            saveGameDelete = false;
+                        }
+                    }
+                    break;
+
                 case GameState.Help:
                     if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
                     {
@@ -218,6 +284,9 @@ namespace GroupProject
                     break;
 
                 case GameState.Hub:
+                    StreamWriter swH = new StreamWriter("../../../Content/Saves/save" + saveGameIndex+".txt");
+                    swH.WriteLine(currentLevel.ToString());
+                    swH.Close();
                     PlayerManager.Instance.Player.Update();
                     if (currentLevel == 5)
                         completeGame = true;
@@ -249,15 +318,12 @@ namespace GroupProject
                     //End Wall Collision
                     /******************************************************************************/
 
-                    //Check to see if player can unlock a door
-                    if (previousKb.IsKeyUp(Keys.Space))
-                        MapManager.Instance.DoorCheck(currentKb);
-
                     //Keys to open inventory and equipment screens
                     if (currentKb.IsKeyDown(Keys.L) && previousKb.IsKeyUp(Keys.L))
                     {
                         if (PlayerManager.Instance.Player.Rectangle.Intersects(new Rectangle(200, 20, 150, 50)) || PlayerManager.Instance.Player.Rectangle.Intersects(new Rectangle(417, 20, 150, 50)))
                         {
+                            PlayerManager.Instance.Player.Hp = 100;
                             gameState = GameState.Load;
                             this.IsMouseVisible = true;
                         }
@@ -284,29 +350,6 @@ namespace GroupProject
                             }
                         }
                     }
-
-                    //moves submap when player walks to an edge
-                    if (PlayerManager.Instance.Player.X + PlayerManager.Instance.Player.Width / 2 < 0)
-                    {
-                        MapManager.Instance.MoveSubmap(Direction.Left);
-                        PlayerManager.Instance.Player.X = graphics.PreferredBackBufferWidth - PlayerManager.Instance.Player.Width / 2;
-                    }
-                    else if (PlayerManager.Instance.Player.X + PlayerManager.Instance.Player.Width / 2 > graphics.PreferredBackBufferWidth)
-                    {
-                        MapManager.Instance.MoveSubmap(Direction.Right);
-                        PlayerManager.Instance.Player.X = PlayerManager.Instance.Player.Width / 2;
-                    }
-                    else if (PlayerManager.Instance.Player.Y + PlayerManager.Instance.Player.Height / 2 < 0)
-                    {
-                        MapManager.Instance.MoveSubmap(Direction.Up);
-                        PlayerManager.Instance.Player.Y = graphics.PreferredBackBufferHeight - PlayerManager.Instance.Player.Height / 2;
-                    }
-                    else if (PlayerManager.Instance.Player.Y + PlayerManager.Instance.Player.Height / 2 > graphics.PreferredBackBufferHeight)
-                    {
-                        MapManager.Instance.MoveSubmap(Direction.Down);
-                        PlayerManager.Instance.Player.Y = PlayerManager.Instance.Player.Height / 2;
-                    }
-
                     break;
 
                 case GameState.Game:
@@ -522,6 +565,10 @@ namespace GroupProject
                     break;
 
                 case GameState.Load:
+                    PlayerManager.Instance.Player.X = graphics.PreferredBackBufferWidth / 2;
+                    PlayerManager.Instance.Player.Y = graphics.PreferredBackBufferHeight / 2;
+                    PlayerManager.Instance.Player.PreviousX = PlayerManager.Instance.Player.X;
+                    PlayerManager.Instance.Player.PreviousY = PlayerManager.Instance.Player.Y;
                     if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
                     {
                         if (currentLevel == 1 && completeGame == false)
@@ -538,6 +585,7 @@ namespace GroupProject
                     PlayerManager.Instance.PlayerInventory.Inventory.Clear();
                     break;
                 case GameState.Death:
+                    MapManager.Instance.NewMap("../../../Content/Levels/Ship Hub");
                     if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
                     {
                         gameState = GameState.MainMenu;
@@ -568,8 +616,72 @@ namespace GroupProject
             {
                 case GameState.MainMenu:
                     spriteBatch.Draw(mainLogo, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
-                    spriteBatch.DrawString(basicFont, "press enter", new Vector2(223, GraphicsDevice.Viewport.Height / 2 + 60), Color.White);
-                    PlayerManager.Instance.Player.Hp = 100;
+                    spriteBatch.DrawString(basicFont, "press enter", new Vector2(223, GraphicsDevice.Viewport.Height / 2 + 60), Color.White);                    
+                    break;
+
+                case GameState.SaveGame:
+                    spriteBatch.Draw(mainLogo, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+
+                    string save0;
+                    string save1;
+                    string save2;
+                    string delete;
+
+                    if (saveGames[0] > 1)
+                        save0 = "Save Game 1";
+                    else
+                        save0 = "Start New Game";
+                    if (saveGames[1] > 1)
+                        save1 = "Save Game 2";
+                    else
+                        save1 = "Start New Game";
+                    if (saveGames[2] > 1)
+                        save2 = "Save Game 3";
+                    else
+                        save2 = "Start New Game";
+                    if (saveGameDelete)
+                        delete = "Cancel";
+                    else
+                        delete = "Delete";
+
+                    if (!saveGameDelete)
+                    {
+                        if(saveGameIndex == 0)
+                            spriteBatch.DrawString(basicFont, save0, new Vector2(223, GraphicsDevice.Viewport.Height / 2 - 45), Color.Purple);
+                        else
+                            spriteBatch.DrawString(basicFont, save0, new Vector2(223, GraphicsDevice.Viewport.Height / 2 - 45), Color.White);
+                        if (saveGameIndex == 1)
+                            spriteBatch.DrawString(basicFont, save1, new Vector2(223, GraphicsDevice.Viewport.Height / 2 - 15), Color.Purple);
+                        else
+                            spriteBatch.DrawString(basicFont, save1, new Vector2(223, GraphicsDevice.Viewport.Height / 2 - 15), Color.White);
+                        if (saveGameIndex == 2)
+                            spriteBatch.DrawString(basicFont, save2, new Vector2(223, GraphicsDevice.Viewport.Height / 2 + 15), Color.Purple);
+                        else
+                            spriteBatch.DrawString(basicFont, save2, new Vector2(223, GraphicsDevice.Viewport.Height / 2 + 15), Color.White);
+                        if (saveGameIndex == 3)
+                            spriteBatch.DrawString(basicFont, delete, new Vector2(223, GraphicsDevice.Viewport.Height / 2 + 45), Color.Purple);
+                        else
+                            spriteBatch.DrawString(basicFont, delete, new Vector2(223, GraphicsDevice.Viewport.Height / 2 + 45), Color.White);
+                    }
+                    else
+                    {
+                        if (saveGameIndex == 0)
+                            spriteBatch.DrawString(basicFont, save0, new Vector2(223, GraphicsDevice.Viewport.Height / 2 - 45), Color.Red);
+                        else
+                            spriteBatch.DrawString(basicFont, save0, new Vector2(223, GraphicsDevice.Viewport.Height / 2 - 45), Color.White);
+                        if (saveGameIndex == 1)
+                            spriteBatch.DrawString(basicFont, save1, new Vector2(223, GraphicsDevice.Viewport.Height / 2 - 15), Color.Red);
+                        else
+                            spriteBatch.DrawString(basicFont, save1, new Vector2(223, GraphicsDevice.Viewport.Height / 2 - 15), Color.White);
+                        if (saveGameIndex == 2)
+                            spriteBatch.DrawString(basicFont, save2, new Vector2(223, GraphicsDevice.Viewport.Height / 2 + 15), Color.Red);
+                        else
+                            spriteBatch.DrawString(basicFont, save2, new Vector2(223, GraphicsDevice.Viewport.Height / 2 + 15), Color.White);
+                        if (saveGameIndex == 3)
+                            spriteBatch.DrawString(basicFont, delete, new Vector2(223, GraphicsDevice.Viewport.Height / 2 + 45), Color.Red);
+                        else
+                            spriteBatch.DrawString(basicFont, delete, new Vector2(223, GraphicsDevice.Viewport.Height / 2 + 45), Color.White);
+                    }
                     break;
 
                 case GameState.Help:
