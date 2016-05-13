@@ -357,7 +357,7 @@ namespace GroupProject
                         if (currentKb.IsKeyDown(Keys.Enter) && previousKb.IsKeyUp(Keys.Enter))
                         {
                             gameState = GameState.End;
-                            if (currentLevel < 5)
+                            if (currentLevel < 6)
                             {
                                 currentLevel++;
                             }

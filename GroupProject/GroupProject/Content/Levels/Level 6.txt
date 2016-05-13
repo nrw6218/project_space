@@ -11,7 +11,7 @@ start
 0
 1
 item
-100
+70
 100
 key
 enemy
@@ -29,7 +29,7 @@ start
 0
 2
 item
-200
+100
 200
 key
 item
@@ -99,6 +99,10 @@ start
 2
 2
 enemy
+600
+200
+enemy
+100
 200
 item
 350
@@ -112,6 +116,9 @@ start
 enemy
 200
 200
+enemy
+500
+300
 end
 
 start

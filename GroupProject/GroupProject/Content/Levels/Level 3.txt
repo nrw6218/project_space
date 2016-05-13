@@ -66,6 +66,9 @@ item
 400
 100
 health
+enemy
+600
+100
 end
 
 start
@@ -79,6 +82,9 @@ item
 100
 150
 artifact
+enemy
+450
+250
 end
 
 start
@@ -137,6 +143,9 @@ item
 300
 150
 artifact
+enemy
+500
+100
 end
 
 start
@@ -190,6 +199,12 @@ item
 250
 275
 box
+enemy
+500
+200
+enemy
+300
+300
 end
 
 start
@@ -199,6 +214,15 @@ item
 100
 100
 artifact
+enemy
+200
+200
+enemy
+600
+150
+enemy
+150
+150
 end
 
 start

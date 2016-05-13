@@ -2,7 +2,7 @@ start
 0
 0
 item
-200
+250
 200
 crate
 end
@@ -33,7 +33,7 @@ start
 0
 2
 enemy
-100
+500
 250
 item
 350
@@ -53,7 +53,7 @@ start
 1
 0
 item
-200
+300
 200
 crate
 enemy
@@ -84,8 +84,8 @@ item
 200
 box
 item
-100
-100
+500
+260
 artifact
 item
 350
@@ -101,7 +101,7 @@ item
 100
 box
 item
-70
+120
 200
 crate
 item
@@ -109,7 +109,7 @@ item
 100
 artifact
 item
-400
+600
 200
 crate
 end
@@ -127,6 +127,9 @@ enemy
 enemy
 350
 200
+enemy
+500
+100
 end
 
 start
@@ -144,14 +147,17 @@ item
 300
 250
 crate
+enemy
+500
+200
 end
 
 start
 4
 0
 item
-100
-70
+500
+300
 key
 item
 100
@@ -169,7 +175,7 @@ enemy
 350
 120
 item
-400
+600
 100
 health
 end
@@ -188,4 +194,7 @@ item
 100
 200
 crate
+enemy
+600
+100
 end
